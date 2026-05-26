@@ -12,6 +12,7 @@ import styled from "styled-components";
 import { fade } from "../animations/Fade";
 import { SlideUp } from "../animations/Slide";
 import { useNavigate } from "react-router-dom";
+import { LandingImage, LargeImage } from "../helpers/imageImport";
 
 const Wrap = styled.div`
   width: 100%;
@@ -20,7 +21,7 @@ const Wrap = styled.div`
   grid-template-columns: 1fr 1fr;
 `;
 
-const LandingImage = styled.img`
+const LandingImageTag = styled.img`
   position: absolute;
   top: 50%;
   left: 50%;
@@ -30,18 +31,45 @@ const LandingImage = styled.img`
   object-fit: cover;
 `;
 
+const LargeImageContainer = styled.div`
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  // MASK FOR dimmed background
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.7);
+  }
+`;
+
+const LargeImageTag = styled.img``;
+
 export default function Landing() {
   const navigate = useNavigate();
   return (
     <Wrap>
-      <div></div>
+      <LargeImageContainer>
+        <LargeImageTag
+          src={LargeImage}
+          as={motion.img}
+          variants={fade(0.7, 0, 1, 1)}
+        />
+      </LargeImageContainer>
       <Container>
-        <LandingImage
+        <LandingImageTag
           as={motion.img}
           variants={fade(1, 0, 1, 1)}
           initial="initial"
           animate="animate"
-          src="./src/assets/images/landing.png"
+          src={LandingImage}
         />
         <TopWrapp>
           <Title>
