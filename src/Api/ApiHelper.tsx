@@ -3,7 +3,7 @@ import axios from "axios";
 // internal axios instance; not exported to avoid interfering with Fast Refresh
 const ApiAxios = axios.create({
   baseURL: `${import.meta.env.VITE_BACKEND_URL}`,
-  timeout: 30000,
+  timeout: 50000,
 
   validateStatus: function (status) {
     return status >= 200 && status <= 299;

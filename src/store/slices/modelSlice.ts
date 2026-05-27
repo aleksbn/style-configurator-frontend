@@ -17,13 +17,15 @@ export const fetchModels = createAsyncThunk(
 );
 
 interface ModelState {
-  models: any[];
+  data: any[];
+  selectedModel: any | null;
   loading: boolean;
   error: string | null;
 }
 
 const initialState: ModelState = {
-  models: [],
+  data: [],
+  selectedModel: null,
   loading: false,
   error: null,
 };
@@ -31,7 +33,11 @@ const initialState: ModelState = {
 const modelSlice = createSlice({
   name: "models",
   initialState,
-  reducers: {},
+  reducers: {
+    setSelectedModel: (state, action) => {
+      state.selectedModel = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchModels.pending, (state) => {
@@ -40,7 +46,7 @@ const modelSlice = createSlice({
       })
       .addCase(fetchModels.fulfilled, (state, action) => {
         state.loading = false;
-        state.models = action.payload;
+        state.data = action.payload;
       })
       .addCase(fetchModels.rejected, (state, action) => {
         state.loading = false;
@@ -49,4 +55,5 @@ const modelSlice = createSlice({
   },
 });
 
+export const { setSelectedModel } = modelSlice.actions;
 export default modelSlice.reducer;

@@ -1,5 +1,5 @@
-import { motion } from "framer-motion";
 import React from "react";
+import { motion } from "framer-motion";
 import styled from "styled-components";
 import { fade } from "../../animations/Fade";
 
@@ -28,6 +28,7 @@ const Logo = styled.img`
 `;
 
 export default function Navbar() {
+  const location = window.location;
   return (
     <Wrapp
       as={motion.div}
@@ -36,7 +37,7 @@ export default function Navbar() {
       animate="animate"
       exit="exit"
     >
-      <div>Back</div>
+      {location.pathname === "/" ? <span></span> : <div>Back</div>}
       <Logo src="./src/assets/images/logo_monochrome.png" alt="logo" />
       <div>Cart</div>
     </Wrapp>

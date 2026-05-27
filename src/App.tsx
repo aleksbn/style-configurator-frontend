@@ -3,9 +3,9 @@ import AnimatedRoutes from "./AnimatedRoutes";
 import styled from "styled-components";
 import Navbar from "./components/ui/Navbar";
 import { useEffect } from "react";
-import Api from "./Api/ApiHelper";
 import { useAppDispatch, useAppSelector } from "./store/hooks";
 import { fetchModels } from "./store/slices/modelSlice";
+import LoadingSpinner from "./components/ui/LoadingSpinner";
 
 const AppWrapper = styled.div`
   height: 100%;
@@ -19,13 +19,13 @@ const AppWrapper = styled.div`
 
 function App() {
   const dispatch = useAppDispatch();
-  const { models, loading, error } = useAppSelector((state) => state.models);
+  const { loading, error } = useAppSelector((state) => state.models);
 
   useEffect(() => {
     dispatch(fetchModels());
   }, [dispatch]);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <LoadingSpinner text="Loading all models" />;
   if (error) return <div>{error}</div>;
 
   return (
