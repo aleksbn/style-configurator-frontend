@@ -6,10 +6,11 @@ function SlideUp(
   durationIn: number = 1,
   durationOut: number = 1,
   withOpacity: boolean = false,
+  distance: number = 100,
 ) {
   return {
     initial: {
-      y: 100,
+      y: distance,
       opacity: withOpacity ? 0 : 1,
     },
     animate: {
@@ -23,7 +24,7 @@ function SlideUp(
     },
     exit: {
       opacity: withOpacity ? 0 : 1,
-      y: 100,
+      y: distance,
       transition: {
         duration: durationOut,
         ease: cubicBezier(0.8, 0, 0.2, 1),
@@ -39,10 +40,11 @@ function SlideRight(
   durationIn: number = 1,
   durationOut: number = 1,
   withOpacity: boolean = false,
+  distance: number = 100,
 ) {
   return {
     initial: {
-      x: -100,
+      x: -distance,
       opacity: withOpacity ? 0 : 1,
     },
     animate: {
@@ -55,7 +57,7 @@ function SlideRight(
       },
     },
     exit: {
-      x: -100,
+      x: -distance,
       opacity: withOpacity ? 0 : 1,
       transition: {
         duration: durationOut,

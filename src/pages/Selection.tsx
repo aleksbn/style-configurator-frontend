@@ -41,7 +41,11 @@ export default function Selection() {
 
   return (
     <Wrap>
-      <ProductList models={models} setCurrentModel={setCurrentModel} />
+      <ProductList
+        models={models}
+        setCurrentModel={setCurrentModel}
+        currentModel={currentModel}
+      />
       <ProductImage currentModel={currentModel} isLeaving={isLeaving} />
       <Footer>
         <div></div>

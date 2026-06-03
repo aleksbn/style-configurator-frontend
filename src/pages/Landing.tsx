@@ -31,6 +31,17 @@ const LandingImageTag = styled.img`
   object-fit: cover;
 `;
 
+const StyledSlogan = styled.h1`
+  position: absolute;
+  top: 50vh;
+  left: 50%;
+  text-align: center;
+  transform: translate(-50%, -50%);
+  font-size: 2.5rem;
+  font-weight: bold;
+  z-index: 2;
+`;
+
 const LargeImageContainer = styled.div`
   width: 100%;
   height: 100vh;
@@ -38,25 +49,34 @@ const LargeImageContainer = styled.div`
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  // MASK FOR dimmed background
+  position: relative;
   &::after {
     content: "";
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 50%;
-    height: 100%;
+    inset: 0;
     background-color: rgba(255, 255, 255, 0.7);
+    z-index: 1;
   }
 `;
 
-const LargeImageTag = styled.img``;
+const LargeImageTag = styled.img`
+  position: relative;
+  z-index: 0;
+`;
 
 export default function Landing() {
   const navigate = useNavigate();
   return (
     <Wrap>
       <LargeImageContainer>
+        <StyledSlogan
+          as={motion.h1}
+          variants={fade(2.5, 0, 1, 1)}
+          initial="initial"
+          animate="animate"
+        >
+          Style Dial — Tailored to Your Signature.
+        </StyledSlogan>
         <LargeImageTag
           src={LargeImage}
           as={motion.img}

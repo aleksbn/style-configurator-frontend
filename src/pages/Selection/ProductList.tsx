@@ -5,9 +5,10 @@ import { SlideRight } from "../../animations/Slide";
 
 const StyledContainer = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: flex-start;
   padding-top: 10vh;
+  padding-left: 40%;
   width: 100%;
   height: 100%;
 `;
@@ -27,7 +28,7 @@ const StyledList = styled.ul`
   margin: 0;
 `;
 
-export default function ProductList({ models, setCurrentModel }) {
+export default function ProductList({ models, setCurrentModel, currentModel }) {
   let delayIn = 0.5;
   return (
     <StyledContainer>
@@ -45,6 +46,10 @@ export default function ProductList({ models, setCurrentModel }) {
               <StyledItem key={option.name}>
                 <p
                   onClick={() => setCurrentModel(option)}
+                  style={{
+                    fontWeight:
+                      currentModel?.name === option.name ? "bold" : "normal",
+                  }}
                 >{`${option.name}`}</p>
               </StyledItem>
             ))}
