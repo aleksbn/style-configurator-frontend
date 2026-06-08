@@ -1,4 +1,4 @@
-import { cubicBezier } from "framer-motion";
+import { cubicBezier, scale } from "framer-motion";
 
 function fade(
   delayIn: number = 0,
@@ -29,4 +29,36 @@ function fade(
   };
 }
 
-export { fade };
+function fadeAndIncrease(
+  delayIn: number = 0,
+  delayOut: number = 0,
+  durationIn: number = 1,
+  durationOut: number = 1,
+) {
+  return {
+    initial: {
+      opacity: 0,
+      scale: 0.7,
+    },
+    animate: {
+      opacity: 1,
+      scale: 1,
+      transition: {
+        duration: durationIn,
+        ease: cubicBezier(0.8, 0, 0.2, 1),
+        delay: delayIn,
+      },
+    },
+    exit: {
+      opacity: 0,
+      scale: 0.7,
+      transition: {
+        duration: durationOut,
+        ease: cubicBezier(0.8, 0, 0.2, 1),
+        delay: delayOut,
+      },
+    },
+  };
+}
+
+export { fade, fadeAndIncrease };

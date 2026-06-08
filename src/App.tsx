@@ -30,8 +30,8 @@ function App() {
 
   return (
     <AppWrapper>
-      <Navbar />
       <BrowserRouter>
+        <Navbar />
         <AnimatedRoutes />
       </BrowserRouter>
     </AppWrapper>

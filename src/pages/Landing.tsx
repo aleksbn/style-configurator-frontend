@@ -16,7 +16,7 @@ import { LandingImage, LargeImage } from "../helpers/imageImport";
 
 const Wrap = styled.div`
   width: 100%;
-  height: 100vh;
+  height: 100svh;
   display: grid;
   grid-template-columns: 1fr 1fr;
 `;
@@ -44,7 +44,7 @@ const StyledSlogan = styled.h1`
 
 const LargeImageContainer = styled.div`
   width: 100%;
-  height: 100vh;
+  height: 100svh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -66,6 +66,7 @@ const LargeImageTag = styled.img`
 
 export default function Landing() {
   const navigate = useNavigate();
+
   return (
     <Wrap>
       <LargeImageContainer>

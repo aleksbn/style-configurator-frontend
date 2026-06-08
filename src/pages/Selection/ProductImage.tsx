@@ -27,7 +27,7 @@ const StyledPrice = styled.span`
   font-weight: bold;
 `;
 
-export default function ProductImage({ currentModel, isLeaving }) {
+export default function ProductImage({ currentModel }) {
   const [isInitial, setIsInitial] = useState(true);
   return (
     <StyledContainer>
@@ -55,7 +55,7 @@ export default function ProductImage({ currentModel, isLeaving }) {
           </motion.div>
         </>
       )}
-      {!isInitial && !isLeaving && (
+      {!isInitial && (
         <AnimatePresence mode="wait" initial={false}>
           <StyledImage
             src={currentModel?.sketch}
@@ -79,27 +79,6 @@ export default function ProductImage({ currentModel, isLeaving }) {
             </StyledPrice>
           </motion.div>
         </AnimatePresence>
-      )}
-      {isLeaving && (
-        <>
-          <StyledImage
-            src={currentModel?.sketch}
-            key={currentModel?.sketch}
-            as={motion.img}
-            variants={fade(0, 0, 0.5, 0.5)}
-            exit="exit"
-          />
-          <motion.div
-            key={currentModel?.sketch + "price"}
-            variants={fade(0, 0, 0.5, 0.5)}
-            exit="exit"
-          >
-            <StyledLabel>Starting from:</StyledLabel>
-            <StyledPrice key={currentModel?.price}>
-              ${currentModel?.base_price}
-            </StyledPrice>
-          </motion.div>
-        </>
       )}
     </StyledContainer>
   );

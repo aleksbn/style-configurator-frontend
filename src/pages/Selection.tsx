@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
 import ProductList from "./Selection/ProductList.js";
 import ProductImage from "./Selection/ProductImage.js";
 import { useAppDispatch, useAppSelector } from "../store/hooks.js";
 import Footer from "../components/ui/Footer.js";
 import { Button } from "../components/style/Buttons.style.js";
 import { setSelectedModel } from "../store/slices/modelSlice.js";
-import { updateLocalStorage } from "../helpers/skuHelper.js";
+import { convertModelToSku } from "../helpers/skuHelper.js";
 import { useNavigate } from "react-router-dom";
+import { PageWrap } from "../components/style/Common.style.js";
+import styled from "styled-components";
+import { setConfiguration } from "../store/slices/configurationSlice.js";
 
-const Wrap = styled.div`
-  width: 100%;
-  height: 100vh;
-  padding-top: 70px;
+const PageSelectionWrap = styled(PageWrap)`
   display: grid;
   grid-template-columns: 1fr 2fr;
+  height: calc(100svh - 140px);
 `;
 
 export default function Selection() {
@@ -22,7 +22,10 @@ export default function Selection() {
   const dispatch = useAppDispatch();
   const [currentModel, setCurrentModel] = useState(null);
   const navigate = useNavigate();
-  const [isLeaving, setIsLeaving] = useState(false);
+
+  useEffect(() => {
+    dispatch(setConfiguration(null));
+  }, []);
 
   useEffect(() => {
     if (Object.values(models).length > 0) {
@@ -31,22 +34,19 @@ export default function Selection() {
   }, [models]);
 
   const handleComposeClick = () => {
-    setIsLeaving(true);
-    setTimeout(() => {
-      dispatch(setSelectedModel(currentModel));
-      updateLocalStorage(currentModel);
-      navigate("/compose");
-    }, 500);
+    dispatch(setSelectedModel(currentModel));
+    dispatch(setConfiguration(convertModelToSku(currentModel)));
+    navigate("/compose");
   };
 
   return (
-    <Wrap>
+    <PageSelectionWrap>
       <ProductList
         models={models}
         setCurrentModel={setCurrentModel}
         currentModel={currentModel}
       />
-      <ProductImage currentModel={currentModel} isLeaving={isLeaving} />
+      <ProductImage currentModel={currentModel} />
       <Footer>
         <div></div>
         <Button type="primary" onClick={handleComposeClick}>
@@ -54,6 +54,6 @@ export default function Selection() {
         </Button>
         <div></div>
       </Footer>
-    </Wrap>
+    </PageSelectionWrap>
   );
 }

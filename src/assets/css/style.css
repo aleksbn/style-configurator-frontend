@@ -1,3 +1,6 @@
+* {
+  box-sizing: border-box;
+}
 html,
 body {
   font-size: 1rem;
@@ -5,7 +8,6 @@ body {
   padding: 0;
   height: 100%;
   width: 100%;
-  box-sizing: border-box;
   overflow: hidden;
 }
 

@@ -10,7 +10,7 @@ const StyledContainer = styled.div`
   padding-top: 10vh;
   padding-left: 40%;
   width: 100%;
-  height: 100%;
+  height: calc(100svh - 140px);
 `;
 
 const StyledHeader = styled.h2`

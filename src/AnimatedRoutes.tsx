@@ -34,7 +34,7 @@ export default function AnimatedRoutes() {
           path="/products"
           element={
             <motion.div
-              variants={fade(0, 10, 1, 1)}
+              variants={fade(0, 0, 1, 1)}
               initial="initial"
               animate="animate"
               exit="exit"
@@ -52,7 +52,7 @@ export default function AnimatedRoutes() {
           path="/compose"
           element={
             <motion.div
-              variants={fade(0, 10, 1, 1)}
+              variants={fade(1, 0, 1, 1)}
               initial="initial"
               animate="animate"
               exit="exit"

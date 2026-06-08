@@ -2,6 +2,8 @@ import React from "react";
 import { motion } from "framer-motion";
 import styled from "styled-components";
 import { fade } from "../../animations/Fade";
+import { useLocation } from "react-router-dom";
+import { SlideRight } from "../../animations/Slide";
 
 const Wrapp = styled.div`
   display: flex;
@@ -9,13 +11,21 @@ const Wrapp = styled.div`
   padding: 26px 39px 26px 44px;
   position: relative;
   align-items: center;
+  height: 70px;
   z-index: 3;
   position: fixed;
   left: 0;
   top: 0;
   width: 100%;
-  box-sizing: border-box;
   background: rgba(255, 255, 255, 0.7);
+`;
+
+const LogoContainer = styled.div`
+  display: flex;
+  height: 70px;
+  width: 70px;
+  justify-content: center;
+  align-items: center;
 `;
 
 const Logo = styled.img`
@@ -27,8 +37,10 @@ const Logo = styled.img`
   transform: translate(-50%, -50%);
 `;
 
+const StyledBackButton = styled.span``;
+
 export default function Navbar() {
-  const location = window.location;
+  const location = useLocation();
   return (
     <Wrapp
       as={motion.div}
@@ -37,8 +49,21 @@ export default function Navbar() {
       animate="animate"
       exit="exit"
     >
-      {location.pathname === "/" ? <span></span> : <div>Back</div>}
-      <Logo src="./src/assets/images/logo_monochrome.png" alt="logo" />
+      {location.pathname === "/" ? (
+        <span></span>
+      ) : (
+        <StyledBackButton
+          as={motion.span}
+          variants={SlideRight(0.5, 0, 0.5, 0.5, true)}
+          initial="initial"
+          animate="animate"
+        >
+          Back
+        </StyledBackButton>
+      )}
+      <LogoContainer>
+        <Logo src="./src/assets/images/logo_monochrome.png" alt="logo" />
+      </LogoContainer>
       <div>Cart</div>
     </Wrapp>
   );
