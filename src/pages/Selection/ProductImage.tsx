@@ -11,6 +11,7 @@ const StyledContainer = styled.div`
   padding-top: 10vh;
   width: 100%;
   height: 100%;
+  gap: 16px;
 `;
 
 const StyledImage = styled.img`

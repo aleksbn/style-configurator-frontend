@@ -7,6 +7,8 @@ interface IModel {
   url: string;
   sketch: string;
   base_price: number;
+  sizes: [string];
+  selected_size: string;
 }
 
 interface IMultiOptionType {
@@ -14,6 +16,7 @@ interface IMultiOptionType {
   name: string;
   value: string;
   part_ids: [string];
+  price: number;
 }
 
 interface IOption {

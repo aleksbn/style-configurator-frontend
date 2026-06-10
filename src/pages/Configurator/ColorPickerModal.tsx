@@ -24,6 +24,10 @@ const StyledContainer = styled.div`
   justify-content: center;
   align-items: center;
   width: fit-content;
+  padding: 120px;
+  background-color: rgba(240, 248, 255, 0.7);
+  border-radius: 50px;
+  gap: 32px;
 
   & .react-colorful {
     height: 400px;
@@ -36,7 +40,7 @@ const StyledModalOkButton = styled.div`
   background-color: #000;
   color: #fff;
   padding: 24px 36px;
-  border-radius: 0 0 12px 12px;
+  border-radius: 10px;
   display: flex;
   justify-content: center;
   align-items: center;

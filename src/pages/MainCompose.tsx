@@ -45,7 +45,6 @@ export default function MainCompose() {
   const redoModel = () => {
     if (selectedModel) {
       const allIds = Object.keys(selectedModel.options);
-      console.log(allIds);
       allIds.forEach((id) => {
         const option = selectedModel.options[id];
         const optionElements = document.getElementsByClassName(id);
@@ -144,12 +143,7 @@ export default function MainCompose() {
 
   const getComponent = () => {
     const Component = Configurator;
-    return (
-      <Component
-        {...getComponentProps()}
-        title="Configure your piece of clothing"
-      />
-    );
+    return <Component {...getComponentProps()} />;
   };
 
   if (!selectedModel) return null;

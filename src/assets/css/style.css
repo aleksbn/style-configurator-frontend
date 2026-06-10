@@ -1,5 +1,9 @@
 * {
   box-sizing: border-box;
+  font-family: Inter, sans-serif;
+  font-feature-settings:
+    "liga" 1,
+    "calt" 1;
 }
 html,
 body {

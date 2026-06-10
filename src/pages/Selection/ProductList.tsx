@@ -20,6 +20,10 @@ const StyledHeader = styled.h2`
 const StyledItem = styled.div`
   cursor: pointer;
   padding-left: 25px;
+
+  &:last-child {
+    padding-bottom: 20px;
+  }
 `;
 
 const StyledList = styled.ul`

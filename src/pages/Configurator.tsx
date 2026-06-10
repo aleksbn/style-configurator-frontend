@@ -6,6 +6,7 @@ import Model from "./Configurator/Model";
 import type { IModel, IOption } from "../models/Model";
 import Options from "./Configurator/Options";
 import ConfigureOptions from "./Configurator/ConfigureOptions";
+import { Button } from "../components/style/Buttons.style";
 
 const PageConfiguratorWrap = styled(PageWrap)`
   display: flex;
@@ -21,18 +22,18 @@ const PageConfigurator = styled.div`
   grid-template-columns: 3fr 5fr 3fr;
   display: grid;
   width: 100%;
-  height: calc(100svh - 240px);
+  height: calc(100svh - 140px);
 `;
 
 const StyledTitle = styled.h1`
   text-align: center;
   font-size: 2.5rem;
-  height: 100px;
 `;
+
+const EmptyDiv = styled.div``;
 
 export default function Configurator({
   model,
-  title,
   update_color,
   update_parts,
 }: {
@@ -47,11 +48,12 @@ export default function Configurator({
   return (
     <>
       <PageConfiguratorWrap>
-        <StyledTitle>{title}</StyledTitle>
+        <StyledTitle>{model?.name}</StyledTitle>
         <PageConfigurator>
           <Options
             options={Object.values(model?.options ?? {})}
             setSelectedOption={setSelectedOption}
+            selectedOption={selectedOption}
           />
           <Model model={model} />
           <ConfigureOptions
@@ -62,13 +64,16 @@ export default function Configurator({
             }
             update_color={update_color}
             update_parts={update_parts}
+            model={model}
           />
         </PageConfigurator>
       </PageConfiguratorWrap>
       <Footer>
-        <div></div>
-        <div>Add to cart</div>
-        <div></div>
+        <EmptyDiv></EmptyDiv>
+        <div style={{ overflow: "hidden" }}>
+          <Button type="primary">Add to cart</Button>
+        </div>
+        <EmptyDiv></EmptyDiv>
       </Footer>
     </>
   );
