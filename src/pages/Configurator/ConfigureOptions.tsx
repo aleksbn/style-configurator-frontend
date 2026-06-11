@@ -3,6 +3,7 @@ import type { IModel, IOption } from "../../models/Model";
 import styled from "styled-components";
 import ColorPickerModal from "./ColorPickerModal";
 import { AnimatePresence } from "framer-motion";
+import PriceBreakdown from "./PriceBreakdown";
 
 const Container = styled.div`
   display: flex;
@@ -128,7 +129,7 @@ const SizeOption = styled.option`
   cursor: pointer;
 `;
 
-const TotalPriceContainer = styled.div`
+const PriceContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -138,11 +139,11 @@ const TotalPriceContainer = styled.div`
   padding-left: 20%;
 `;
 
-const TotalPriceLabel = styled.label`
+const PriceLabel = styled.label`
   cursor: pointer;
 `;
 
-const TotalPrice = styled.span``;
+const Price = styled.span``;
 
 export default function ConfigureOptions({
   selectedOption,
@@ -158,6 +159,7 @@ export default function ConfigureOptions({
   price: { [key: string]: number };
 }) {
   const [colorPickerOpened, setColorPickerOpened] = useState(false);
+  const [priceBreakdownOpened, setPriceBreakdownOpened] = useState(false);
   const selectedColor = selectedOption?.value || selectedOption?.default_value;
   let invertedColor = selectedColor
     ? `#${selectedColor
@@ -236,10 +238,20 @@ export default function ConfigureOptions({
           </SizeSelectorContainer>
         </MainContainer>
       </Body>
-      <TotalPriceContainer>
-        <TotalPriceLabel>Total price:</TotalPriceLabel>
-        <TotalPrice>${price["Total price"].toFixed(2)}</TotalPrice>
-      </TotalPriceContainer>
+      <PriceContainer onClick={() => setPriceBreakdownOpened(true)}>
+        <PriceLabel>Total price:</PriceLabel>
+        <Price>${price["Total price"].toFixed(2)}</Price>
+      </PriceContainer>
+      <AnimatePresence>
+        {priceBreakdownOpened && (
+          <PriceBreakdown
+            onClose={() => setPriceBreakdownOpened(false)}
+            name={model?.name || ""}
+            price={price}
+            transitionTime={0.5}
+          />
+        )}
+      </AnimatePresence>
     </Container>
   );
 }

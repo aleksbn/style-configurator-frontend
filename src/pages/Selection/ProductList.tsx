@@ -3,7 +3,7 @@ import React from "react";
 import styled from "styled-components";
 import { SlideRight } from "../../animations/Slide";
 
-const StyledContainer = styled.div`
+const Container = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
@@ -13,11 +13,11 @@ const StyledContainer = styled.div`
   height: calc(100svh - 140px);
 `;
 
-const StyledHeader = styled.h2`
+const Header = styled.h2`
   font-size: 1.2rem;
 `;
 
-const StyledItem = styled.div`
+const Item = styled.div`
   cursor: pointer;
   padding-left: 25px;
 
@@ -26,7 +26,7 @@ const StyledItem = styled.div`
   }
 `;
 
-const StyledList = styled.ul`
+const List = styled.ul`
   list-style-type: none;
   padding: 0;
   margin: 0;
@@ -35,8 +35,8 @@ const StyledList = styled.ul`
 export default function ProductList({ models, setCurrentModel, currentModel }) {
   let delayIn = 0.5;
   return (
-    <StyledContainer>
-      <StyledList>
+    <Container>
+      <List>
         {Object.values(models).map((model) => (
           <motion.li
             key={model.name}
@@ -45,9 +45,9 @@ export default function ProductList({ models, setCurrentModel, currentModel }) {
             animate="animate"
             exit="exit"
           >
-            <StyledHeader>{model.name.toUpperCase()}</StyledHeader>
+            <Header>{model.name.toUpperCase()}</Header>
             {Object.values(model.options).map((option) => (
-              <StyledItem key={option.name}>
+              <Item key={option.name}>
                 <p
                   onClick={() => setCurrentModel(option)}
                   style={{
@@ -55,11 +55,11 @@ export default function ProductList({ models, setCurrentModel, currentModel }) {
                       currentModel?.name === option.name ? "bold" : "normal",
                   }}
                 >{`${option.name}`}</p>
-              </StyledItem>
+              </Item>
             ))}
           </motion.li>
         ))}
-      </StyledList>
-    </StyledContainer>
+      </List>
+    </Container>
   );
 }

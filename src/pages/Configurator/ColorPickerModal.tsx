@@ -3,22 +3,9 @@ import { cubicBezier, motion } from "framer-motion";
 import styled from "styled-components";
 import { HexColorPicker } from "react-colorful";
 import { fadeAndIncrease } from "../../animations/Fade";
+import { BackgroundOverlay } from "../../components/style/Common.style";
 
-const StyledBackgroundOverlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100svh;
-  background-color: rgba(0, 0, 0, 0);
-  z-index: 100;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-`;
-const StyledContainer = styled.div`
+const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -35,7 +22,7 @@ const StyledContainer = styled.div`
   }
 `;
 
-const StyledModalOkButton = styled.div`
+const ModalOkButton = styled.div`
   width: 100%;
   background-color: #000;
   color: #fff;
@@ -61,7 +48,7 @@ export default function ColorPickerModal({
 }) {
   const [selectedColor, setSelectedColor] = useState(color);
   return (
-    <StyledBackgroundOverlay
+    <BackgroundOverlay
       as={motion.div}
       initial={{ backgroundColor: "rgba(0, 0, 0, 0)" }}
       animate={{
@@ -80,7 +67,7 @@ export default function ColorPickerModal({
       }}
       onClick={onClose}
     >
-      <StyledContainer
+      <Container
         as={motion.div}
         variants={fadeAndIncrease(0, 0, 0.3, 0.3)}
         initial="initial"
@@ -92,15 +79,15 @@ export default function ColorPickerModal({
           color={color}
           onChange={(color) => setSelectedColor(color)}
         />
-        <StyledModalOkButton
+        <ModalOkButton
           onClick={() => {
             onChange(selectedColor);
             onClose?.();
           }}
         >
           OK
-        </StyledModalOkButton>
-      </StyledContainer>
-    </StyledBackgroundOverlay>
+        </ModalOkButton>
+      </Container>
+    </BackgroundOverlay>
   );
 }

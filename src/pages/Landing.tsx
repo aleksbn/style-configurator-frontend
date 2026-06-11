@@ -1,11 +1,4 @@
 import React from "react";
-import {
-  BottomWrapp,
-  Container,
-  Desc,
-  Title,
-  TopWrapp,
-} from "../components/style/Common.style";
 import { motion } from "framer-motion";
 import { Button } from "../components/style/Buttons.style";
 import styled from "styled-components";
@@ -13,6 +6,75 @@ import { fade } from "../animations/Fade";
 import { SlideUp } from "../animations/Slide";
 import { useNavigate } from "react-router-dom";
 import { LandingImage, LargeImage } from "../helpers/imageImport";
+
+const Container = styled.div`
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  position: relative;
+`;
+const TopWrapp = styled.div`
+  position: absolute;
+  top: 70%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+  width: 100%;
+`;
+
+const BottomWrapp = styled.div`
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  align-items: center;
+  position: absolute;
+  bottom: 9.68svh;
+`;
+
+const Title = styled.h2`
+  color: #191817;
+  text-align: center;
+  font-size: 48px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 64px;
+  letter-spacing: -0.5px;
+
+  /* FOR ANIMATIONS */
+  overflow: hidden;
+  height: fit-content;
+  width: fit-content;
+
+  > span {
+    display: inline-block;
+  }
+`;
+const Desc = styled.div`
+  color: #191817;
+  text-align: center;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 26px;
+  letter-spacing: 0.2px;
+
+  /* FOR ANIMATIONS */
+  overflow: hidden;
+  height: fit-content;
+  width: fit-content;
+
+  > span {
+    display: inline-block;
+  }
+`;
 
 const Wrap = styled.div`
   width: 100%;
@@ -31,7 +93,7 @@ const LandingImageTag = styled.img`
   object-fit: cover;
 `;
 
-const StyledSlogan = styled.h1`
+const Slogan = styled.h1`
   position: absolute;
   top: 50vh;
   left: 50%;
@@ -70,14 +132,14 @@ export default function Landing() {
   return (
     <Wrap>
       <LargeImageContainer>
-        <StyledSlogan
+        <Slogan
           as={motion.h1}
           variants={fade(2.5, 0, 1, 1)}
           initial="initial"
           animate="animate"
         >
           Style Dial — Tailored to Your Signature.
-        </StyledSlogan>
+        </Slogan>
         <LargeImageTag
           src={LargeImage}
           as={motion.img}

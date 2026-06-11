@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { fade } from "../../animations/Fade";
 
-const StyledContainer = styled.div`
+const Container = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -14,16 +14,16 @@ const StyledContainer = styled.div`
   gap: 16px;
 `;
 
-const StyledImage = styled.img`
+const Image = styled.img`
   height: 500px;
 `;
 
-const StyledLabel = styled.span`
+const Label = styled.span`
   font-size: 1.2rem;
   margin-right: 10px;
 `;
 
-const StyledPrice = styled.span`
+const Price = styled.span`
   font-size: 1.2rem;
   font-weight: bold;
 `;
@@ -31,10 +31,10 @@ const StyledPrice = styled.span`
 export default function ProductImage({ currentModel }) {
   const [isInitial, setIsInitial] = useState(true);
   return (
-    <StyledContainer>
+    <Container>
       {isInitial && (
         <>
-          <StyledImage
+          <Image
             src={currentModel?.sketch}
             key={currentModel?.sketch}
             as={motion.img}
@@ -49,16 +49,14 @@ export default function ProductImage({ currentModel }) {
             animate="animate"
             onAnimationComplete={() => setIsInitial(false)}
           >
-            <StyledLabel>Starting from:</StyledLabel>
-            <StyledPrice key={currentModel?.price}>
-              ${currentModel?.base_price}
-            </StyledPrice>
+            <Label>Starting from:</Label>
+            <Price key={currentModel?.price}>${currentModel?.base_price}</Price>
           </motion.div>
         </>
       )}
       {!isInitial && (
         <AnimatePresence mode="wait" initial={false}>
-          <StyledImage
+          <Image
             src={currentModel?.sketch}
             key={currentModel?.sketch}
             as={motion.img}
@@ -74,13 +72,11 @@ export default function ProductImage({ currentModel }) {
             animate="animate"
             exit="exit"
           >
-            <StyledLabel>Starting from:</StyledLabel>
-            <StyledPrice key={currentModel?.price}>
-              ${currentModel?.base_price}
-            </StyledPrice>
+            <Label>Starting from:</Label>
+            <Price key={currentModel?.price}>${currentModel?.base_price}</Price>
           </motion.div>
         </AnimatePresence>
       )}
-    </StyledContainer>
+    </Container>
   );
 }

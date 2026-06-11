@@ -20,6 +20,7 @@ export default function MainCompose() {
 
   useEffect(() => {
     const fetchPrice = async () => {
+      if (selectedSKU === null) return;
       const priceObject = await Api.getSinglePrice(selectedSKU!);
       setPrice(priceObject);
       setIsLoading(false);

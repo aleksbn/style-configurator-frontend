@@ -25,7 +25,7 @@ const PageConfigurator = styled.div`
   height: calc(100svh - 140px);
 `;
 
-const StyledTitle = styled.h1`
+const Title = styled.h1`
   text-align: center;
   font-size: 2.5rem;
 `;
@@ -49,7 +49,7 @@ export default function Configurator({
   return (
     <>
       <PageConfiguratorWrap>
-        <StyledTitle>{model?.name}</StyledTitle>
+        <Title>{model?.name}</Title>
         <PageConfigurator>
           <Options
             options={Object.values(model?.options ?? {})}

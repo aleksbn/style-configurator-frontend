@@ -2,8 +2,10 @@ import React from "react";
 import { motion } from "framer-motion";
 import styled from "styled-components";
 import { fade } from "../../animations/Fade";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { SlideRight } from "../../animations/Slide";
+import { IoChevronBackCircleOutline } from "react-icons/io5";
+import { BsCartDash } from "react-icons/bs";
 
 const Wrapp = styled.div`
   display: flex;
@@ -37,10 +39,11 @@ const Logo = styled.img`
   transform: translate(-50%, -50%);
 `;
 
-const StyledBackButton = styled.span``;
+const BackButton = styled.div``;
 
 export default function Navbar() {
   const location = useLocation();
+  const navigate = useNavigate();
   return (
     <Wrapp
       as={motion.div}
@@ -52,19 +55,24 @@ export default function Navbar() {
       {location.pathname === "/" ? (
         <span></span>
       ) : (
-        <StyledBackButton
+        <BackButton
           as={motion.span}
           variants={SlideRight(0.5, 0, 0.5, 0.5, true)}
           initial="initial"
           animate="animate"
+          onClick={() => navigate(-1)}
         >
-          Back
-        </StyledBackButton>
+          <IoChevronBackCircleOutline
+            size={36}
+            color="black"
+            cursor="pointer"
+          />
+        </BackButton>
       )}
       <LogoContainer>
         <Logo src="./src/assets/images/logo_monochrome.png" alt="logo" />
       </LogoContainer>
-      <div>Cart</div>
+      <BsCartDash size={32} color="black" cursor="pointer" />
     </Wrapp>
   );
 }

@@ -1,12 +1,12 @@
 import React from "react";
 import styled from "styled-components";
-import type { IModel, IOption } from "../../models/Model";
+import type { IOption } from "../../models/Model";
 
-const StyledContainer = styled.div`
+const Container = styled.div`
   padding-left: 20%;
 `;
 
-const StyledOptionsContainer = styled.div`
+const OptionsContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 40px;
@@ -17,13 +17,13 @@ const StyledOptionsContainer = styled.div`
   height: calc(100svh - 240px);
 `;
 
-const StyledOptionContainer = styled.div`
+const OptionContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
 `;
 
-const StyledOption = styled.div`
+const Option = styled.div`
   cursor: pointer;
   font-size: 1.4rem;
   text-transform: uppercase;
@@ -37,7 +37,7 @@ const StyledOption = styled.div`
   }
 `;
 
-const StyledUnderline = styled.div`
+const Underline = styled.div`
   width: 0%;
   height: 2px;
   background-color: #000000;
@@ -58,23 +58,23 @@ export default function Options({
   selectedOption: IOption | null;
 }) {
   return (
-    <StyledContainer>
-      <StyledOptionsContainer>
+    <Container>
+      <OptionsContainer>
         {options.map((option) => (
-          <StyledOptionContainer>
-            <StyledOption
+          <OptionContainer>
+            <Option
               key={option.code}
               onClick={() => setSelectedOption(option)}
               className={selectedOption?.code === option.code ? "selected" : ""}
             >
               {option.name}
-            </StyledOption>
-            <StyledUnderline
+            </Option>
+            <Underline
               className={selectedOption?.code === option.code ? "selected" : ""}
             />
-          </StyledOptionContainer>
+          </OptionContainer>
         ))}
-      </StyledOptionsContainer>
-    </StyledContainer>
+      </OptionsContainer>
+    </Container>
   );
 }
