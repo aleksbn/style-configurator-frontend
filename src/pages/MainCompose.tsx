@@ -1,9 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Configurator from "./Configurator";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { setSelectedModel } from "../store/slices/modelSlice";
 import { setConfiguration } from "../store/slices/configurationSlice";
 import type { IMultiOptionType, IOption } from "../models/Model";
+import Api from "../Api/ApiHelper";
+import LoadingSpinner from "../components/ui/LoadingSpinner";
 
 export default function MainCompose() {
   const dispatch = useAppDispatch();
@@ -13,6 +15,18 @@ export default function MainCompose() {
     .flat();
   const selectedSKU = useAppSelector((state) => state.configuration.data);
   const selectedModel = useAppSelector((state) => state.models.selectedModel);
+  const [price, setPrice] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchPrice = async () => {
+      const priceObject = await Api.getSinglePrice(selectedSKU!);
+      setPrice(priceObject);
+      setIsLoading(false);
+    };
+
+    fetchPrice();
+  }, [selectedSKU]);
 
   const redoReduxModel = () => {
     const modelToConfigure = structuredClone(
@@ -138,7 +152,7 @@ export default function MainCompose() {
   };
 
   const getComponentProps = () => {
-    return { model: selectedModel, update_color, update_parts };
+    return { model: selectedModel, update_color, update_parts, price };
   };
 
   const getComponent = () => {
@@ -147,5 +161,6 @@ export default function MainCompose() {
   };
 
   if (!selectedModel) return null;
+  if (isLoading) return <LoadingSpinner />;
   return <>{getComponent()}</>;
 }

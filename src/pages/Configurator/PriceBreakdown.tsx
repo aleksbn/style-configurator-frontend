@@ -1,7 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import type { IModel, IOption } from "../../models/Model";
-import calculateOneItemPrice from "../../helpers/priceHelper";
 
 const StyledPriceContainer = styled.div`
   display: flex;
@@ -32,41 +30,37 @@ const StyledPriceLabel = styled.span``;
 const StyledPrice = styled.span``;
 
 export default function PriceBreakdown({
-  model,
-  options,
+  name,
+  price: priceObject,
 }: {
-  model: IModel | null;
-  options: IOption[];
+  name: string;
+  price: { [key: string]: number };
 }) {
   return (
     <StyledPriceContainer>
-      <StyledTitle>{model?.name}</StyledTitle>
+      <StyledTitle>{name}</StyledTitle>
       <StyledPart>Base price</StyledPart>
       <StyledPriceInfoContainer>
         <StyledPriceLabel>Amount:</StyledPriceLabel>
-        <StyledPrice>${model?.base_price.toFixed(2)}</StyledPrice>
+        <StyledPrice>${priceObject["Base price"]?.toFixed(2)}</StyledPrice>
       </StyledPriceInfoContainer>
-      {Object.values(model?.options).map((option: IOption) => (
-        <>
-          <StyledPart key={option.code}>{option.name}</StyledPart>
-          <StyledPriceInfoContainer>
-            <StyledPriceLabel>Amount:</StyledPriceLabel>
-            <StyledPrice>
-              ${calculateOneItemPrice(option).toFixed(2)}
-            </StyledPrice>
-          </StyledPriceInfoContainer>
-        </>
-      ))}
+      {Object.entries(priceObject).map(
+        ([key, price]) =>
+          key !== "Base price" &&
+          key !== "Total price" && (
+            <React.Fragment key={key}>
+              <StyledPart>{key}</StyledPart>
+              <StyledPriceInfoContainer>
+                <StyledPriceLabel>Amount:</StyledPriceLabel>
+                <StyledPrice>${price.toFixed(2)}</StyledPrice>
+              </StyledPriceInfoContainer>
+            </React.Fragment>
+          ),
+      )}
       <StyledPart>Total</StyledPart>
       <StyledPriceInfoContainer>
         <StyledPriceLabel>Amount:</StyledPriceLabel>
-        <StyledPrice>
-          $
-          {(
-            options.reduce((acc, option) => acc + calculatePrice(option), 0) +
-            model?.base_price
-          ).toFixed(2)}
-        </StyledPrice>
+        <StyledPrice>${priceObject["Total price"].toFixed(2)}</StyledPrice>
       </StyledPriceInfoContainer>
     </StyledPriceContainer>
   );

@@ -40,6 +40,10 @@ const Api = {
   getAllModelsContent() {
     return Api.get("/models");
   },
+
+  getSinglePrice(configKey: string) {
+    return Api.get(`/price/calculate/${configKey}`);
+  },
 };
 
 export default Api;

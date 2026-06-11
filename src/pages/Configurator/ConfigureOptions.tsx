@@ -3,7 +3,6 @@ import type { IModel, IOption } from "../../models/Model";
 import styled from "styled-components";
 import ColorPickerModal from "./ColorPickerModal";
 import { AnimatePresence } from "framer-motion";
-import calculateOneItemPrice from "../../helpers/priceHelper";
 
 const Container = styled.div`
   display: flex;
@@ -150,11 +149,13 @@ export default function ConfigureOptions({
   update_color,
   update_parts,
   model,
+  price,
 }: {
   selectedOption: IOption | null;
   update_color: (partid: string, color: string) => void;
   update_parts: (partid: string, partvalue: string) => void;
   model: IModel | null;
+  price: { [key: string]: number };
 }) {
   const [colorPickerOpened, setColorPickerOpened] = useState(false);
   const selectedColor = selectedOption?.value || selectedOption?.default_value;
@@ -237,15 +238,7 @@ export default function ConfigureOptions({
       </Body>
       <TotalPriceContainer>
         <TotalPriceLabel>Total price:</TotalPriceLabel>
-        <TotalPrice>
-          $
-          {(
-            Object.values(model?.options).reduce(
-              (acc, option) => acc + calculateOneItemPrice(option),
-              0,
-            ) + model?.base_price
-          ).toFixed(2)}
-        </TotalPrice>
+        <TotalPrice>${price["Total price"].toFixed(2)}</TotalPrice>
       </TotalPriceContainer>
     </Container>
   );

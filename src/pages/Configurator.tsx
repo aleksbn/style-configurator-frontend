@@ -36,11 +36,12 @@ export default function Configurator({
   model,
   update_color,
   update_parts,
+  price,
 }: {
   model: IModel | null;
-  title: string;
   update_color: (partid: string, color: string) => void;
   update_parts: (partid: string, partvalue: string) => void;
+  price: { [key: string]: number };
 }) {
   const [selectedOption, setSelectedOption] = useState<IOption | null>(
     Object.values(model?.options ?? {})[0] ?? null,
@@ -65,6 +66,7 @@ export default function Configurator({
             update_color={update_color}
             update_parts={update_parts}
             model={model}
+            price={price}
           />
         </PageConfigurator>
       </PageConfiguratorWrap>
