@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import styled from "styled-components";
 import { fade } from "../../animations/Fade";
 import { useLocation, useNavigate } from "react-router-dom";
-import { SlideRight } from "../../animations/Slide";
+import { SlideLeft, SlideRight } from "../../animations/Slide";
 import { IoChevronBackCircleOutline } from "react-icons/io5";
 import { BsCartDash } from "react-icons/bs";
 
@@ -60,6 +60,7 @@ export default function Navbar() {
           variants={SlideRight(0.5, 0, 0.5, 0.5, true)}
           initial="initial"
           animate="animate"
+          exit="exit"
           onClick={() => navigate(-1)}
         >
           <IoChevronBackCircleOutline
@@ -72,7 +73,18 @@ export default function Navbar() {
       <LogoContainer>
         <Logo src="./src/assets/images/logo_monochrome.png" alt="logo" />
       </LogoContainer>
-      <BsCartDash size={32} color="black" cursor="pointer" />
+      {location.pathname === "/" ? (
+        <span></span>
+      ) : (
+        <motion.div
+          variants={SlideLeft(0.5, 0, 0.5, 0.5, true)}
+          initial="initial"
+          animate="animate"
+          exit="exit"
+        >
+          <BsCartDash size={32} color="black" cursor="pointer" />
+        </motion.div>
+      )}
     </Wrapp>
   );
 }

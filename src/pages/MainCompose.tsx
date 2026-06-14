@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import Configurator from "./Configurator";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { setSelectedModel } from "../store/slices/modelSlice";
 import { setConfiguration } from "../store/slices/configurationSlice";
-import type { IMultiOptionType, IOption } from "../models/Model";
+import type { IMultiOptionType } from "../models/Model";
 import Api from "../Api/ApiHelper";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
 
@@ -102,16 +102,10 @@ export default function MainCompose() {
     }
   };
 
-  useEffect(() => {
-    if (!selectedModel && selectedSKU && allModels.length > 0) {
-      redoReduxModel();
-    }
-  }, []);
-
-  useEffect(() => {
+  useLayoutEffect(() => {
     setTimeout(() => {
       redoModel();
-    }, 100);
+    }, 300);
   }, [selectedModel]);
 
   useEffect(() => {
@@ -120,11 +114,6 @@ export default function MainCompose() {
       redoReduxModel();
     }
   }, [selectedSKU]);
-
-  useEffect(() => {
-    // UPDATE REAL MODEL
-    redoModel();
-  }, [selectedModel]);
 
   const update_color = (partid: string, color: string) => {
     const newSku = selectedSKU

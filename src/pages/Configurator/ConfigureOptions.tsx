@@ -64,11 +64,7 @@ const Radio = styled.input`
   cursor: pointer;
 `;
 
-const RadioLabel = styled.label`
-  cursor: pointer;
-`;
-
-const SizeSelectorLabel = styled.label`
+const Label = styled.label`
   cursor: pointer;
 `;
 
@@ -139,11 +135,24 @@ const PriceContainer = styled.div`
   padding-left: 20%;
 `;
 
-const PriceLabel = styled.label`
+const NumberOfItemsInput = styled.input`
+  width: 100%;
+  height: 46px;
+  padding: 0 16px;
+  font-size: 16px;
+  color: #1f2937;
+  background-color: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
   cursor: pointer;
+  outline: none;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease-in-out;
 `;
 
-const Price = styled.span``;
+const Price = styled.span`
+  font-weight: bold;
+`;
 
 export default function ConfigureOptions({
   selectedOption,
@@ -151,12 +160,16 @@ export default function ConfigureOptions({
   update_parts,
   model,
   price,
+  numberOfItems,
+  setNumberOfItems,
 }: {
   selectedOption: IOption | null;
   update_color: (partid: string, color: string) => void;
   update_parts: (partid: string, partvalue: string) => void;
   model: IModel | null;
   price: { [key: string]: number };
+  numberOfItems: number;
+  setNumberOfItems: React.Dispatch<React.SetStateAction<number>>;
 }) {
   const [colorPickerOpened, setColorPickerOpened] = useState(false);
   const [priceBreakdownOpened, setPriceBreakdownOpened] = useState(false);
@@ -194,13 +207,13 @@ export default function ConfigureOptions({
           {selectedOption?.multi_option_type &&
             selectedOption.multi_option_type.map((option) => (
               <>
-                <RadioLabel
+                <Label
                   onClick={() =>
                     update_parts(selectedOption?.code || "", option.code)
                   }
                 >
                   {option.name}
-                </RadioLabel>
+                </Label>
                 <Radio
                   type="radio"
                   key={option.value}
@@ -220,8 +233,7 @@ export default function ConfigureOptions({
             }}
             onClick={() => setColorPickerOpened(!colorPickerOpened)}
           />
-
-          <SizeSelectorLabel>Size:</SizeSelectorLabel>
+          <Label>Size:</Label>
           <SizeSelectorContainer>
             <SizeSelector>
               {model?.sizes.map((size) => (
@@ -236,11 +248,20 @@ export default function ConfigureOptions({
             </SizeSelector>
             <Arrow />
           </SizeSelectorContainer>
+          <Label>Number of items:</Label>
+          <NumberOfItemsInput
+            type="number"
+            min="1"
+            max="10"
+            step="1"
+            value={numberOfItems}
+            onChange={(e) => setNumberOfItems(parseInt(e.target.value))}
+          />
         </MainContainer>
       </Body>
       <PriceContainer onClick={() => setPriceBreakdownOpened(true)}>
-        <PriceLabel>Total price:</PriceLabel>
-        <Price>${price["Total price"].toFixed(2)}</Price>
+        <Label>Total price:</Label>
+        <Price>${(price["Total price"] * numberOfItems).toFixed(2)}</Price>
       </PriceContainer>
       <AnimatePresence>
         {priceBreakdownOpened && (
@@ -249,6 +270,7 @@ export default function ConfigureOptions({
             name={model?.name || ""}
             price={price}
             transitionTime={0.5}
+            numberOfItems={numberOfItems}
           />
         )}
       </AnimatePresence>

@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useLayoutEffect, useState } from "react";
 import styled from "styled-components";
 import { BackgroundOverlay } from "../../components/style/Common.style";
 import { cubicBezier, motion } from "framer-motion";
 import { SlideLeft } from "../../animations/Slide";
 import { IoMdClose } from "react-icons/io";
 
-const PriceContainer = styled.div`
+const PriceBreakdownContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -15,7 +15,7 @@ const PriceContainer = styled.div`
   max-width: 40%;
   height: 100%;
   background-color: rgb(131, 238, 229);
-  padding: 80px 60px;
+  padding: 80px 20px 80px 60px;
   position: absolute;
   top: 0;
   right: 0;
@@ -28,6 +28,17 @@ const PriceContainer = styled.div`
   }
 `;
 
+const PriceListContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  padding-right: 40px;
+`;
+
 const Title = styled.h2`
   text-align: center;
   padding-bottom: 60px;
@@ -37,8 +48,12 @@ const Title = styled.h2`
 
 const Part = styled.div`
   text-transform: uppercase;
-  padding-bottom: 20px;
+  padding-bottom: 14px;
   letter-spacing: 0.1em;
+
+  &.total {
+    font-weight: 700;
+  }
 `;
 
 const PriceInfoContainer = styled.div`
@@ -48,6 +63,10 @@ const PriceInfoContainer = styled.div`
   padding-left: 40px;
   width: 100%;
   padding-bottom: 8px;
+
+  &.total {
+    font-weight: 700;
+  }
 `;
 
 const Underline = styled.div`
@@ -55,6 +74,7 @@ const Underline = styled.div`
   height: 3px;
   background-color: rgba(0, 0, 0, 0.2);
   margin-bottom: 42px;
+  flex-shrink: 0;
 `;
 
 const PriceLabel = styled.span``;
@@ -66,11 +86,13 @@ export default function PriceBreakdown({
   price: priceObject,
   transitionTime = 0.3,
   onClose,
+  numberOfItems,
 }: {
   name: string;
   price: { [key: string]: number };
   transitionTime?: number;
   onClose?: () => void;
+  numberOfItems: number;
 }) {
   return (
     <BackgroundOverlay
@@ -92,7 +114,7 @@ export default function PriceBreakdown({
       }}
       onClick={onClose}
     >
-      <PriceContainer
+      <PriceBreakdownContainer
         as={motion.div}
         variants={SlideLeft(0, 0, 0.5, 0.5, false, "100%")}
         initial="initial"
@@ -102,33 +124,43 @@ export default function PriceBreakdown({
       >
         <IoMdClose onClick={onClose} size={30} className="close-icon" />
         <Title>{name}</Title>
-        <Part>Base price</Part>
-        <PriceInfoContainer>
-          <PriceLabel>Amount:</PriceLabel>
-          <Price>${priceObject["Base price"]?.toFixed(2)}</Price>
-        </PriceInfoContainer>
-        <Underline />
-        {Object.entries(priceObject).map(
-          ([key, price]) =>
-            key !== "Base price" &&
-            key !== "Total price" && (
-              <React.Fragment key={key}>
-                <Part>{key}</Part>
-                <PriceInfoContainer>
-                  <PriceLabel>Amount:</PriceLabel>
-                  <Price>${price.toFixed(2)}</Price>
-                </PriceInfoContainer>
-                <Underline />
-              </React.Fragment>
-            ),
-        )}
-        <Part>Total</Part>
-        <PriceInfoContainer>
-          <PriceLabel>Amount:</PriceLabel>
-          <Price>${priceObject["Total price"].toFixed(2)}</Price>
-        </PriceInfoContainer>
-        <Underline />
-      </PriceContainer>
+        <PriceListContainer>
+          <Part>Base price</Part>
+          <PriceInfoContainer>
+            <PriceLabel>Amount:</PriceLabel>
+            <Price>${priceObject["Base price"]?.toFixed(2)}</Price>
+          </PriceInfoContainer>
+          <Underline />
+          {Object.entries(priceObject).map(
+            ([key, price]) =>
+              key !== "Base price" &&
+              key !== "Total price" && (
+                <React.Fragment key={key}>
+                  <Part>{key}</Part>
+                  <PriceInfoContainer>
+                    <PriceLabel>Amount:</PriceLabel>
+                    <Price>${price.toFixed(2)}</Price>
+                  </PriceInfoContainer>
+                  <Underline />
+                </React.Fragment>
+              ),
+          )}
+          <Part>Per item</Part>
+          <PriceInfoContainer>
+            <PriceLabel>Amount:</PriceLabel>
+            <Price>${priceObject["Total price"].toFixed(2)}</Price>
+          </PriceInfoContainer>
+          <Underline />
+          <Part className="total">{`Total (${numberOfItems} item${numberOfItems > 1 ? "s" : ""})`}</Part>
+          <PriceInfoContainer className="total">
+            <PriceLabel>Amount:</PriceLabel>
+            <Price>
+              ${(priceObject["Total price"] * numberOfItems).toFixed(2)}
+            </Price>
+          </PriceInfoContainer>
+          <Underline />
+        </PriceListContainer>
+      </PriceBreakdownContainer>
     </BackgroundOverlay>
   );
 }

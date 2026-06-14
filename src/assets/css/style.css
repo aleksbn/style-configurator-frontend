@@ -28,3 +28,26 @@ h6 {
 #root {
   height: 100%;
 }
+
+::-webkit-scrollbar {
+  width: 3px;
+  height: 2px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f6f4f4;
+  border-radius: 77px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #b7b7b7;
+  border-radius: 77px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #b7b7b7;
+  border-radius: 77px;
+}

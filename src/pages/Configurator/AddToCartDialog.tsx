@@ -1,46 +1,48 @@
-import React, { useState } from "react";
+import React from "react";
+import { BackgroundOverlay } from "../../components/style/Common.style";
 import { cubicBezier, motion } from "framer-motion";
 import styled from "styled-components";
-import { HexColorPicker } from "react-colorful";
 import { fadeAndIncrease } from "../../animations/Fade";
-import { BackgroundOverlay } from "../../components/style/Common.style";
+import { Button } from "../../components/style/Buttons.style";
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   width: fit-content;
-  padding: 120px;
-  background-color: rgba(240, 248, 255, 0.7);
+  height: 60%;
+  width: 60%;
+  padding: 5% 10% 10% 10%;
+  background-color: rgba(240, 248, 255, 1);
   border-radius: 50px;
-
-  & .react-colorful {
-    height: 400px;
-    width: 400px;
-    padding-bottom: 32px;
-  }
+  position: relative;
 `;
 
-const ModalOkButton = styled.div`
+const ModalAddMoreButton = styled(Button)`
   width: 100%;
   background-color: #000;
   color: #fff;
   padding: 24px 36px;
-  border-radius: 10px 10px 0 0;
+  border-radius: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
   font-weight: bold;
   cursor: pointer;
+
+  &:hover {
+    background-color: #fff;
+    color: #000000;
+  }
 `;
 
-const ModalCancelButton = styled.div`
+const ModalCheckoutButton = styled(Button)`
   width: 100%;
   background-color: #fff;
   color: #000;
   padding: 24px 36px;
-  border-radius: 0 0 10px 10px;
+  border-radius: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -48,18 +50,42 @@ const ModalCancelButton = styled.div`
   cursor: pointer;
 `;
 
-export default function ColorPickerModal({
+const Title = styled.div`
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 0 0 48px 0;
+  text-align: center;
+`;
+
+const Desc = styled.div`
+  font-size: 1.4rem;
+  text-align: center;
+  margin-bottom: 32px;
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 48px;
+  min-width: 50%;
+  max-width: 70%;
+  position: absolute;
+  bottom: 48px;
+  left: 50%;
+  transform: translateX(-50%);
+`;
+
+export default function AddToCartDialog({
   transitionTime = 0.3,
-  onChange,
-  color,
   onClose,
+  onAddMore,
+  onCheckout,
 }: {
   transitionTime?: number;
-  onChange: (color: string) => void;
-  color: string;
   onClose?: () => void;
+  onAddMore?: () => void;
+  onCheckout?: () => void;
 }) {
-  const [selectedColor, setSelectedColor] = useState(color);
   return (
     <BackgroundOverlay
       as={motion.div}
@@ -88,19 +114,19 @@ export default function ColorPickerModal({
         exit="exit"
         onClick={(e) => e.stopPropagation()}
       >
-        <HexColorPicker
-          color={color}
-          onChange={(color) => setSelectedColor(color)}
-        />
-        <ModalOkButton
-          onClick={() => {
-            onChange(selectedColor);
-            onClose?.();
-          }}
-        >
-          OK
-        </ModalOkButton>
-        <ModalCancelButton onClick={onClose}>Cancel</ModalCancelButton>
+        <Title>Item added to cart</Title>
+        <Desc>
+          Do you want to go back and add some more items? Or go to checkout?
+        </Desc>
+        <div></div>
+        <ButtonContainer>
+          <ModalAddMoreButton type="primary" onClick={onAddMore}>
+            Add more items
+          </ModalAddMoreButton>
+          <ModalCheckoutButton type="secondary" onClick={onCheckout}>
+            Go to checkout
+          </ModalCheckoutButton>
+        </ButtonContainer>
       </Container>
     </BackgroundOverlay>
   );

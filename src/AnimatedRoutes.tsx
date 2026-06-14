@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { fade } from "./animations/Fade";
 import Selection from "./pages/Selection";
 import MainCompose from "./pages/MainCompose";
+import Final from "./pages/Final";
 
 export default function AnimatedRoutes() {
   const location = useLocation();
@@ -63,6 +64,24 @@ export default function AnimatedRoutes() {
               }}
             >
               <MainCompose />
+            </motion.div>
+          }
+        />
+        <Route
+          path="/final"
+          element={
+            <motion.div
+              variants={fade(1, 0, 1, 1)}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              style={{
+                position: "absolute",
+                width: "100%",
+                height: "100%",
+              }}
+            >
+              <Final />
             </motion.div>
           }
         />

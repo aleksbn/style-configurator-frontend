@@ -7,6 +7,9 @@ import type { IModel, IOption } from "../models/Model";
 import Options from "./Configurator/Options";
 import ConfigureOptions from "./Configurator/ConfigureOptions";
 import { Button } from "../components/style/Buttons.style";
+import { AnimatePresence } from "framer-motion";
+import AddToCartDialog from "./Configurator/AddToCartDialog";
+import { useNavigate } from "react-router-dom";
 
 const PageConfiguratorWrap = styled(PageWrap)`
   display: flex;
@@ -46,6 +49,17 @@ export default function Configurator({
   const [selectedOption, setSelectedOption] = useState<IOption | null>(
     Object.values(model?.options ?? {})[0] ?? null,
   );
+  const [numberOfItems, setNumberOfItems] = useState(1);
+  const [addToCardDialogOpen, setAddToCardDialogOpen] = useState(false);
+  const navigate = useNavigate();
+  const handleAddMore = () => {
+    setAddToCardDialogOpen(false);
+    setTimeout(() => navigate("/products"), 500);
+  };
+  const handleCheckout = () => {
+    setAddToCardDialogOpen(false);
+    setTimeout(() => navigate("/final"), 500);
+  };
   return (
     <>
       <PageConfiguratorWrap>
@@ -67,13 +81,32 @@ export default function Configurator({
             update_parts={update_parts}
             model={model}
             price={price}
+            numberOfItems={numberOfItems}
+            setNumberOfItems={setNumberOfItems}
           />
         </PageConfigurator>
+        <AnimatePresence>
+          {addToCardDialogOpen && (
+            <AddToCartDialog
+              onClose={() => setAddToCardDialogOpen(false)}
+              onAddMore={handleAddMore}
+              onCheckout={handleCheckout}
+              transitionTime={0.5}
+            />
+          )}
+        </AnimatePresence>
       </PageConfiguratorWrap>
       <Footer>
         <EmptyDiv></EmptyDiv>
         <div style={{ overflow: "hidden" }}>
-          <Button type="primary">Add to cart</Button>
+          <Button
+            type="primary"
+            onClick={() => {
+              setAddToCardDialogOpen(true);
+            }}
+          >
+            Add to cart
+          </Button>
         </div>
         <EmptyDiv></EmptyDiv>
       </Footer>
