@@ -3,9 +3,11 @@ import Configurator from "./Configurator";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { setSelectedModel } from "../store/slices/modelSlice";
 import { setConfiguration } from "../store/slices/configurationSlice";
-import type { IMultiOptionType } from "../models/Model";
+import type { IModel, IMultiOptionType, IOption } from "../models/Model";
 import Api from "../Api/ApiHelper";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
+import { addToCart } from "../store/slices/cartSlice";
+import type { ICartItem } from "../models/Cart";
 
 export default function MainCompose() {
   const dispatch = useAppDispatch();
@@ -29,34 +31,42 @@ export default function MainCompose() {
     fetchPrice();
   }, [selectedSKU]);
 
+  // UPDATE REDUX MODEL
   const redoReduxModel = () => {
-    const modelToConfigure = structuredClone(
-      allModels.find((model) => model.id === selectedSKU?.split(":")[0]),
+    const modelToConfigure: IModel | undefined = structuredClone(
+      allModels.find(
+        (model: IModel) => model.id === selectedSKU?.split(":")[0],
+      ),
     );
-    const allOptions = Object.values(modelToConfigure?.options || {}).flat();
+    const allOptions: IOption[] = Object.values(
+      modelToConfigure?.options || {},
+    ).flat();
     const allSkuOptions = selectedSKU?.split(":").slice(1) || [];
     allSkuOptions.forEach((option) => {
-      let selectedOption = allOptions.find(
+      const selectedOption: IOption | undefined = allOptions.find(
         (o) => o.code === option.split("-")[0],
       );
-      const hasMultiOptions = !!selectedOption?.multi_option_type;
+      if (!selectedOption) return;
+      const hasMultiOptions = !!selectedOption.multi_option_type;
       if (selectedOption.default_value !== option.split("-")[1]) {
         selectedOption.value = option.split("-")[1];
       } else {
         selectedOption.value = null;
       }
       if (hasMultiOptions) {
-        selectedOption.selected_type = selectedOption.multi_option_type?.find(
+        const selectedType = selectedOption.multi_option_type?.find(
           (o) => o.code === option.split("-")[2],
-        ).value;
+        )?.value;
+        if (selectedType !== undefined) {
+          selectedOption.selected_type = selectedType;
+        }
       }
-      if (selectedOption) {
-        modelToConfigure!.options[selectedOption.type_name] = selectedOption;
-      }
+      modelToConfigure!.options[selectedOption.type_name] = selectedOption;
     });
     dispatch(setSelectedModel(modelToConfigure));
   };
 
+  // UPDATE VISUAL MODEL
   const redoModel = () => {
     if (selectedModel) {
       const allIds = Object.keys(selectedModel.options);
@@ -109,7 +119,6 @@ export default function MainCompose() {
   }, [selectedModel]);
 
   useEffect(() => {
-    // UPDATE REDUX MODEL
     if (selectedSKU && allModels.length > 0) {
       redoReduxModel();
     }
@@ -141,8 +150,23 @@ export default function MainCompose() {
     dispatch(setConfiguration(newSku));
   };
 
+  const add_to_cart = (numberOfItems: number, size: string) => {
+    const cartItem: ICartItem = {
+      configKey: selectedSKU!,
+      size,
+      quantity: numberOfItems,
+    };
+    dispatch(addToCart(cartItem));
+  };
+
   const getComponentProps = () => {
-    return { model: selectedModel, update_color, update_parts, price };
+    return {
+      model: selectedModel,
+      update_color,
+      update_parts,
+      add_to_cart,
+      price,
+    };
   };
 
   const getComponent = () => {

@@ -162,6 +162,7 @@ export default function ConfigureOptions({
   price,
   numberOfItems,
   setNumberOfItems,
+  setSize,
 }: {
   selectedOption: IOption | null;
   update_color: (partid: string, color: string) => void;
@@ -170,10 +171,12 @@ export default function ConfigureOptions({
   price: { [key: string]: number };
   numberOfItems: number;
   setNumberOfItems: React.Dispatch<React.SetStateAction<number>>;
+  setSize: React.Dispatch<React.SetStateAction<string>>;
 }) {
   const [colorPickerOpened, setColorPickerOpened] = useState(false);
   const [priceBreakdownOpened, setPriceBreakdownOpened] = useState(false);
   const selectedColor = selectedOption?.value || selectedOption?.default_value;
+
   let invertedColor = selectedColor
     ? `#${selectedColor
         .replace("#", "")
@@ -235,14 +238,13 @@ export default function ConfigureOptions({
           />
           <Label>Size:</Label>
           <SizeSelectorContainer>
-            <SizeSelector>
-              {model?.sizes.map((size) => (
+            <SizeSelector onChange={(e) => setSize(e.target.value)}>
+              {model?.sizes.map((sizeValue) => (
                 <SizeOption
-                  key={size}
-                  onClick={() => console.log(size)}
-                  selected={size === model?.selected_size}
+                  key={sizeValue}
+                  selected={sizeValue === model?.selected_size}
                 >
-                  {size}
+                  {sizeValue}
                 </SizeOption>
               ))}
             </SizeSelector>

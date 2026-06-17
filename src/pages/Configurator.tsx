@@ -39,19 +39,27 @@ export default function Configurator({
   model,
   update_color,
   update_parts,
+  add_to_cart,
   price,
 }: {
   model: IModel | null;
   update_color: (partid: string, color: string) => void;
   update_parts: (partid: string, partvalue: string) => void;
+  add_to_cart: (numberOfItems: number, size: string) => void;
   price: { [key: string]: number };
 }) {
   const [selectedOption, setSelectedOption] = useState<IOption | null>(
     Object.values(model?.options ?? {})[0] ?? null,
   );
   const [numberOfItems, setNumberOfItems] = useState(1);
+  const [size, setSize] = useState(model?.selected_size || "");
   const [addToCardDialogOpen, setAddToCardDialogOpen] = useState(false);
+  console.log(size);
   const navigate = useNavigate();
+  const handleAddToCartClick = () => {
+    add_to_cart(numberOfItems, size);
+    setAddToCardDialogOpen(true);
+  };
   const handleAddMore = () => {
     setAddToCardDialogOpen(false);
     setTimeout(() => navigate("/products"), 500);
@@ -83,6 +91,7 @@ export default function Configurator({
             price={price}
             numberOfItems={numberOfItems}
             setNumberOfItems={setNumberOfItems}
+            setSize={setSize}
           />
         </PageConfigurator>
         <AnimatePresence>
@@ -99,12 +108,7 @@ export default function Configurator({
       <Footer>
         <EmptyDiv></EmptyDiv>
         <div style={{ overflow: "hidden" }}>
-          <Button
-            type="primary"
-            onClick={() => {
-              setAddToCardDialogOpen(true);
-            }}
-          >
+          <Button type="primary" onClick={handleAddToCartClick}>
             Add to cart
           </Button>
         </div>
