@@ -1,4 +1,5 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import type { ICartItem } from "../../models/Cart";
 
 interface CartItem {
   configKey: string;
@@ -30,20 +31,34 @@ const cartSlice = createSlice({
         state.items.push(action.payload);
       }
     },
-    updateQuantity: (
+    updateCartItem: (
       state,
       action: PayloadAction<{
-        configKey: string;
-        size: string;
-        quantity: number;
+        oldItem: ICartItem;
+        newItem: ICartItem;
       }>,
     ) => {
-      const item = state.items.find(
-        (item) =>
-          item.configKey === action.payload.configKey &&
-          item.size === action.payload.size,
-      );
-      if (item) item.quantity = action.payload.quantity;
+      state.items = state.items.map((item) => {
+        if (
+          item.configKey === action.payload.oldItem.configKey &&
+          item.size === action.payload.oldItem.size
+        ) {
+          return action.payload.newItem;
+        }
+        return item;
+      });
+      // if there is two items with same configKey and size, merge them by adding quantities
+      state.items = state.items.reduce((acc, item) => {
+        const existing = acc.find(
+          (i) => i.configKey === item.configKey && i.size === item.size,
+        );
+        if (existing) {
+          existing.quantity += item.quantity;
+        } else {
+          acc.push(item);
+        }
+        return acc;
+      }, [] as CartItem[]);
     },
     removeFromCart: (
       state,
@@ -63,6 +78,6 @@ const cartSlice = createSlice({
   },
 });
 
-export const { addToCart, updateQuantity, removeFromCart, clearCart } =
+export const { addToCart, updateCartItem, removeFromCart, clearCart } =
   cartSlice.actions;
 export default cartSlice.reducer;

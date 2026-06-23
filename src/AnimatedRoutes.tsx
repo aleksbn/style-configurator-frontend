@@ -12,7 +12,7 @@ export default function AnimatedRoutes() {
 
   return (
     <AnimatePresence>
-      <Routes location={location.pathname} key={location.pathname}>
+      <Routes location={location} key={location.pathname}>
         <Route
           path="/"
           element={

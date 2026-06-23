@@ -10,6 +10,16 @@ const StyledModel = styled.div`
   width: 100%;
   height: calc(100svh - 240px);
   padding: 35px;
+  ${({ type }) => {
+    switch (type) {
+      case "final":
+        return `
+          height: 100%;
+        `;
+      default:
+        return "";
+    }
+  }}
   & div {
     display: flex;
     justify-content: center;
@@ -23,9 +33,16 @@ const StyledModel = styled.div`
   }
 `;
 
-export default function Model({ model }: { model: IModel | null }) {
+export default function Model({
+  model,
+  type = "",
+}: {
+  model: IModel | null;
+  type: string;
+}) {
+  if (!model) return null;
   return (
-    <StyledModel>
+    <StyledModel type={type}>
       <ReactSVG src={model?.url} alt={model?.name} />
     </StyledModel>
   );

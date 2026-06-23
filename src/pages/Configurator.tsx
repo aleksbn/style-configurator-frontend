@@ -9,7 +9,8 @@ import ConfigureOptions from "./Configurator/ConfigureOptions";
 import { Button } from "../components/style/Buttons.style";
 import { AnimatePresence } from "framer-motion";
 import AddToCartDialog from "./Configurator/AddToCartDialog";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import type { ICartItem } from "../models/Cart";
 
 const PageConfiguratorWrap = styled(PageWrap)`
   display: flex;
@@ -40,25 +41,45 @@ export default function Configurator({
   update_color,
   update_parts,
   add_to_cart,
+  update_cart,
   price,
+  selectedSKU,
 }: {
   model: IModel | null;
   update_color: (partid: string, color: string) => void;
   update_parts: (partid: string, partvalue: string) => void;
   add_to_cart: (numberOfItems: number, size: string) => void;
+  update_cart: (oldItem: ICartItem, newItem: ICartItem) => void;
   price: { [key: string]: number };
+  selectedSKU: string | null;
 }) {
   const [selectedOption, setSelectedOption] = useState<IOption | null>(
     Object.values(model?.options ?? {})[0] ?? null,
   );
-  const [numberOfItems, setNumberOfItems] = useState(1);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const cartItem = searchParams.get("cartItem")?.split("|");
+  const [numberOfItems, setNumberOfItems] = useState(
+    Number(cartItem?.[2]) || 1,
+  );
   const [size, setSize] = useState(model?.selected_size || "");
   const [addToCardDialogOpen, setAddToCardDialogOpen] = useState(false);
-  console.log(size);
   const navigate = useNavigate();
+
   const handleAddToCartClick = () => {
-    add_to_cart(numberOfItems, size);
-    setAddToCardDialogOpen(true);
+    if (cartItem) {
+      update_cart(
+        { configKey: cartItem[0], size: cartItem[1], quantity: 1 },
+        {
+          configKey: selectedSKU!,
+          size,
+          quantity: numberOfItems,
+        },
+      );
+      navigate("/final");
+    } else {
+      add_to_cart(numberOfItems, size);
+      setAddToCardDialogOpen(true);
+    }
   };
   const handleAddMore = () => {
     setAddToCardDialogOpen(false);
@@ -68,6 +89,7 @@ export default function Configurator({
     setAddToCardDialogOpen(false);
     setTimeout(() => navigate("/final"), 500);
   };
+
   return (
     <>
       <PageConfiguratorWrap>
@@ -78,7 +100,7 @@ export default function Configurator({
             setSelectedOption={setSelectedOption}
             selectedOption={selectedOption}
           />
-          <Model model={model} />
+          <Model model={model} type="" />
           <ConfigureOptions
             selectedOption={
               selectedOption
@@ -92,6 +114,7 @@ export default function Configurator({
             numberOfItems={numberOfItems}
             setNumberOfItems={setNumberOfItems}
             setSize={setSize}
+            cartItem={cartItem}
           />
         </PageConfigurator>
         <AnimatePresence>
@@ -109,7 +132,7 @@ export default function Configurator({
         <EmptyDiv></EmptyDiv>
         <div style={{ overflow: "hidden" }}>
           <Button type="primary" onClick={handleAddToCartClick}>
-            Add to cart
+            {cartItem ? "Update cart" : "Add to cart"}
           </Button>
         </div>
         <EmptyDiv></EmptyDiv>

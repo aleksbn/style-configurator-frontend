@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import type { IModel, IOption } from "../../models/Model";
 import styled from "styled-components";
 import ColorPickerModal from "./ColorPickerModal";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, number } from "framer-motion";
 import PriceBreakdown from "./PriceBreakdown";
 
 const Container = styled.div`
@@ -163,6 +163,7 @@ export default function ConfigureOptions({
   numberOfItems,
   setNumberOfItems,
   setSize,
+  cartItem,
 }: {
   selectedOption: IOption | null;
   update_color: (partid: string, color: string) => void;
@@ -172,6 +173,7 @@ export default function ConfigureOptions({
   numberOfItems: number;
   setNumberOfItems: React.Dispatch<React.SetStateAction<number>>;
   setSize: React.Dispatch<React.SetStateAction<string>>;
+  cartItem: string[] | undefined;
 }) {
   const [colorPickerOpened, setColorPickerOpened] = useState(false);
   const [priceBreakdownOpened, setPriceBreakdownOpened] = useState(false);
@@ -242,7 +244,10 @@ export default function ConfigureOptions({
               {model?.sizes.map((sizeValue) => (
                 <SizeOption
                   key={sizeValue}
-                  selected={sizeValue === model?.selected_size}
+                  selected={
+                    sizeValue == cartItem?.[1] ||
+                    sizeValue === model?.selected_size
+                  }
                 >
                   {sizeValue}
                 </SizeOption>

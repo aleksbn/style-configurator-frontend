@@ -5,7 +5,9 @@ import { fade } from "../../animations/Fade";
 import { useLocation, useNavigate } from "react-router-dom";
 import { SlideLeft, SlideRight } from "../../animations/Slide";
 import { IoChevronBackCircleOutline } from "react-icons/io5";
-import { BsCartDash } from "react-icons/bs";
+import { BsCart } from "react-icons/bs";
+import { BsFillCartFill } from "react-icons/bs";
+import { useAppSelector } from "../../store/hooks";
 
 const Wrapp = styled.div`
   display: flex;
@@ -41,9 +43,26 @@ const Logo = styled.img`
 
 const BackButton = styled.div``;
 
+const CartContainer = styled.div`
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  cursor: pointer;
+`;
+
+const NumberOfItems = styled.span`
+  font-size: 1.2rem;
+  font-weight: bold;
+`;
+
 export default function Navbar() {
   const location = useLocation();
   const navigate = useNavigate();
+  const cart = useAppSelector((state) => state.cart);
+  const handleCartClick = () => {
+    if (cart.items.length === 0) return;
+    navigate("/final");
+  };
   return (
     <Wrapp
       as={motion.div}
@@ -76,14 +95,21 @@ export default function Navbar() {
       {location.pathname === "/" ? (
         <span></span>
       ) : (
-        <motion.div
+        <CartContainer
+          as={motion.div}
           variants={SlideLeft(0.5, 0, 0.5, 0.5, true)}
           initial="initial"
           animate="animate"
           exit="exit"
+          onClick={handleCartClick}
         >
-          <BsCartDash size={32} color="black" cursor="pointer" />
-        </motion.div>
+          {cart.items.length === 0 ? (
+            <BsCart size={32} color="#263b58" />
+          ) : (
+            <BsFillCartFill size={32} color="#263b58" cursor="pointer" />
+          )}
+          <NumberOfItems>{cart.items.length}</NumberOfItems>
+        </CartContainer>
       )}
     </Wrapp>
   );
