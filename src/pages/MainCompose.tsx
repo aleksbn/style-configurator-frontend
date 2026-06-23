@@ -20,6 +20,7 @@ export default function MainCompose() {
   const selectedModel = useAppSelector((state) => state.models.selectedModel);
   const [price, setPrice] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [justLoaded, setJustLoaded] = useState(true);
 
   useEffect(() => {
     const fetchPrice = async () => {
@@ -32,11 +33,21 @@ export default function MainCompose() {
     fetchPrice();
   }, [selectedSKU]);
 
+  // FOR JUST LOADED
+  useEffect(() => {
+    setTimeout(() => {
+      setJustLoaded(false);
+    }, 1100);
+  }, []);
+
   // UPDATE VISUAL MODEL
   useLayoutEffect(() => {
-    setTimeout(() => {
-      redoModel(selectedModel);
-    }, 1000);
+    setTimeout(
+      () => {
+        redoModel(selectedModel);
+      },
+      justLoaded ? 1000 : 200,
+    );
   }, [selectedModel]);
 
   // UPDATE REDUX MODEL
