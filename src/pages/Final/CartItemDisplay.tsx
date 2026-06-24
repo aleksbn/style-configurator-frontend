@@ -11,6 +11,7 @@ import { createSearchParams, useNavigate } from "react-router-dom";
 import { Button } from "../../components/style/Buttons.style";
 import { useAppDispatch } from "../../store/hooks";
 import { removeFromCart } from "../../store/slices/cartSlice";
+import YesNoDialog from "../../components/ui/YesNoDialog";
 
 const Container = styled.div`
   display: flex;
@@ -62,17 +63,22 @@ const ButtonsContainer = styled.div`
 `;
 
 export default function CartItemDisplay({
+  selectItem,
   selectedCartItem,
   allModels,
+  isFirstInteraction,
 }: {
+  selectItem: (item: ICartItem | null) => void;
   selectedCartItem: ICartItem | null;
   allModels: IModel[];
+  isFirstInteraction: boolean;
 }) {
   const [selectedModel, setSelectedModel] = useState<IModel | null>(null);
   const [modelKey, setModelKey] = useState<string>("");
   const [modelName, setModelName] = useState<string>("");
   const [size, setSize] = useState<string>("");
   const [maxButtonWidth, setMaxButtonWidth] = useState(50);
+  const [deletionDialogOpen, setDeletionDialogOpen] = useState(false);
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -113,83 +119,102 @@ export default function CartItemDisplay({
   const handleClickDelete = () => {
     if (selectedCartItem) {
       dispatch(removeFromCart(selectedCartItem));
+      setDeletionDialogOpen(false);
       setModelKey("");
       setSelectedModel(null);
+      selectItem(null);
     }
   };
 
-  if (!selectedCartItem)
+  if (!selectedCartItem && isFirstInteraction)
     return (
       <Container>
         <None>Click on a cart item to see a model</None>
       </Container>
     );
 
-  return (
-    <Container>
-      <AnimatePresence mode="wait">
-        {selectedModel && (
-          <>
-            <Title
-              key={modelKey + "Title"}
-              as={motion.h1}
-              variants={fade(0, 0, 0.3, 0.3)}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-            >
-              {modelName} - <Size>{size}</Size>
-            </Title>
-            <ModelContainer
-              as={motion.div}
-              key={modelKey}
-              variants={fade(0, 0, 0.3, 0.3)}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-            >
-              <Model model={selectedModel} type="final" />
-            </ModelContainer>
-          </>
-        )}
-      </AnimatePresence>
-      <ButtonsContainer>
-        <Button
-          as={motion.div}
-          variants={fade(0.3, 0, 0.3, 0.3)}
-          initial="initial"
-          animate="animate"
-          className="button"
-          style={{
-            borderRadius: "40px 0 0 40px",
-            width: `${maxButtonWidth}px`,
-          }}
-          onClick={() => {
-            navigate({
-              pathname: "/compose",
-              search: `${createSearchParams({ cartItem: `${selectedCartItem.configKey}|${selectedCartItem.size}|${selectedCartItem.quantity}` })}`,
-            });
-          }}
-          type="primary"
-        >
-          Edit
-        </Button>
-        <Button
-          as={motion.div}
-          variants={fade(0.3, 0, 0.3, 0.3)}
-          initial="initial"
-          animate="animate"
-          className="button"
-          style={{
-            borderRadius: "0 40px 40px 0",
-            width: `${maxButtonWidth}px`,
-          }}
-          onClick={handleClickDelete}
-          type="secondary"
-        >
-          Delete
-        </Button>
-      </ButtonsContainer>
-    </Container>
-  );
+  if (selectedCartItem)
+    return (
+      <Container>
+        <AnimatePresence mode="wait">
+          {selectedModel && (
+            <>
+              <Title
+                key={modelKey + "Title"}
+                as={motion.h1}
+                variants={fade(0, 0, 0.3, 0.3)}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+              >
+                {modelName} - <Size>{size}</Size>
+              </Title>
+              <ModelContainer
+                as={motion.div}
+                key={modelKey}
+                variants={fade(0, 0, 0.3, 0.3)}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+              >
+                <Model model={selectedModel} type="final" />
+              </ModelContainer>
+            </>
+          )}
+        </AnimatePresence>
+        <ButtonsContainer>
+          <Button
+            as={motion.div}
+            variants={fade(0.3, 0, 0.3, 0.3)}
+            initial="initial"
+            animate="animate"
+            className="button"
+            style={{
+              borderRadius: "40px 0 0 40px",
+              width: `${maxButtonWidth}px`,
+            }}
+            onClick={() => {
+              navigate({
+                pathname: "/compose",
+                search: `${createSearchParams({ cartItem: `${selectedCartItem.configKey}|${selectedCartItem.size}|${selectedCartItem.quantity}` })}`,
+              });
+            }}
+            type="primary"
+          >
+            Edit
+          </Button>
+          <Button
+            as={motion.div}
+            variants={fade(0.3, 0, 0.3, 0.3)}
+            initial="initial"
+            animate="animate"
+            className="button"
+            style={{
+              borderRadius: "0 40px 40px 0",
+              width: `${maxButtonWidth}px`,
+            }}
+            onClick={() => setDeletionDialogOpen(true)}
+            type="secondary"
+          >
+            Delete
+          </Button>
+        </ButtonsContainer>
+        <AnimatePresence>
+          {deletionDialogOpen && (
+            <YesNoDialog
+              transitionTime={0.3}
+              title="Deleting item"
+              description="Are you sure you want to delete this item?"
+              onClose={() => setDeletionDialogOpen(false)}
+              onYes={handleClickDelete}
+              onNo={() => setDeletionDialogOpen(false)}
+              onYesText="Yes"
+              onNoText="No"
+            />
+          )}
+        </AnimatePresence>
+      </Container>
+    );
+
+  return <Container></Container>;
 }

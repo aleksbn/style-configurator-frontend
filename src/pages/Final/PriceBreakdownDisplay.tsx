@@ -123,16 +123,18 @@ export default function PriceBreakdownDisplay({
     fetchPrices();
   }, [cartRedux]);
 
-  console.log(allPrices);
-
   if (loading) {
-    return <DataLoadingSpinner />;
+    return (
+      <PriceBreakdownContainer>
+        <DataLoadingSpinner />
+      </PriceBreakdownContainer>
+    );
   }
 
   return (
     <PriceBreakdownContainer>
       <PriceListContainer>
-        {allPrices.map((price, index) => (
+        {allPrices.map((price) => (
           <Fragment key={price.Name + price.Size + price.Quantity}>
             <Part>
               {price.Name + " - " + price.Size} <span>x {price.Quantity}</span>
@@ -150,7 +152,7 @@ export default function PriceBreakdownDisplay({
         ))}
         <Part className="total">{`Total (${allPrices.reduce((acc, curr) => acc + curr.Quantity, 0)} item${allPrices.reduce((acc, curr) => acc + curr.Quantity, 0) > 1 ? "s" : ""})`}</Part>
         <PriceInfoContainer className="total">
-          <PriceLabel>Full price:</PriceLabel>
+          <PriceLabel>Full price (with discount):</PriceLabel>
           <Price>${totalPrice?.totalPrice.toFixed(2)}</Price>
         </PriceInfoContainer>
         <Note>{totalPrice?.note}</Note>

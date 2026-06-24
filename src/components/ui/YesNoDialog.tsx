@@ -1,9 +1,9 @@
 import React from "react";
-import { BackgroundOverlay } from "../../components/style/Common.style";
+import { BackgroundOverlay } from "../style/Common.style";
 import { cubicBezier, motion } from "framer-motion";
 import styled from "styled-components";
 import { fadeAndIncrease } from "../../animations/Fade";
-import { Button } from "../../components/style/Buttons.style";
+import { Button } from "../style/Buttons.style";
 
 const Container = styled.div`
   display: flex;
@@ -75,16 +75,24 @@ const ButtonContainer = styled.div`
   transform: translateX(-50%);
 `;
 
-export default function AddToCartDialog({
+export default function YesNoDialog({
   transitionTime = 0.3,
+  title,
+  description,
   onClose,
-  onAddMore,
-  onCheckout,
+  onYes,
+  onNo,
+  onYesText,
+  onNoText,
 }: {
   transitionTime?: number;
+  title: string;
+  description: string;
   onClose?: () => void;
-  onAddMore?: () => void;
-  onCheckout?: () => void;
+  onYes?: () => void;
+  onNo?: () => void;
+  onYesText: string;
+  onNoText: string;
 }) {
   return (
     <BackgroundOverlay
@@ -114,17 +122,15 @@ export default function AddToCartDialog({
         exit="exit"
         onClick={(e) => e.stopPropagation()}
       >
-        <Title>Item added to cart</Title>
-        <Desc>
-          Do you want to go back and add some more items? Or go to checkout?
-        </Desc>
+        <Title>{title}</Title>
+        <Desc>{description}</Desc>
         <div></div>
         <ButtonContainer>
-          <ModalAddMoreButton type="primary" onClick={onAddMore}>
-            Add more items
+          <ModalAddMoreButton type="primary" onClick={onYes}>
+            {onYesText}
           </ModalAddMoreButton>
-          <ModalCheckoutButton type="secondary" onClick={onCheckout}>
-            Go to checkout
+          <ModalCheckoutButton type="secondary" onClick={onNo}>
+            {onNoText}
           </ModalCheckoutButton>
         </ButtonContainer>
       </Container>

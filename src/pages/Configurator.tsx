@@ -8,9 +8,9 @@ import Options from "./Configurator/Options";
 import ConfigureOptions from "./Configurator/ConfigureOptions";
 import { Button } from "../components/style/Buttons.style";
 import { AnimatePresence } from "framer-motion";
-import AddToCartDialog from "./Configurator/AddToCartDialog";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import type { ICartItem } from "../models/Cart";
+import YesNoDialog from "../components/ui/YesNoDialog";
 
 const PageConfiguratorWrap = styled(PageWrap)`
   display: flex;
@@ -119,11 +119,15 @@ export default function Configurator({
         </PageConfigurator>
         <AnimatePresence>
           {addToCardDialogOpen && (
-            <AddToCartDialog
+            <YesNoDialog
+              transitionTime={0.3}
+              title="Item added to cart"
+              description="Do you want to go back and add some more items? Or go to checkout?"
               onClose={() => setAddToCardDialogOpen(false)}
-              onAddMore={handleAddMore}
-              onCheckout={handleCheckout}
-              transitionTime={0.5}
+              onYes={handleAddMore}
+              onNo={handleCheckout}
+              onYesText="Add more items"
+              onNoText="Go to checkout"
             />
           )}
         </AnimatePresence>

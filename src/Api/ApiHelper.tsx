@@ -48,7 +48,6 @@ const Api = {
   },
 
   getCartPrices(cartItems: { cart: ICartItem[] }) {
-    console.log(cartItems);
     return Api.post("/price/calculate/cart", cartItems);
   },
 };

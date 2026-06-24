@@ -27,6 +27,7 @@ export default function Final() {
   const [selectedCartItem, setSelectedCartItem] = useState<ICartItem | null>(
     null,
   );
+  const [isFirstInteraction, setIsFirstInteraction] = useState(true);
   const cartRedux = useAppSelector((state) => state.cart);
   const allModels = Object.values(useAppSelector((state) => state.models.data))
     .map((model) => model.options)
@@ -35,9 +36,8 @@ export default function Final() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  console.log(cartRedux);
-
-  const handleItemClick = (item: ICartItem) => {
+  const handleItemClick = (item: ICartItem | null) => {
+    setIsFirstInteraction(false);
     setSelectedCartItem(item);
     dispatch(setConfiguration(item.configKey));
   };
@@ -56,8 +56,10 @@ export default function Final() {
           allModels={allModels}
         />
         <CartItemDisplay
+          selectItem={handleItemClick}
           selectedCartItem={selectedCartItem}
           allModels={allModels}
+          isFirstInteraction={isFirstInteraction}
         />
         <PriceBreakdownDisplay
           cartRedux={cartRedux.items}
