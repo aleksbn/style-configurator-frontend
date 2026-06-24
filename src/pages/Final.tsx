@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Cart from "./Final/Cart";
 import CartItemDisplay from "./Final/CartItemDisplay";
 import PriceBreakdownDisplay from "./Final/PriceBreakdownDisplay";
@@ -7,6 +7,10 @@ import { useAppDispatch, useAppSelector } from "../store/hooks";
 import type { IModel } from "../models/Model";
 import type { ICartItem } from "../models/Cart";
 import { setConfiguration } from "../store/slices/configurationSlice";
+import Footer from "../components/ui/Footer";
+import { Button } from "../components/style/Buttons.style";
+import { clearCart } from "../store/slices/cartSlice";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   display: grid;
@@ -29,10 +33,16 @@ export default function Final() {
     .map((options) => Object.values(options))
     .flat() as IModel[];
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const handleItemClick = (item: ICartItem) => {
     setSelectedCartItem(item);
     dispatch(setConfiguration(item.configKey));
+  };
+
+  const handleClearCartClick = () => {
+    dispatch(clearCart());
+    navigate("/products");
   };
 
   return (
@@ -47,8 +57,20 @@ export default function Final() {
           selectedCartItem={selectedCartItem}
           allModels={allModels}
         />
-        <PriceBreakdownDisplay />
+        <PriceBreakdownDisplay
+          cartRedux={cartRedux.items}
+          allModels={allModels}
+        />
       </Container>
+      <Footer>
+        <div></div>
+        <Button type="secondary" onClick={handleClearCartClick}>
+          Clear cart
+        </Button>
+        <Button type="secondary" className="right">
+          Download PDF receipt
+        </Button>
+      </Footer>
     </>
   );
 }

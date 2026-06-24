@@ -4,4 +4,12 @@ interface ICartItem {
   quantity: number;
 }
 
-export type { ICartItem };
+interface IPrice {
+  Name: string;
+  Size: string;
+  Quantity: number;
+  PricePerItem: number;
+  TotalPrice: number;
+}
+
+export type { ICartItem, IPrice };

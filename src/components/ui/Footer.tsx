@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import React from "react";
 import styled from "styled-components";
 import { fade } from "../../animations/Fade";
@@ -16,6 +16,11 @@ const StyledFooter = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+
+    &.right {
+      justify-self: flex-end;
+      margin-right: 50px;
+    }
   }
 `;
 

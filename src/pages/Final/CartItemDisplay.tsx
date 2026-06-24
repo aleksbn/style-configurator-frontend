@@ -96,7 +96,7 @@ export default function CartItemDisplay({
   if (!selectedCartItem)
     return (
       <Container>
-        <None>Click on a cart item to see details</None>
+        <None>Click on a cart item to see a model</None>
       </Container>
     );
 

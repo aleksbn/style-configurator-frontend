@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from "react";
+import React, { Fragment } from "react";
 import styled from "styled-components";
 import { BackgroundOverlay } from "../../components/style/Common.style";
 import { cubicBezier, motion } from "framer-motion";
@@ -135,14 +135,14 @@ export default function PriceBreakdown({
             ([key, price]) =>
               key !== "Base price" &&
               key !== "Total price" && (
-                <React.Fragment key={key}>
+                <Fragment key={key}>
                   <Part>{key}</Part>
                   <PriceInfoContainer>
                     <PriceLabel>Amount:</PriceLabel>
                     <Price>${price.toFixed(2)}</Price>
                   </PriceInfoContainer>
                   <Underline />
-                </React.Fragment>
+                </Fragment>
               ),
           )}
           <Part>Per item</Part>

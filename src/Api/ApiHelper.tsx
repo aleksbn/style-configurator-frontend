@@ -1,4 +1,5 @@
 import axios from "axios";
+import type { ICartItem } from "../models/Cart";
 
 // internal axios instance; not exported to avoid interfering with Fast Refresh
 const ApiAxios = axios.create({
@@ -36,6 +37,7 @@ const Api = {
     Promise.resolve(true).then(() => {
       return ApiAxios.post(`${import.meta.env.VITE_BACKEND_URL}${url}`, data);
     }),
+
   // CUSTOM CALLS
   getAllModelsContent() {
     return Api.get("/models");
@@ -43,6 +45,11 @@ const Api = {
 
   getSinglePrice(configKey: string) {
     return Api.get(`/price/calculate/${configKey}`);
+  },
+
+  getCartPrices(cartItems: { cart: ICartItem[] }) {
+    console.log(cartItems);
+    return Api.post("/price/calculate/cart", cartItems);
   },
 };
 
