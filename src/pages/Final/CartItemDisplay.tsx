@@ -9,6 +9,8 @@ import { motion } from "framer-motion";
 import { fade } from "../../animations/Fade";
 import { createSearchParams, useNavigate } from "react-router-dom";
 import { Button } from "../../components/style/Buttons.style";
+import { useAppDispatch } from "../../store/hooks";
+import { removeFromCart } from "../../store/slices/cartSlice";
 
 const Container = styled.div`
   display: flex;
@@ -48,6 +50,17 @@ const ModelContainer = styled.div`
   padding-bottom: 20px;
 `;
 
+const ButtonsContainer = styled.div`
+  position: absolute;
+  bottom: 0px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 export default function CartItemDisplay({
   selectedCartItem,
   allModels,
@@ -59,14 +72,18 @@ export default function CartItemDisplay({
   const [modelKey, setModelKey] = useState<string>("");
   const [modelName, setModelName] = useState<string>("");
   const [size, setSize] = useState<string>("");
-  const navigate = useNavigate();
+  const [maxButtonWidth, setMaxButtonWidth] = useState(50);
 
-  const buttonStyle = {
-    position: "absolute",
-    bottom: "0px",
-    left: "50%",
-    transform: "translateX(-50%)",
-  };
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
+  useLayoutEffect(() => {
+    const allButtons = document.querySelectorAll(".button");
+    const maxWidth = Math.max(
+      ...Array.from(allButtons).map((b) => b.offsetWidth),
+    );
+    setMaxButtonWidth(maxWidth);
+  }, [selectedModel]);
 
   useLayoutEffect(() => {
     if (selectedCartItem) {
@@ -92,6 +109,14 @@ export default function CartItemDisplay({
       }, 50);
     }
   }, [selectedModel]);
+
+  const handleClickDelete = () => {
+    if (selectedCartItem) {
+      dispatch(removeFromCart(selectedCartItem));
+      setModelKey("");
+      setSelectedModel(null);
+    }
+  };
 
   if (!selectedCartItem)
     return (
@@ -128,22 +153,43 @@ export default function CartItemDisplay({
           </>
         )}
       </AnimatePresence>
-      <Button
-        as={motion.div}
-        variants={fade(0.3, 0, 0.3, 0.3)}
-        initial="initial"
-        animate="animate"
-        style={buttonStyle}
-        onClick={() => {
-          navigate({
-            pathname: "/compose",
-            search: `${createSearchParams({ cartItem: `${selectedCartItem.configKey}|${selectedCartItem.size}|${selectedCartItem.quantity}` })}`,
-          });
-        }}
-        type="primary"
-      >
-        Configure again
-      </Button>
+      <ButtonsContainer>
+        <Button
+          as={motion.div}
+          variants={fade(0.3, 0, 0.3, 0.3)}
+          initial="initial"
+          animate="animate"
+          className="button"
+          style={{
+            borderRadius: "40px 0 0 40px",
+            width: `${maxButtonWidth}px`,
+          }}
+          onClick={() => {
+            navigate({
+              pathname: "/compose",
+              search: `${createSearchParams({ cartItem: `${selectedCartItem.configKey}|${selectedCartItem.size}|${selectedCartItem.quantity}` })}`,
+            });
+          }}
+          type="primary"
+        >
+          Edit
+        </Button>
+        <Button
+          as={motion.div}
+          variants={fade(0.3, 0, 0.3, 0.3)}
+          initial="initial"
+          animate="animate"
+          className="button"
+          style={{
+            borderRadius: "0 40px 40px 0",
+            width: `${maxButtonWidth}px`,
+          }}
+          onClick={handleClickDelete}
+          type="secondary"
+        >
+          Delete
+        </Button>
+      </ButtonsContainer>
     </Container>
   );
 }

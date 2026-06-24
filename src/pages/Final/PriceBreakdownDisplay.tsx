@@ -92,6 +92,7 @@ export default function PriceBreakdownDisplay({
   useEffect(() => {
     const fetchPrices = async () => {
       try {
+        setLoading(true);
         const totalPriceResponse = await Api.getCartPrices({ cart: cartRedux });
         const totalPriceData = totalPriceResponse.data;
         setTotalPrice(totalPriceData);
@@ -120,7 +121,7 @@ export default function PriceBreakdownDisplay({
     };
 
     fetchPrices();
-  }, []);
+  }, [cartRedux]);
 
   console.log(allPrices);
 

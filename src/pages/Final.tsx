@@ -35,6 +35,8 @@ export default function Final() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
+  console.log(cartRedux);
+
   const handleItemClick = (item: ICartItem) => {
     setSelectedCartItem(item);
     dispatch(setConfiguration(item.configKey));
