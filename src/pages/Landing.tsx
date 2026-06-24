@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { fade } from "../animations/Fade";
 import { SlideUp } from "../animations/Slide";
 import { useNavigate } from "react-router-dom";
-import { LandingImage, LargeImage } from "../helpers/imageImport";
+import { LargeLogo, LargeImage } from "../helpers/imageImport";
 
 const Container = styled.div`
   height: 100%;
@@ -83,7 +83,7 @@ const Wrap = styled.div`
   grid-template-columns: 1fr 1fr;
 `;
 
-const LandingImageTag = styled.img`
+const LargeLogoTag = styled.img`
   position: absolute;
   top: 50%;
   left: 50%;
@@ -147,12 +147,12 @@ export default function Landing() {
         />
       </LargeImageContainer>
       <Container>
-        <LandingImageTag
+        <LargeLogoTag
           as={motion.img}
           variants={fade(1, 0, 1, 1)}
           initial="initial"
           animate="animate"
-          src={LandingImage}
+          src={LargeLogo}
         />
         <TopWrapp>
           <Title>

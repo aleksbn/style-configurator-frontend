@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { cubicBezier, motion } from "framer-motion";
 import styled from "styled-components";
 import { HexColorPicker } from "react-colorful";
 import { fadeAndIncrease } from "../../animations/Fade";
 import { BackgroundOverlay } from "../../components/style/Common.style";
+import { Api as ColorApi } from "../../Api/ColorApiHelper";
 
 const Container = styled.div`
   display: flex;
@@ -18,7 +19,10 @@ const Container = styled.div`
   & .react-colorful {
     height: 400px;
     width: 400px;
-    padding-bottom: 32px;
+
+    & .react-colorful__hue {
+      border-radius: 0;
+    }
   }
 `;
 
@@ -48,6 +52,33 @@ const ModalCancelButton = styled.div`
   cursor: pointer;
 `;
 
+const ColorPreview = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  border-radius: 0 0 8px 8px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background-color: rgba(255, 255, 255, 0.8);
+`;
+
+const ColorSwatch = styled.div<{ color: string }>`
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: ${({ color }) => color};
+  border: 1px solid rgba(0, 0, 0, 0.15);
+`;
+
+const HexLabel = styled.span`
+  font-family: monospace;
+  font-size: 14px;
+  letter-spacing: 0.05em;
+`;
+
 export default function ColorPickerModal({
   transitionTime = 0.3,
   onChange,
@@ -60,6 +91,33 @@ export default function ColorPickerModal({
   onClose?: () => void;
 }) {
   const [selectedColor, setSelectedColor] = useState(color);
+  const [colorName, setColorName] = useState("");
+
+  const getColorName = async (hex: string): Promise<string> => {
+    const cleanHex = hex.replace("#", "");
+    const response = await ColorApi.getColorName(cleanHex);
+    console.log(response);
+    return response.name.value;
+  };
+
+  useEffect(() => {
+    let active = true;
+    const timer = setTimeout(() => {
+      getColorName(selectedColor)
+        .then((name) => {
+          if (active) setColorName(name);
+        })
+        .catch((err) => {
+          if (active) setColorName(selectedColor);
+        });
+    }, 300);
+
+    return () => {
+      active = false;
+      clearTimeout(timer);
+    };
+  }, [selectedColor]);
+
   return (
     <BackgroundOverlay
       as={motion.div}
@@ -89,9 +147,13 @@ export default function ColorPickerModal({
         onClick={(e) => e.stopPropagation()}
       >
         <HexColorPicker
-          color={color}
+          color={selectedColor}
           onChange={(color) => setSelectedColor(color)}
         />
+        <ColorPreview>
+          <ColorSwatch color={selectedColor} />
+          <HexLabel>{colorName}</HexLabel>
+        </ColorPreview>
         <ModalOkButton
           onClick={() => {
             onChange(selectedColor);

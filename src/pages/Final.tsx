@@ -47,6 +47,8 @@ export default function Final() {
     navigate("/products");
   };
 
+  const handleDownloadClick = () => {};
+
   return (
     <>
       <Container>
@@ -71,7 +73,11 @@ export default function Final() {
         <Button type="secondary" onClick={handleClearCartClick}>
           Clear cart
         </Button>
-        <Button type="secondary" className="right">
+        <Button
+          type="secondary"
+          className="right"
+          onClick={handleDownloadClick}
+        >
           Download PDF receipt
         </Button>
       </Footer>
