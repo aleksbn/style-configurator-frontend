@@ -50,6 +50,10 @@ const Api = {
   getCartPrices(cartItems: { cart: ICartItem[] }) {
     return Api.post("/price/calculate/cart", cartItems);
   },
+
+  getPdfContent(cartItems: { cart: ICartItem[] }) {
+    return Api.post("/pdf", cartItems);
+  },
 };
 
 export default Api;

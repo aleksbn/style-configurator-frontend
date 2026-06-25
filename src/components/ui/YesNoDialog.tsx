@@ -19,7 +19,7 @@ const Container = styled.div`
   position: relative;
 `;
 
-const ModalAddMoreButton = styled(Button)`
+const ModalYesButton = styled(Button)`
   width: 100%;
   background-color: #000;
   color: #fff;
@@ -37,7 +37,7 @@ const ModalAddMoreButton = styled(Button)`
   }
 `;
 
-const ModalCheckoutButton = styled(Button)`
+const ModalNoButton = styled(Button)`
   width: 100%;
   background-color: #fff;
   color: #000;
@@ -126,12 +126,12 @@ export default function YesNoDialog({
         <Desc>{description}</Desc>
         <div></div>
         <ButtonContainer>
-          <ModalAddMoreButton type="primary" onClick={onYes}>
+          <ModalYesButton type="primary" onClick={onYes}>
             {onYesText}
-          </ModalAddMoreButton>
-          <ModalCheckoutButton type="secondary" onClick={onNo}>
+          </ModalYesButton>
+          <ModalNoButton type="secondary" onClick={onNo}>
             {onNoText}
-          </ModalCheckoutButton>
+          </ModalNoButton>
         </ButtonContainer>
       </Container>
     </BackgroundOverlay>

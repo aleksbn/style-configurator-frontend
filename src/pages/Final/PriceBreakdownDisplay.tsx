@@ -1,8 +1,6 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment } from "react";
 import styled from "styled-components";
-import type { ICartItem, IPrice } from "../../models/Cart";
-import Api from "../../Api/ApiHelper";
-import type { IModel } from "../../models/Model";
+import type { IPrice } from "../../models/Cart";
 import DataLoadingSpinner from "../../components/ui/DataLoadingSpinner";
 
 const PriceBreakdownContainer = styled.div`
@@ -76,53 +74,14 @@ const Note = styled.span`
 `;
 
 export default function PriceBreakdownDisplay({
-  cartRedux,
-  allModels,
+  allPrices,
+  totalPrice,
+  loading,
 }: {
-  cartRedux: ICartItem[];
-  allModels: IModel[];
+  allPrices: IPrice[];
+  totalPrice: { totalPrice: number; note: string };
+  loading: boolean;
 }) {
-  const [allPrices, setAllPrices] = useState<IPrice[]>([]);
-  const [totalPrice, setTotalPrice] = useState<{
-    totalPrice: number;
-    note: string;
-  } | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchPrices = async () => {
-      try {
-        setLoading(true);
-        const totalPriceResponse = await Api.getCartPrices({ cart: cartRedux });
-        const totalPriceData = totalPriceResponse.data;
-        setTotalPrice(totalPriceData);
-        const allPricesData: IPrice[] = [];
-        for (let i = 0; i < cartRedux.length; i++) {
-          const priceResponse = await Api.getSinglePrice(
-            cartRedux[i].configKey,
-          );
-          allPricesData.push({
-            Name:
-              allModels.find(
-                (model) => model.id === cartRedux[i].configKey.split(":")[0],
-              )?.name ?? "",
-            Size: cartRedux[i].size,
-            Quantity: cartRedux[i].quantity,
-            PricePerItem: priceResponse["Total price"],
-            TotalPrice: priceResponse["Total price"] * cartRedux[i].quantity,
-          });
-        }
-        setAllPrices(allPricesData);
-      } catch (error) {
-        console.error("Error fetching prices:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchPrices();
-  }, [cartRedux]);
-
   if (loading) {
     return (
       <PriceBreakdownContainer>
