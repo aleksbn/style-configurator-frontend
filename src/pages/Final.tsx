@@ -13,9 +13,14 @@ import { clearCart } from "../store/slices/cartSlice";
 import { useNavigate } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import DownloadDialog from "./Final/DownloadDialog";
-import { LogoMonochrome, PdfCover } from "../helpers/imageImport";
+import { LogoMonochrome, PdfCover, LargeLogo } from "../helpers/imageImport";
 import Api from "../Api/ApiHelper";
-import { applyOptionsToSvg, svgToBase64Image } from "../helpers/pdfHelper";
+import ColorApi from "../Api/ColorApiHelper";
+import {
+  applyOptionsToSvg,
+  loadFonts,
+  svgToBase64Image,
+} from "../helpers/pdfHelper";
 
 const Container = styled.div`
   display: grid;
@@ -53,7 +58,7 @@ export default function Final() {
   const handleItemClick = (item: ICartItem | null) => {
     setIsFirstInteraction(false);
     setSelectedCartItem(item);
-    dispatch(setConfiguration(item.configKey));
+    dispatch(setConfiguration(item?.configKey));
   };
 
   const handleClearCartClick = () => {
@@ -81,6 +86,7 @@ export default function Final() {
                 (model) =>
                   model.id === cartRedux.items[i].configKey.split(":")[0],
               )?.name ?? "",
+            ConfigKey: cartRedux.items[i].configKey,
             Size: cartRedux.items[i].size,
             Quantity: cartRedux.items[i].quantity,
             PricePerItem: priceResponse["Total price"],
@@ -119,7 +125,24 @@ export default function Final() {
       email,
       fullAddress,
     );
-    console.log(content);
+    // console.log(content);
+    const { pdf } = await import("@react-pdf/renderer");
+    const { default: PdfGenerator } = await import("./Final/PdfGenerator");
+    await loadFonts();
+    const pdfBlob = await pdf(
+      <PdfGenerator
+        footer={content.footer}
+        frontCoverPage={content.frontCoverPage}
+        priceBreakdownPage={content.priceBreakdownPage}
+        orderDataPage={content.orderDataPage}
+        backCoverPage={content.backCoverPage}
+      />,
+    ).toBlob();
+    const pdfUrl = URL.createObjectURL(pdfBlob);
+    const link = document.createElement("a");
+    link.href = pdfUrl;
+    link.download = "style-dial-receipt.pdf";
+    link.click();
   };
 
   const arrangeContentForPDF = async (
@@ -132,23 +155,42 @@ export default function Final() {
       cart: cartRedux.items,
     });
     const content = {
-      fullName,
-      phone,
-      email,
-      fullAddress,
-      firstPage: {
-        title: "Style Dial Receipt",
-        cover: PdfCover,
-        description: "Created by you!",
+      frontCoverPage: {
+        title: "Style speaks for itself!",
+        image: PdfCover,
+        description: "Created by you",
       },
       footer: {
         logo: LogoMonochrome,
       },
-      items: [...fetchedContent.data],
+      priceBreakdownPage: {
+        title: "Price list",
+        items: {
+          title: "List of all items",
+          pieces: [...fetchedContent.data],
+        },
+        total: {
+          title: "Total",
+          price: totalPrice,
+        },
+      },
+      orderDataPage: {
+        title: "Order data",
+        data: {
+          name: fullName,
+          phone: phone,
+          email: email,
+          address: fullAddress,
+        },
+      },
+      backCoverPage: {
+        title: "Thank you for your order!",
+        image: LargeLogo,
+      },
     };
 
     const items = await Promise.all(
-      content.items.map(async (item) => {
+      content.priceBreakdownPage.items.pieces.map(async (item, index) => {
         const model = allModels.find(
           (model) => model.id === item.configKey.split(":")[0],
         );
@@ -156,6 +198,21 @@ export default function Final() {
           return {
             ...item,
             image: await getModelImageForPdf(model, item.configKey),
+            pricePerItem: allPrices[index].PricePerItem,
+            totalPrice: allPrices[index].TotalPrice,
+            options: await Promise.all(
+              item.options.map(async (option: { color: string }) => {
+                if (option.color) {
+                  return {
+                    ...option,
+                    colorDescription: (
+                      await ColorApi.getColorName(option.color)
+                    ).name.value,
+                  };
+                }
+                return option;
+              }),
+            ),
           };
         }
       }),
@@ -163,7 +220,13 @@ export default function Final() {
 
     return {
       ...content,
-      items, // replace original items with the enriched ones
+      priceBreakdownPage: {
+        ...content.priceBreakdownPage,
+        items: {
+          ...content.priceBreakdownPage.items,
+          pieces: items,
+        },
+      },
     };
   };
 

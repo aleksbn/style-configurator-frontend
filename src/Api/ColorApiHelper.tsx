@@ -32,4 +32,4 @@ const Api = {
   },
 };
 
-export { Api };
+export default Api;

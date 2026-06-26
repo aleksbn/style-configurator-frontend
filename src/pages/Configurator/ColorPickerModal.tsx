@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { HexColorPicker } from "react-colorful";
 import { fadeAndIncrease } from "../../animations/Fade";
 import { BackgroundOverlay } from "../../components/style/Common.style";
-import { Api as ColorApi } from "../../Api/ColorApiHelper";
+import ColorApi from "../../Api/ColorApiHelper";
 
 const Container = styled.div`
   display: flex;

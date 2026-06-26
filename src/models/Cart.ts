@@ -6,6 +6,7 @@ interface ICartItem {
 
 interface IPrice {
   Name: string;
+  ConfigKey: string;
   Size: string;
   Quantity: number;
   PricePerItem: number;

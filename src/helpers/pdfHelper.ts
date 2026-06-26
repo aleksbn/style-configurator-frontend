@@ -1,4 +1,10 @@
 import type { IModel, IMultiOptionType } from "../models/Model";
+import InterRegular from "../assets/fonts/Inter_Regular.ttf";
+import InterBold from "../assets/fonts/Inter_Bold.ttf";
+import InterMedium from "../assets/fonts/Inter_Medium.ttf";
+import InterRegularItalic from "../assets/fonts/Inter_Regular_Italic.ttf";
+import InterBoldItalic from "../assets/fonts/Inter_Bold_Italic.ttf";
+import InterMediumItalic from "../assets/fonts/Inter_Medium_Italic.ttf";
 
 const applyOptionsToSvg = async (
   model: IModel,
@@ -63,4 +69,19 @@ const svgToBase64Image = (svgString: string): Promise<string> => {
   });
 };
 
-export { applyOptionsToSvg, svgToBase64Image };
+const loadFonts = async () => {
+  const { Font } = await import("@react-pdf/renderer");
+  Font.register({
+    family: "Inter",
+    fonts: [
+      { src: InterRegular, fontWeight: 400, fontStyle: "normal" },
+      { src: InterMedium, fontWeight: 500, fontStyle: "normal" },
+      { src: InterBold, fontWeight: 700, fontStyle: "normal" },
+      { src: InterRegularItalic, fontWeight: 400, fontStyle: "italic" },
+      { src: InterMediumItalic, fontWeight: 500, fontStyle: "italic" },
+      { src: InterBoldItalic, fontWeight: 700, fontStyle: "italic" },
+    ],
+  });
+};
+
+export { applyOptionsToSvg, svgToBase64Image, loadFonts };
