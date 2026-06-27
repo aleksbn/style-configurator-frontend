@@ -174,6 +174,7 @@ export default function CartItemDisplay({
               width: `${maxButtonWidth}px`,
             }}
             onClick={() => {
+              localStorage.setItem("previousPath", location.pathname);
               navigate({
                 pathname: "/compose",
                 search: `${createSearchParams({ cartItem: `${selectedCartItem.configKey}|${selectedCartItem.size}|${selectedCartItem.quantity}` })}`,

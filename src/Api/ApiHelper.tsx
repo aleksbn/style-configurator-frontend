@@ -54,6 +54,10 @@ const Api = {
   getPdfContent(cartItems: { cart: ICartItem[] }) {
     return Api.post("/pdf", cartItems);
   },
+
+  createConfiguration(configKey: string) {
+    return Api.post("/configurations", { configKey });
+  },
 };
 
 export default Api;

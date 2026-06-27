@@ -11,6 +11,7 @@ import { AnimatePresence } from "framer-motion";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import type { ICartItem } from "../models/Cart";
 import YesNoDialog from "../components/ui/YesNoDialog";
+import Api from "../Api/ApiHelper";
 
 const PageConfiguratorWrap = styled(PageWrap)`
   display: flex;
@@ -65,7 +66,8 @@ export default function Configurator({
   const [addToCardDialogOpen, setAddToCardDialogOpen] = useState(false);
   const navigate = useNavigate();
 
-  const handleAddToCartClick = () => {
+  const handleAddToCartClick = async () => {
+    await Api.createConfiguration(selectedSKU!);
     if (cartItem) {
       update_cart(
         { configKey: cartItem[0], size: cartItem[1], quantity: 1 },
@@ -86,6 +88,7 @@ export default function Configurator({
     setTimeout(() => navigate("/products"), 500);
   };
   const handleCheckout = () => {
+    localStorage.setItem("previousPath", location.pathname);
     setAddToCardDialogOpen(false);
     setTimeout(() => navigate("/final"), 500);
   };

@@ -8,6 +8,7 @@ import { IoChevronBackCircleOutline } from "react-icons/io5";
 import { BsCart } from "react-icons/bs";
 import { BsFillCartFill } from "react-icons/bs";
 import { useAppSelector } from "../../store/hooks";
+import { getBackLink } from "../../constants/backRelations";
 
 const Wrapp = styled.div`
   display: flex;
@@ -22,6 +23,13 @@ const Wrapp = styled.div`
   top: 0;
   width: 100%;
   background: rgba(255, 255, 255, 0.7);
+`;
+
+const BackContainer = styled.div`
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  cursor: pointer;
 `;
 
 const LogoContainer = styled.div`
@@ -61,6 +69,7 @@ export default function Navbar() {
   const cart = useAppSelector((state) => state.cart);
   const handleCartClick = () => {
     if (cart.items.length === 0) return;
+    localStorage.setItem("previousPath", location.pathname);
     navigate("/final");
   };
   return (
@@ -74,20 +83,30 @@ export default function Navbar() {
       {location.pathname === "/" ? (
         <span></span>
       ) : (
-        <BackButton
-          as={motion.span}
-          variants={SlideRight(0.5, 0, 0.5, 0.5, true)}
-          initial="initial"
-          animate="animate"
-          exit="exit"
-          onClick={() => navigate(-1)}
-        >
-          <IoChevronBackCircleOutline
-            size={36}
-            color="black"
-            cursor="pointer"
-          />
-        </BackButton>
+        <BackContainer>
+          <BackButton
+            as={motion.span}
+            variants={SlideRight(0.5, 0, 0.5, 0.5, true)}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            onClick={() =>
+              navigate(
+                getBackLink(
+                  location.pathname,
+                  localStorage.getItem("previousPath")!,
+                ),
+              )
+            }
+          >
+            <IoChevronBackCircleOutline
+              size={36}
+              color="black"
+              cursor="pointer"
+            />
+          </BackButton>
+          <span>{`${location.pathname.includes("final") ? "New" : ""}`}</span>
+        </BackContainer>
       )}
       <LogoContainer>
         <Logo src="./src/assets/images/logo_monochrome.png" alt="logo" />

@@ -9,7 +9,7 @@ import type { ICartItem, IPrice } from "../models/Cart";
 import { setConfiguration } from "../store/slices/configurationSlice";
 import Footer from "../components/ui/Footer";
 import { Button } from "../components/style/Buttons.style";
-import { clearCart } from "../store/slices/cartSlice";
+import { setCartToBeCleared } from "../store/slices/webSiteSlice";
 import { useNavigate } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import DownloadDialog from "./Final/DownloadDialog";
@@ -62,7 +62,7 @@ export default function Final() {
   };
 
   const handleClearCartClick = () => {
-    dispatch(clearCart());
+    dispatch(setCartToBeCleared(true));
     navigate("/products");
   };
 

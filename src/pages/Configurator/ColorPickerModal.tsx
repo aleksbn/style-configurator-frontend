@@ -96,7 +96,6 @@ export default function ColorPickerModal({
   const getColorName = async (hex: string): Promise<string> => {
     const cleanHex = hex.replace("#", "");
     const response = await ColorApi.getColorName(cleanHex);
-    console.log(response);
     return response.name.value;
   };
 

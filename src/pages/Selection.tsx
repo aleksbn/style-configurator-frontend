@@ -10,6 +10,8 @@ import { useNavigate } from "react-router-dom";
 import { PageWrap } from "../components/style/Common.style.js";
 import styled from "styled-components";
 import { setConfiguration } from "../store/slices/configurationSlice.js";
+import { clearCart } from "../store/slices/cartSlice.js";
+import { setCartToBeCleared } from "../store/slices/webSiteSlice.js";
 
 const PageSelectionWrap = styled(PageWrap)`
   display: grid;
@@ -19,12 +21,23 @@ const PageSelectionWrap = styled(PageWrap)`
 
 export default function Selection() {
   const { data: models } = useAppSelector((state) => state.models);
+  const cartToBeCleared = useAppSelector(
+    (state) => state.webSite.cartToBeCleared,
+  );
   const dispatch = useAppDispatch();
   const [currentModel, setCurrentModel] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(setConfiguration(null));
+  }, []);
+
+  useEffect(() => {
+    if (cartToBeCleared) {
+      console.log("clearing cart");
+      dispatch(clearCart());
+      dispatch(setCartToBeCleared(false));
+    }
   }, []);
 
   useEffect(() => {
