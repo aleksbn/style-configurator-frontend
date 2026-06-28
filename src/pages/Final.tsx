@@ -125,7 +125,7 @@ export default function Final() {
       email,
       fullAddress,
     );
-    // console.log(content);
+    console.log(content);
     const { pdf } = await import("@react-pdf/renderer");
     const { default: PdfGenerator } = await import("./Final/PdfGenerator");
     await loadFonts();
@@ -154,6 +154,7 @@ export default function Final() {
     const fetchedContent = await Api.getPdfContent({
       cart: cartRedux.items,
     });
+    const pieces = [...fetchedContent.data];
     const content = {
       frontCoverPage: {
         title: "Style speaks for itself!",
@@ -165,22 +166,24 @@ export default function Final() {
       },
       priceBreakdownPage: {
         title: "Price list",
-        items: {
-          title: "List of all items",
-          pieces: [...fetchedContent.data],
-        },
+      },
+      orderDataPage: {
+        title: "Order data",
         total: {
           title: "Total",
           price: totalPrice,
         },
-      },
-      orderDataPage: {
-        title: "Order data",
-        data: {
+        userData: {
           name: fullName,
           phone: phone,
           email: email,
           address: fullAddress,
+        },
+        companyData: {
+          name: "Style Dial",
+          phone: "123-456-7890",
+          email: "style-dial@example.com",
+          address: "123 Imaginary Street, Novi Sad, Serbia",
         },
       },
       backCoverPage: {
@@ -190,7 +193,7 @@ export default function Final() {
     };
 
     const items = await Promise.all(
-      content.priceBreakdownPage.items.pieces.map(async (item, index) => {
+      pieces.map(async (item, index) => {
         const model = allModels.find(
           (model) => model.id === item.configKey.split(":")[0],
         );
@@ -218,14 +221,23 @@ export default function Final() {
       }),
     );
 
+    const chunkSize = 5;
+    const itemSets = [];
+    for (let i = 0; i < items.length; i += chunkSize) {
+      const chunk = items.slice(i, i + chunkSize);
+      const from = i + 1;
+      const to = Math.min(i + chunkSize, items.length);
+      itemSets.push({
+        title: `List of items ${from}-${to}`,
+        pieces: chunk,
+      });
+    }
+
     return {
       ...content,
       priceBreakdownPage: {
         ...content.priceBreakdownPage,
-        items: {
-          ...content.priceBreakdownPage.items,
-          pieces: items,
-        },
+        itemSets,
       },
     };
   };
