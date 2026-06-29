@@ -72,7 +72,7 @@ export default function ModalProductList({
     >
       <Container
         as={motion.div}
-        variants={SlideRight(0, 0, 0.5, 0.5, false, 500)}
+        variants={SlideRight(0, 0, 0.5, 0.5, false, 1000)}
         initial="initial"
         animate="animate"
         exit="exit"

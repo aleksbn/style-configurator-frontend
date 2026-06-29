@@ -10,11 +10,10 @@ const PriceBreakdownContainer = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  padding-left: 20%;
   min-width: 30%;
   max-width: 40%;
   height: 100%;
-  background-color: rgb(131, 238, 229);
+  background-color: #ffffff;
   padding: 80px 20px 80px 60px;
   position: absolute;
   top: 0;
@@ -25,6 +24,12 @@ const PriceBreakdownContainer = styled.div`
     top: 20px;
     left: 20px;
     cursor: pointer;
+  }
+
+  @media (max-width: 1024px) {
+    padding: 80px 20px 80px 20px;
+    max-width: initial;
+    width: 50svw;
   }
 `;
 
@@ -37,6 +42,10 @@ const PriceListContainer = styled.div`
   height: 100%;
   overflow-y: auto;
   padding-right: 40px;
+
+  @media (max-width: 1024px) {
+    padding-right: 0;
+  }
 `;
 
 const Title = styled.h2`

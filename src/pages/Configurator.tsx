@@ -12,6 +12,9 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import type { ICartItem } from "../models/Cart";
 import YesNoDialog from "../components/ui/YesNoDialog";
 import Api from "../Api/ApiHelper";
+import useBreakpoint from "../hooks/useBreakpoints";
+import { GrConfigure } from "react-icons/gr";
+import PriceBreakdown from "./Configurator/PriceBreakdown";
 
 const PageConfiguratorWrap = styled(PageWrap)`
   display: flex;
@@ -21,6 +24,7 @@ const PageConfiguratorWrap = styled(PageWrap)`
   width: 100%;
   height: calc(100svh - 140px);
   margin-top: 70px;
+  position: relative;
 `;
 
 const PageConfigurator = styled.div`
@@ -28,6 +32,10 @@ const PageConfigurator = styled.div`
   display: grid;
   width: 100%;
   height: calc(100svh - 140px);
+
+  @media (max-width: 768px) {
+    grid-template-columns: 3fr 5fr;
+  }
 `;
 
 const Title = styled.h1`
@@ -36,6 +44,25 @@ const Title = styled.h1`
 `;
 
 const EmptyDiv = styled.div``;
+
+const ConfigurationBox = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 36px;
+  justify-content: flex-end;
+  align-items: center;
+  position: absolute;
+  bottom: 0;
+  right: 35px;
+  gap: 8px;
+  row-gap: 16px;
+
+  > span {
+    font-size: 1.2rem;
+    text-align: right;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+`;
 
 export default function Configurator({
   model,
@@ -64,7 +91,10 @@ export default function Configurator({
   );
   const [size, setSize] = useState(model?.selected_size || "");
   const [addToCardDialogOpen, setAddToCardDialogOpen] = useState(false);
+  const [priceBreakdownOpened, setPriceBreakdownOpened] = useState(false);
+  const [configurationOpened, setConfigurationOpened] = useState(false);
   const navigate = useNavigate();
+  const breakpoint = useBreakpoint();
 
   const handleAddToCartClick = async () => {
     await Api.createConfiguration(selectedSKU!);
@@ -103,22 +133,32 @@ export default function Configurator({
             setSelectedOption={setSelectedOption}
             selectedOption={selectedOption}
           />
-          <Model model={model} type="" />
-          <ConfigureOptions
-            selectedOption={
-              selectedOption
-                ? (model?.options[selectedOption.type_name] ?? null)
-                : null
-            }
-            update_color={update_color}
-            update_parts={update_parts}
+          <Model
             model={model}
             price={price}
             numberOfItems={numberOfItems}
-            setNumberOfItems={setNumberOfItems}
-            setSize={setSize}
-            cartItem={cartItem}
+            showPriceBreakdown={() => setPriceBreakdownOpened(true)}
+            type=""
           />
+          {breakpoint == "desktop" && (
+            <ConfigureOptions
+              selectedOption={
+                selectedOption
+                  ? (model?.options[selectedOption.type_name] ?? null)
+                  : null
+              }
+              update_color={update_color}
+              update_parts={update_parts}
+              model={model}
+              price={price}
+              numberOfItems={numberOfItems}
+              setNumberOfItems={setNumberOfItems}
+              setSize={setSize}
+              cartItem={cartItem}
+              priceBreakdownOpened={priceBreakdownOpened}
+              setPriceBreakdownOpened={setPriceBreakdownOpened}
+            />
+          )}
         </PageConfigurator>
         <AnimatePresence>
           {addToCardDialogOpen && (
@@ -134,6 +174,12 @@ export default function Configurator({
             />
           )}
         </AnimatePresence>
+        {breakpoint != "desktop" && (
+          <ConfigurationBox onClick={() => setConfigurationOpened(true)}>
+            <span>Configuration</span>
+            <GrConfigure size={30} />
+          </ConfigurationBox>
+        )}
       </PageConfiguratorWrap>
       <Footer>
         <EmptyDiv></EmptyDiv>
@@ -144,6 +190,28 @@ export default function Configurator({
         </div>
         <EmptyDiv></EmptyDiv>
       </Footer>
+      <AnimatePresence>
+        {priceBreakdownOpened && (
+          <PriceBreakdown
+            onClose={() => setPriceBreakdownOpened(false)}
+            name={model?.name || ""}
+            price={price}
+            transitionTime={0.5}
+            numberOfItems={numberOfItems}
+          />
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {configurationOpened && (
+          <PriceBreakdown
+            onClose={() => setConfigurationOpened(false)}
+            name={model?.name || ""}
+            price={price}
+            transitionTime={0.5}
+            numberOfItems={numberOfItems}
+          />
+        )}
+      </AnimatePresence>
     </>
   );
 }

@@ -32,8 +32,8 @@ const Image = styled.img`
   }
 
   @media (max-width: 768px) {
-    max-height: 40svh;
-    max-width: 40svh;
+    max-height: 45svh;
+    max-width: 45svh;
   }
 
   @media (max-width: 480px) {
@@ -131,7 +131,9 @@ export default function ProductImage({
             exit="exit"
           >
             <Label>Starting from:</Label>
-            <Price key={currentModel?.price}>${currentModel?.base_price}</Price>
+            <Price key={currentModel?.price}>
+              ${currentModel?.base_price.toFixed(2)}
+            </Price>
           </PriceContainer>
         </AnimatePresence>
       )}

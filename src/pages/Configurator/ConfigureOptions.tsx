@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import type { IModel, IOption } from "../../models/Model";
 import styled from "styled-components";
 import ColorPickerModal from "./ColorPickerModal";
-import { AnimatePresence, number } from "framer-motion";
-import PriceBreakdown from "./PriceBreakdown";
+import { AnimatePresence } from "framer-motion";
 
 const Container = styled.div`
   display: flex;
@@ -13,10 +12,18 @@ const Container = styled.div`
   padding-left: 20%;
   width: 100%;
   height: calc(100svh - 240px);
+
+  @media (max-width: 1280px) {
+    padding-left: 0;
+  }
 `;
 
 const Title = styled.h2`
   padding-left: 20%;
+
+  @media (max-width: 1280px) {
+    padding-left: 10%;
+  }
 `;
 
 const Body = styled.div`
@@ -28,6 +35,11 @@ const Body = styled.div`
   padding-right: 20%;
   width: 100%;
   gap: 40px;
+
+  @media (max-width: 1280px) {
+    padding-left: 10%;
+    padding-right: 10%;
+  }
 `;
 
 const MainContainer = styled.div`
@@ -41,7 +53,8 @@ const ColorLabel = styled.label`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
+  margin-top: 24px;
   gap: 8px;
 `;
 
@@ -50,7 +63,6 @@ const ColorCircle = styled.div`
   height: 64px;
   border-radius: 50%;
   border: 5px solid #000;
-  // add glassy effect, like the color is behind a glass
   background: rgba(255, 255, 255, 0.5);
   backdrop-filter: blur(4px);
   cursor: pointer;
@@ -91,7 +103,7 @@ const Arrow = styled.div`
 const SizeSelector = styled.select`
   width: 100%;
   height: 46px;
-  padding: 0 40px 0 16px; /* Extra right padding protects text from overlapping the arrow */
+  padding: 0 40px 0 16px;
   font-size: 16px;
   color: #1f2937;
   background-color: #ffffff;
@@ -102,7 +114,6 @@ const SizeSelector = styled.select`
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   transition: all 0.2s ease-in-out;
 
-  /* Hides default native browser arrow across modern engines */
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -133,6 +144,10 @@ const PriceContainer = styled.div`
   gap: 8px;
   cursor: pointer;
   padding-left: 20%;
+
+  @media (max-width: 1280px) {
+    padding-left: 10%;
+  }
 `;
 
 const NumberOfItemsInput = styled.input`
@@ -164,6 +179,7 @@ export default function ConfigureOptions({
   setNumberOfItems,
   setSize,
   cartItem,
+  setPriceBreakdownOpened,
 }: {
   selectedOption: IOption | null;
   update_color: (partid: string, color: string) => void;
@@ -174,9 +190,10 @@ export default function ConfigureOptions({
   setNumberOfItems: React.Dispatch<React.SetStateAction<number>>;
   setSize: React.Dispatch<React.SetStateAction<string>>;
   cartItem: string[] | undefined;
+  priceBreakdownOpened: boolean;
+  setPriceBreakdownOpened: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const [colorPickerOpened, setColorPickerOpened] = useState(false);
-  const [priceBreakdownOpened, setPriceBreakdownOpened] = useState(false);
   const selectedColor = selectedOption?.value || selectedOption?.default_value;
 
   let invertedColor = selectedColor
@@ -270,17 +287,6 @@ export default function ConfigureOptions({
         <Label>Total price:</Label>
         <Price>${(price["Total price"] * numberOfItems).toFixed(2)}</Price>
       </PriceContainer>
-      <AnimatePresence>
-        {priceBreakdownOpened && (
-          <PriceBreakdown
-            onClose={() => setPriceBreakdownOpened(false)}
-            name={model?.name || ""}
-            price={price}
-            transitionTime={0.5}
-            numberOfItems={numberOfItems}
-          />
-        )}
-      </AnimatePresence>
     </Container>
   );
 }

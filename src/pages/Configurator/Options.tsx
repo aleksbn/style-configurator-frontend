@@ -15,6 +15,10 @@ const OptionsContainer = styled.div`
   padding-left: 20%;
   width: 100%;
   height: calc(100svh - 240px);
+
+  @media (max-width: 1280px) {
+    padding-left: 0;
+  }
 `;
 
 const OptionContainer = styled.div`

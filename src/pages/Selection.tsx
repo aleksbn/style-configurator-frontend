@@ -59,7 +59,13 @@ const SeeAllContainer = styled.div`
   cursor: pointer;
 
   & span {
-    font-size: 0.8rem;
+    font-size: 1rem;
+  }
+
+  @media (max-width: 480px) {
+    & span {
+      font-size: 0.8rem;
+    }
   }
 `;
 
@@ -96,6 +102,7 @@ export default function Selection() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const breakpoint = useBreakpoint();
+  console.log(breakpoint);
 
   useEffect(() => {
     dispatch(setConfiguration(null));
