@@ -1,16 +1,23 @@
-import { motion } from "framer-motion";
 import React from "react";
+import { motion } from "framer-motion";
 import styled from "styled-components";
 import { SlideRight } from "../../animations/Slide";
 
 const Container = styled.div`
   display: flex;
   justify-content: flex-start;
-  align-items: flex-start;
-  padding-top: 10vh;
+  align-items: center;
+  padding-top: 10svh;
+  padding-bottom: 10svh;
   padding-left: 40%;
   width: 100%;
   height: calc(100svh - 140px);
+
+  @media (max-width: 768px) {
+    padding-left: 10%;
+    padding-bottom: 5svh;
+    padding-top: 5svh;
+  }
 `;
 
 const Header = styled.h2`

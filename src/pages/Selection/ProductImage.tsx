@@ -2,20 +2,54 @@ import { AnimatePresence, motion } from "framer-motion";
 import React, { useState } from "react";
 import styled from "styled-components";
 import { fade } from "../../animations/Fade";
+import type { IModel } from "../../models/Model";
+import useBreakpoint from "../../hooks/useBreakpoints";
 
 const Container = styled.div`
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
   flex-direction: column;
   padding-top: 10vh;
+  padding-bottom: 10vh;
   width: 100%;
-  height: 100%;
+  height: calc(100svh - 140px);
   gap: 16px;
+  position: relative;
+
+  @media (max-width: 1024px) {
+    justify-content: center;
+  }
 `;
 
 const Image = styled.img`
-  height: 500px;
+  max-height: 500px;
+  max-width: 500px;
+
+  @media (max-width: 1024px) {
+    max-height: 50svh;
+    max-width: 50svh;
+  }
+
+  @media (max-width: 768px) {
+    max-height: 40svh;
+    max-width: 40svh;
+  }
+
+  @media (max-width: 480px) {
+    max-height: 35svh;
+    max-width: 35svh;
+  }
+`;
+
+const PriceContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  bottom: 10svh;
+  left: 50%;
+  transform: translateX(-50%);
 `;
 
 const Label = styled.span`
@@ -28,8 +62,17 @@ const Price = styled.span`
   font-weight: bold;
 `;
 
-export default function ProductImage({ currentModel }) {
+export default function ProductImage({
+  currentModel,
+  swipeLeft,
+  swipeRight,
+}: {
+  currentModel: IModel | null;
+  swipeLeft: () => void;
+  swipeRight: () => void;
+}) {
   const [isInitial, setIsInitial] = useState(true);
+  const breakpoint = useBreakpoint();
   return (
     <Container>
       {isInitial && (
@@ -42,7 +85,8 @@ export default function ProductImage({ currentModel }) {
             initial="initial"
             animate="animate"
           />
-          <motion.div
+          <PriceContainer
+            as={motion.div}
             key={currentModel?.sketch + "price"}
             variants={fade(1.5, 0, 0.5, 0.5)}
             initial="initial"
@@ -50,8 +94,10 @@ export default function ProductImage({ currentModel }) {
             onAnimationComplete={() => setIsInitial(false)}
           >
             <Label>Starting from:</Label>
-            <Price key={currentModel?.price}>${currentModel?.base_price}</Price>
-          </motion.div>
+            <Price key={currentModel?.sketch}>
+              ${currentModel?.base_price}
+            </Price>
+          </PriceContainer>
         </>
       )}
       {!isInitial && (
@@ -64,8 +110,20 @@ export default function ProductImage({ currentModel }) {
             initial="initial"
             animate="animate"
             exit="exit"
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={0}
+            onDragEnd={(_, info) => {
+              if (info.offset.x < -50) {
+                if (breakpoint === "mobile") swipeLeft();
+              }
+              if (info.offset.x > 50) {
+                if (breakpoint === "mobile") swipeRight();
+              }
+            }}
           />
-          <motion.div
+          <PriceContainer
+            as={motion.div}
             key={currentModel?.sketch + "price"}
             variants={fade(0, 0, 0.5, 0.5)}
             initial="initial"
@@ -74,7 +132,7 @@ export default function ProductImage({ currentModel }) {
           >
             <Label>Starting from:</Label>
             <Price key={currentModel?.price}>${currentModel?.base_price}</Price>
-          </motion.div>
+          </PriceContainer>
         </AnimatePresence>
       )}
     </Container>

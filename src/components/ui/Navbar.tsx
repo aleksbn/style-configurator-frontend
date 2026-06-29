@@ -23,6 +23,10 @@ const Wrapp = styled.div`
   top: 0;
   width: 100%;
   background: rgba(255, 255, 255, 0.7);
+
+  @media (max-width: 768px) {
+    padding: 26px 19px 26px 24px;
+  }
 `;
 
 const BackContainer = styled.div`
@@ -42,8 +46,8 @@ const LogoContainer = styled.div`
 
 const Logo = styled.img`
   position: absolute;
-  height: 96px;
-  width: 96px;
+  height: 86px;
+  width: 86px;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);

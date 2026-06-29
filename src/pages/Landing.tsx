@@ -6,6 +6,7 @@ import { fade } from "../animations/Fade";
 import { SlideUp } from "../animations/Slide";
 import { useNavigate } from "react-router-dom";
 import { LargeLogo, LargeImage } from "../helpers/imageImport";
+import useBreakpoint from "../hooks/useBreakpoints";
 
 const Container = styled.div`
   height: 100%;
@@ -81,6 +82,10 @@ const Wrap = styled.div`
   height: 100svh;
   display: grid;
   grid-template-columns: 1fr 1fr;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 const LargeLogoTag = styled.img`
@@ -91,6 +96,7 @@ const LargeLogoTag = styled.img`
   height: 512px;
   transform: translate(-50%, -50%);
   object-fit: cover;
+  z-index: 1;
 `;
 
 const Slogan = styled.h1`
@@ -119,6 +125,12 @@ const LargeImageContainer = styled.div`
     background-color: rgba(255, 255, 255, 0.7);
     z-index: 1;
   }
+
+  @media (max-width: 1024px) {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
 `;
 
 const LargeImageTag = styled.img`
@@ -126,27 +138,50 @@ const LargeImageTag = styled.img`
   z-index: 0;
 `;
 
+const RotateMessage = styled.div`
+  display: none;
+  @media (max-height: 500px) and (orientation: landscape) {
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #23303e;
+    color: #eee7dc;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    z-index: 9999;
+  }
+`;
+
 export default function Landing() {
   const navigate = useNavigate();
+  const breakpoint = useBreakpoint();
 
   return (
     <Wrap>
-      <LargeImageContainer>
-        <Slogan
-          as={motion.h1}
-          variants={fade(2.5, 0, 1, 1)}
-          initial="initial"
-          animate="animate"
-        >
-          Style Dial — Tailored to Your Signature.
-        </Slogan>
-        <LargeImageTag
-          src={LargeImage}
-          as={motion.img}
-          variants={fade(0.7, 0, 1, 1)}
-        />
-      </LargeImageContainer>
+      <RotateMessage>Please rotate your device to portrait mode</RotateMessage>
+      {breakpoint == "desktop" && (
+        <LargeImageContainer>
+          <Slogan
+            as={motion.h1}
+            variants={fade(2.5, 0, 1, 1)}
+            initial="initial"
+            animate="animate"
+          >
+            Style Dial — Tailored to Your Signature.
+          </Slogan>
+          <LargeImageTag src={LargeImage} />
+        </LargeImageContainer>
+      )}
       <Container>
+        {breakpoint != "desktop" && (
+          <LargeImageContainer>
+            <LargeImageTag src={LargeImage} />
+          </LargeImageContainer>
+        )}
         <LargeLogoTag
           as={motion.img}
           variants={fade(1, 0, 1, 1)}
