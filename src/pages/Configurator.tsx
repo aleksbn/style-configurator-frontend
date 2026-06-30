@@ -3,7 +3,7 @@ import { PageWrap } from "../components/style/Common.style";
 import styled from "styled-components";
 import Footer from "../components/ui/Footer";
 import Model from "./Configurator/Model";
-import type { IModel, IOption } from "../models/Model";
+import type { IModel } from "../models/Model";
 import Options from "./Configurator/Options";
 import ConfigureOptions from "./Configurator/ConfigureOptions";
 import { Button } from "../components/style/Buttons.style";
@@ -15,6 +15,7 @@ import Api from "../Api/ApiHelper";
 import useBreakpoint from "../hooks/useBreakpoints";
 import { GrConfigure } from "react-icons/gr";
 import PriceBreakdown from "./Configurator/PriceBreakdown";
+import ColorPickerModal from "./Configurator/ColorPickerModal";
 
 const PageConfiguratorWrap = styled(PageWrap)`
   display: flex;
@@ -81,8 +82,8 @@ export default function Configurator({
   price: { [key: string]: number };
   selectedSKU: string | null;
 }) {
-  const [selectedOption, setSelectedOption] = useState<IOption | null>(
-    Object.values(model?.options ?? {})[0] ?? null,
+  const [selectedOptionKey, setSelectedOptionKey] = useState<string>(
+    Object.keys(model?.options ?? {})[0] ?? "",
   );
   const [searchParams, setSearchParams] = useSearchParams();
   const cartItem = searchParams.get("cartItem")?.split("|");
@@ -93,8 +94,13 @@ export default function Configurator({
   const [addToCardDialogOpen, setAddToCardDialogOpen] = useState(false);
   const [priceBreakdownOpened, setPriceBreakdownOpened] = useState(false);
   const [configurationOpened, setConfigurationOpened] = useState(false);
+  const [colorPickerOpened, setColorPickerOpened] = useState(false);
   const navigate = useNavigate();
   const breakpoint = useBreakpoint();
+
+  const selectedOption = selectedOptionKey
+    ? (model?.options[selectedOptionKey] ?? null)
+    : null;
 
   const handleAddToCartClick = async () => {
     await Api.createConfiguration(selectedSKU!);
@@ -123,6 +129,10 @@ export default function Configurator({
     setTimeout(() => navigate("/final"), 500);
   };
 
+  const handleColorChange = (color: string) => {
+    update_color(selectedOption?.code || "", color);
+  };
+
   return (
     <>
       <PageConfiguratorWrap>
@@ -130,7 +140,9 @@ export default function Configurator({
         <PageConfigurator>
           <Options
             options={Object.values(model?.options ?? {})}
-            setSelectedOption={setSelectedOption}
+            setSelectedOption={(option) =>
+              setSelectedOptionKey(option?.type_name)
+            }
             selectedOption={selectedOption}
           />
           <Model
@@ -147,7 +159,6 @@ export default function Configurator({
                   ? (model?.options[selectedOption.type_name] ?? null)
                   : null
               }
-              update_color={update_color}
               update_parts={update_parts}
               model={model}
               price={price}
@@ -157,6 +168,12 @@ export default function Configurator({
               cartItem={cartItem}
               priceBreakdownOpened={priceBreakdownOpened}
               setPriceBreakdownOpened={setPriceBreakdownOpened}
+              handleColorChange={handleColorChange}
+              colorPickerOpened={colorPickerOpened}
+              setColorPickerOpened={setColorPickerOpened}
+              selectedColor={
+                selectedOption?.value || selectedOption?.default_value || ""
+              }
             />
           )}
         </PageConfigurator>
@@ -209,6 +226,16 @@ export default function Configurator({
             price={price}
             transitionTime={0.5}
             numberOfItems={numberOfItems}
+          />
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {colorPickerOpened && (
+          <ColorPickerModal
+            onChange={handleColorChange}
+            color={`#${selectedOption?.value || selectedOption?.default_value || ""}`}
+            transitionTime={0.3}
+            onClose={() => setColorPickerOpened(false)}
           />
         )}
       </AnimatePresence>

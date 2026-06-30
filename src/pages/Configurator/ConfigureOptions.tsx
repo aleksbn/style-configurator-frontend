@@ -1,8 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import type { IModel, IOption } from "../../models/Model";
 import styled from "styled-components";
-import ColorPickerModal from "./ColorPickerModal";
-import { AnimatePresence } from "framer-motion";
 
 const Container = styled.div`
   display: flex;
@@ -171,7 +169,6 @@ const Price = styled.span`
 
 export default function ConfigureOptions({
   selectedOption,
-  update_color,
   update_parts,
   model,
   price,
@@ -180,9 +177,11 @@ export default function ConfigureOptions({
   setSize,
   cartItem,
   setPriceBreakdownOpened,
+  colorPickerOpened,
+  setColorPickerOpened,
+  selectedColor,
 }: {
   selectedOption: IOption | null;
-  update_color: (partid: string, color: string) => void;
   update_parts: (partid: string, partvalue: string) => void;
   model: IModel | null;
   price: { [key: string]: number };
@@ -192,10 +191,10 @@ export default function ConfigureOptions({
   cartItem: string[] | undefined;
   priceBreakdownOpened: boolean;
   setPriceBreakdownOpened: React.Dispatch<React.SetStateAction<boolean>>;
+  colorPickerOpened: boolean;
+  setColorPickerOpened: React.Dispatch<React.SetStateAction<boolean>>;
+  selectedColor: string;
 }) {
-  const [colorPickerOpened, setColorPickerOpened] = useState(false);
-  const selectedColor = selectedOption?.value || selectedOption?.default_value;
-
   let invertedColor = selectedColor
     ? `#${selectedColor
         .replace("#", "")
@@ -207,22 +206,8 @@ export default function ConfigureOptions({
     invertedColor = "#aaaaaa";
   }
 
-  const handleColorChange = (color: string) => {
-    update_color(selectedOption?.code || "", color);
-  };
-
   return (
     <Container>
-      <AnimatePresence>
-        {colorPickerOpened && (
-          <ColorPickerModal
-            onChange={handleColorChange}
-            color={`#${selectedColor}`}
-            transitionTime={0.3}
-            onClose={() => setColorPickerOpened(false)}
-          />
-        )}
-      </AnimatePresence>
       <Title>{selectedOption?.name}</Title>
       <Body>
         <MainContainer>
