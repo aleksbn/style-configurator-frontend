@@ -7,7 +7,7 @@ import { Button } from "../components/style/Buttons.style.js";
 import { setSelectedModel } from "../store/slices/modelSlice.js";
 import { convertModelToSku } from "../helpers/skuHelper.js";
 import { useNavigate } from "react-router-dom";
-import { PageWrap } from "../components/style/Common.style.js";
+import { PageWrap, RotateMessage } from "../components/style/Common.style.js";
 import styled from "styled-components";
 import { setConfiguration } from "../store/slices/configurationSlice.js";
 import { clearCart } from "../store/slices/cartSlice.js";
@@ -66,24 +66,6 @@ const SeeAllContainer = styled.div`
     & span {
       font-size: 0.8rem;
     }
-  }
-`;
-
-const RotateMessage = styled.div`
-  display: none;
-  @media (max-height: 500px) and (orientation: landscape) {
-    display: flex;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: #23303e;
-    color: #eee7dc;
-    justify-content: center;
-    align-items: center;
-    font-size: 1.2rem;
-    z-index: 9999;
   }
 `;
 

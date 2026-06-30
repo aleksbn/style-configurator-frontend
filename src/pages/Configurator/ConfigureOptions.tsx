@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import type { IModel, IOption } from "../../models/Model";
 import styled from "styled-components";
 
@@ -45,6 +45,7 @@ const MainContainer = styled.div`
   grid-template-columns: 1fr 1fr;
   align-items: center;
   gap: 12px;
+  position: relative;
 `;
 
 const ColorLabel = styled.label`
@@ -146,6 +147,10 @@ const PriceContainer = styled.div`
   @media (max-width: 1280px) {
     padding-left: 10%;
   }
+
+  @media (max-width: 1024px) {
+    visibility: hidden;
+  }
 `;
 
 const NumberOfItemsInput = styled.input`
@@ -165,6 +170,21 @@ const NumberOfItemsInput = styled.input`
 
 const Price = styled.span`
   font-weight: bold;
+`;
+
+const Error = styled.span`
+  color: red;
+  font-style: italic;
+  font-size: 0.8rem;
+  position: absolute;
+  bottom: -24px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  display: none;
+  &.visible {
+    display: block;
+  }
 `;
 
 export default function ConfigureOptions({
@@ -189,12 +209,13 @@ export default function ConfigureOptions({
   setNumberOfItems: React.Dispatch<React.SetStateAction<number>>;
   setSize: React.Dispatch<React.SetStateAction<string>>;
   cartItem: string[] | undefined;
-  priceBreakdownOpened: boolean;
   setPriceBreakdownOpened: React.Dispatch<React.SetStateAction<boolean>>;
   colorPickerOpened: boolean;
   setColorPickerOpened: React.Dispatch<React.SetStateAction<boolean>>;
   selectedColor: string;
 }) {
+  const [inputValue, setInputValue] = useState(String(numberOfItems));
+  const [errorDisplayed, setErrorDisplayed] = useState(false);
   let invertedColor = selectedColor
     ? `#${selectedColor
         .replace("#", "")
@@ -205,6 +226,30 @@ export default function ConfigureOptions({
   if (invertedColor === "#ffffff") {
     invertedColor = "#aaaaaa";
   }
+
+  const handleNumberOfItemsChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setInputValue(e.target.value);
+    setErrorDisplayed(false);
+  };
+
+  const handleNumberOfItemsBlur = () => {
+    const desiredNumber = Number(inputValue);
+    if (isNaN(desiredNumber) || desiredNumber < 1) {
+      setNumberOfItems(1);
+      setInputValue("1");
+      setErrorDisplayed(true);
+    } else if (desiredNumber > 10) {
+      setNumberOfItems(10);
+      setInputValue("10");
+      setErrorDisplayed(true);
+    } else {
+      setNumberOfItems(desiredNumber);
+      setInputValue(String(desiredNumber));
+      setErrorDisplayed(false);
+    }
+  };
 
   return (
     <Container>
@@ -263,9 +308,13 @@ export default function ConfigureOptions({
             min="1"
             max="10"
             step="1"
-            value={numberOfItems}
-            onChange={(e) => setNumberOfItems(parseInt(e.target.value))}
+            value={inputValue}
+            onChange={handleNumberOfItemsChange}
+            onBlur={handleNumberOfItemsBlur}
           />
+          <Error className={errorDisplayed ? "visible" : ""}>
+            You can only select between 1 and 10 items
+          </Error>
         </MainContainer>
       </Body>
       <PriceContainer onClick={() => setPriceBreakdownOpened(true)}>

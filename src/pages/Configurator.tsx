@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import { PageWrap } from "../components/style/Common.style";
-import styled from "styled-components";
+import { PageWrap, RotateMessage } from "../components/style/Common.style";
+import styled, { css } from "styled-components";
 import Footer from "../components/ui/Footer";
 import Model from "./Configurator/Model";
 import type { IModel } from "../models/Model";
 import Options from "./Configurator/Options";
 import ConfigureOptions from "./Configurator/ConfigureOptions";
 import { Button } from "../components/style/Buttons.style";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import type { ICartItem } from "../models/Cart";
 import YesNoDialog from "../components/ui/YesNoDialog";
@@ -16,6 +16,9 @@ import useBreakpoint from "../hooks/useBreakpoints";
 import { GrConfigure } from "react-icons/gr";
 import PriceBreakdown from "./Configurator/PriceBreakdown";
 import ColorPickerModal from "./Configurator/ColorPickerModal";
+import ModalConfigureOptions from "./Configurator/ModalConfigureOptions";
+import { SlideUp } from "../animations/Slide";
+import MobileOptions from "./Configurator/MobileOptions";
 
 const PageConfiguratorWrap = styled(PageWrap)`
   display: flex;
@@ -26,6 +29,10 @@ const PageConfiguratorWrap = styled(PageWrap)`
   height: calc(100svh - 140px);
   margin-top: 70px;
   position: relative;
+
+  @media (max-width: 480px) {
+    justify-content: space-between;
+  }
 `;
 
 const PageConfigurator = styled.div`
@@ -34,14 +41,32 @@ const PageConfigurator = styled.div`
   width: 100%;
   height: calc(100svh - 140px);
 
-  @media (max-width: 768px) {
+  @media (max-width: 1024px) {
     grid-template-columns: 3fr 5fr;
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+    height: calc(100svh - 280px);
   }
 `;
 
 const Title = styled.h1`
   text-align: center;
   font-size: 2.5rem;
+  height: 50px;
+
+  @media (max-width: 1024px) {
+    font-size: 2.2rem;
+  }
+
+  @media (max-width: 768) {
+    font-size: 1.8rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1.5rem;
+  }
 `;
 
 const EmptyDiv = styled.div``;
@@ -62,6 +87,10 @@ const ConfigurationBox = styled.div`
     text-align: right;
     font-weight: 600;
     letter-spacing: 0.5px;
+  }
+
+  @media (max-width: 480px) {
+    right: 15px;
   }
 `;
 
@@ -136,15 +165,27 @@ export default function Configurator({
   return (
     <>
       <PageConfiguratorWrap>
+        <RotateMessage>
+          Please rotate your device to portrait mode
+        </RotateMessage>
         <Title>{model?.name}</Title>
-        <PageConfigurator>
-          <Options
-            options={Object.values(model?.options ?? {})}
-            setSelectedOption={(option) =>
-              setSelectedOptionKey(option?.type_name)
-            }
-            selectedOption={selectedOption}
-          />
+        <PageConfigurator className="test">
+          {breakpoint != "mobile" && (
+            <Options
+              options={Object.values(model?.options ?? {})}
+              setSelectedOption={(option) =>
+                setSelectedOptionKey(option?.type_name)
+              }
+              selectedOption={selectedOption}
+            />
+          )}
+          {breakpoint == "mobile" && (
+            <MobileOptions
+              model={model}
+              selectedOptionKey={selectedOptionKey}
+              setSelectedOptionKey={setSelectedOptionKey}
+            />
+          )}
           <Model
             model={model}
             price={price}
@@ -166,9 +207,7 @@ export default function Configurator({
               setNumberOfItems={setNumberOfItems}
               setSize={setSize}
               cartItem={cartItem}
-              priceBreakdownOpened={priceBreakdownOpened}
               setPriceBreakdownOpened={setPriceBreakdownOpened}
-              handleColorChange={handleColorChange}
               colorPickerOpened={colorPickerOpened}
               setColorPickerOpened={setColorPickerOpened}
               selectedColor={
@@ -220,12 +259,27 @@ export default function Configurator({
       </AnimatePresence>
       <AnimatePresence>
         {configurationOpened && (
-          <PriceBreakdown
+          <ModalConfigureOptions
             onClose={() => setConfigurationOpened(false)}
-            name={model?.name || ""}
+            selectedOption={
+              selectedOption
+                ? (model?.options[selectedOption.type_name] ?? null)
+                : null
+            }
+            update_parts={update_parts}
+            model={model}
             price={price}
-            transitionTime={0.5}
             numberOfItems={numberOfItems}
+            setNumberOfItems={setNumberOfItems}
+            setSize={setSize}
+            cartItem={cartItem}
+            priceBreakdownOpened={priceBreakdownOpened}
+            setPriceBreakdownOpened={setPriceBreakdownOpened}
+            colorPickerOpened={colorPickerOpened}
+            setColorPickerOpened={setColorPickerOpened}
+            selectedColor={
+              selectedOption?.value || selectedOption?.default_value || ""
+            }
           />
         )}
       </AnimatePresence>

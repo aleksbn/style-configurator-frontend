@@ -24,6 +24,22 @@ const Container = styled.div`
       border-radius: 0;
     }
   }
+
+  @media (max-width: 1024px) {
+    background-color: rgba(240, 248, 255, 0.9);
+  }
+
+  @media (max-width: 480px) {
+    padding: 0;
+    border-radius: 0;
+    height: 100svh;
+    width: 100svw;
+
+    & .react-colorful {
+      height: 75svw;
+      width: 75svw;
+    }
+  }
 `;
 
 const ModalOkButton = styled.div`
@@ -37,6 +53,10 @@ const ModalOkButton = styled.div`
   align-items: center;
   font-weight: bold;
   cursor: pointer;
+
+  @media (max-width: 480px) {
+    width: 75svw;
+  }
 `;
 
 const ModalCancelButton = styled.div`
@@ -50,6 +70,10 @@ const ModalCancelButton = styled.div`
   align-items: center;
   font-weight: bold;
   cursor: pointer;
+
+  @media (max-width: 480px) {
+    width: 75svw;
+  }
 `;
 
 const ColorPreview = styled.div`
@@ -63,6 +87,10 @@ const ColorPreview = styled.div`
   border-radius: 0 0 8px 8px;
   border: 1px solid rgba(0, 0, 0, 0.1);
   background-color: rgba(255, 255, 255, 0.8);
+
+  @media (max-width: 480px) {
+    width: 75svw;
+  }
 `;
 
 const ColorSwatch = styled.div<{ color: string }>`

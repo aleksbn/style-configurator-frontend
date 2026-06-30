@@ -7,6 +7,7 @@ import { SlideUp } from "../animations/Slide";
 import { useNavigate } from "react-router-dom";
 import { LargeLogo, LargeImage } from "../helpers/imageImport";
 import useBreakpoint from "../hooks/useBreakpoints";
+import { RotateMessage } from "../components/style/Common.style";
 
 const Container = styled.div`
   height: 100%;
@@ -136,24 +137,6 @@ const LargeImageContainer = styled.div`
 const LargeImageTag = styled.img`
   position: relative;
   z-index: 0;
-`;
-
-const RotateMessage = styled.div`
-  display: none;
-  @media (max-height: 500px) and (orientation: landscape) {
-    display: flex;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: #23303e;
-    color: #eee7dc;
-    justify-content: center;
-    align-items: center;
-    font-size: 1.2rem;
-    z-index: 9999;
-  }
 `;
 
 export default function Landing() {

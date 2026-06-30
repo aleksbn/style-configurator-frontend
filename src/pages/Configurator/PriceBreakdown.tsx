@@ -31,6 +31,11 @@ const PriceBreakdownContainer = styled.div`
     max-width: initial;
     width: 50svw;
   }
+
+  @media (max-width: 480px) {
+    padding: 80px 20px 80px 20px;
+    width: 100svw;
+  }
 `;
 
 const PriceListContainer = styled.div`

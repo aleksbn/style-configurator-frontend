@@ -50,6 +50,7 @@ const PriceContainer = styled.div`
   bottom: 10svh;
   left: 50%;
   transform: translateX(-50%);
+  width: 100%;
 `;
 
 const Label = styled.span`

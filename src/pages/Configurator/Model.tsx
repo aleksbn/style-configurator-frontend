@@ -29,20 +29,36 @@ const ModelComponent = styled.div`
     align-items: center;
     width: 100%;
     height: 100%;
-
-    @media (max-width: 1024px) {
-      height: initial;
-    }
   }
   & svg {
     max-width: 100%;
     max-height: 100%;
+  }
+
+  @media (max-width: 1024px) {
+    > div {
+      height: initial;
+    }
+  }
+
+  @media (max-width: 1024px) and (orientation: landscape) {
+    > div {
+      max-height: 60%;
+    }
+  }
+
+  @media (max-width: 480px) {
+    height: calc(100svh - 280px);
+    > div {
+      max-height: 80%;
+    }
   }
 `;
 
 const Price = styled.span`
   font-size: 1.2rem;
   font-weight: bold;
+  text-align: center;
 `;
 
 export default function Model({
@@ -63,7 +79,7 @@ export default function Model({
   return (
     <ModelComponent type={type}>
       <ReactSVG src={model?.url} alt={model?.name} />
-      {breakpoint != "desktop" && (
+      {breakpoint != "desktop" && price && (
         <Price onClick={showPriceBreakdown}>
           Total price: ${(price["Total price"] * numberOfItems).toFixed(2)}
         </Price>
