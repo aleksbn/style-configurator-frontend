@@ -21,6 +21,12 @@ import {
   loadFonts,
   svgToBase64Image,
 } from "../helpers/pdfHelper";
+import { RotateMessage } from "../components/style/Common.style";
+import useBreakpoint from "../hooks/useBreakpoints";
+import MobileCart from "./Final/MobileCart";
+import MobilePriceBreakdownDisplay from "./Final/MobilePriceBreakdownDisplay";
+import { FaChevronDown } from "react-icons/fa6";
+import MobileMore from "./Final/MobileMore";
 
 const Container = styled.div`
   display: grid;
@@ -31,6 +37,57 @@ const Container = styled.div`
   width: 100%;
   height: calc(100svh - 140px);
   padding: 35px;
+  position: relative;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr 2fr;
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+const DisplayMobileCartButton = styled.div`
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 0;
+  padding: 20px 12px 20px 0;
+  height: fit-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.6rem;
+  border: 1px solid black;
+  border-radius: 0 50px 50px 0;
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+
+  @media (max-width: 768px) {
+    font-size: 1.4rem;
+  }
+
+  @media (max-width: 575px) {
+    font-size: 1rem;
+  }
+`;
+
+const MobileFooterFinal = styled.div`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 70px;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.2rem;
+
+  @media (max-width: 575px) {
+    display: flex;
+  }
 `;
 
 export default function Final() {
@@ -45,7 +102,14 @@ export default function Final() {
     note: string;
   } | null>(null);
   const [loading, setLoading] = useState(true);
+  const [smallerThan768px, setSmallerThan768px] = useState(
+    window.innerWidth <= 768,
+  );
+  const [cartModalOpened, setCartModalOpened] = useState(false);
+  const [priceModalOpened, setPriceModalOpened] = useState(false);
+  const [moreModalOpened, setMoreModalOpened] = useState(false);
 
+  const breakpoint = useBreakpoint();
   const cartRedux = useAppSelector((state) => state.cart);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -54,6 +118,12 @@ export default function Final() {
     .map((model) => model.options)
     .map((options) => Object.values(options))
     .flat() as IModel[];
+
+  useEffect(() => {
+    const handleResize = () => setSmallerThan768px(window.innerWidth <= 768);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const handleItemClick = (item: ICartItem | null) => {
     setIsFirstInteraction(false);
@@ -244,26 +314,66 @@ export default function Final() {
 
   return (
     <>
+      <RotateMessage>Please rotate your device to portrait mode</RotateMessage>
       <Container>
-        <Cart
-          selectItem={handleItemClick}
-          cartRedux={cartRedux}
-          allModels={allModels}
-        />
+        {!smallerThan768px && (
+          <Cart
+            selectItem={handleItemClick}
+            cartRedux={cartRedux}
+            allModels={allModels}
+          />
+        )}
+        {smallerThan768px && (
+          <DisplayMobileCartButton onClick={() => setCartModalOpened(true)}>
+            Show cart
+          </DisplayMobileCartButton>
+        )}
+        <AnimatePresence>
+          {cartModalOpened && (
+            <MobileCart
+              selectItem={handleItemClick}
+              cartRedux={cartRedux}
+              allModels={allModels}
+              onClose={() => setCartModalOpened(false)}
+            />
+          )}
+        </AnimatePresence>
+        <AnimatePresence>
+          {priceModalOpened && (
+            <MobilePriceBreakdownDisplay
+              allPrices={allPrices}
+              totalPrice={totalPrice ?? { totalPrice: 0, note: "" }}
+              loading={loading}
+              onClose={() => setPriceModalOpened(false)}
+            />
+          )}
+        </AnimatePresence>
         <CartItemDisplay
           selectItem={handleItemClick}
           selectedCartItem={selectedCartItem}
           allModels={allModels}
           isFirstInteraction={isFirstInteraction}
+          smallerThan768px={smallerThan768px}
         />
-        <PriceBreakdownDisplay
-          allPrices={allPrices}
-          totalPrice={totalPrice ?? { totalPrice: 0, note: "" }}
-          loading={loading}
-        />
+        {breakpoint == "desktop" && (
+          <PriceBreakdownDisplay
+            allPrices={allPrices}
+            totalPrice={totalPrice ?? { totalPrice: 0, note: "" }}
+            loading={loading}
+          />
+        )}
       </Container>
-      <Footer>
-        <div></div>
+      <Footer className="final-footer">
+        {breakpoint == "desktop" && <div></div>}
+        {breakpoint != "desktop" && (
+          <Button
+            type="secondary"
+            style={{ justifySelf: "flex-start", marginLeft: "15px" }}
+            onClick={() => setPriceModalOpened(true)}
+          >
+            Show prices
+          </Button>
+        )}
         <Button type="secondary" onClick={handleClearCartClick}>
           Clear cart
         </Button>
@@ -275,11 +385,46 @@ export default function Final() {
           Download PDF receipt
         </Button>
       </Footer>
+      <MobileFooterFinal onClick={() => setMoreModalOpened(true)}>
+        <FaChevronDown />
+        More
+        <FaChevronDown />
+      </MobileFooterFinal>
       <AnimatePresence>
         {downloadDialogOpen && (
           <DownloadDialog
             onClose={() => setDownloadDialogOpen(false)}
             onClick={handleDownloadClick}
+          />
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {moreModalOpened && (
+          <MobileMore
+            onClose={() => setMoreModalOpened(false)}
+            actions={[
+              {
+                label: "Show prices",
+                onClick: () => {
+                  setPriceModalOpened(true);
+                  setMoreModalOpened(false);
+                },
+              },
+              {
+                label: "Clear cart",
+                onClick: () => {
+                  handleClearCartClick();
+                  setMoreModalOpened(false);
+                },
+              },
+              {
+                label: "Download PDF receipt",
+                onClick: () => {
+                  setDownloadDialogOpen(true);
+                  setMoreModalOpened(false);
+                },
+              },
+            ]}
           />
         )}
       </AnimatePresence>

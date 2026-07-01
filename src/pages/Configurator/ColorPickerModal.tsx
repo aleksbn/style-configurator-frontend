@@ -29,6 +29,18 @@ const Container = styled.div`
     background-color: rgba(240, 248, 255, 0.9);
   }
 
+  @media (max-width: 768px) {
+    padding: 40px;
+    border-radius: 40px;
+    height: 80svh;
+    width: 80svw;
+
+    & .react-colorful {
+      height: 60svh;
+      width: 60svw;
+    }
+  }
+
   @media (max-width: 480px) {
     padding: 0;
     border-radius: 0;
@@ -54,6 +66,10 @@ const ModalOkButton = styled.div`
   font-weight: bold;
   cursor: pointer;
 
+  @media (max-width: 768px) {
+    width: 60svw;
+  }
+
   @media (max-width: 480px) {
     width: 75svw;
   }
@@ -71,6 +87,10 @@ const ModalCancelButton = styled.div`
   font-weight: bold;
   cursor: pointer;
 
+  @media (max-width: 768px) {
+    width: 60svw;
+  }
+
   @media (max-width: 480px) {
     width: 75svw;
   }
@@ -87,6 +107,10 @@ const ColorPreview = styled.div`
   border-radius: 0 0 8px 8px;
   border: 1px solid rgba(0, 0, 0, 0.1);
   background-color: rgba(255, 255, 255, 0.8);
+
+  @media (max-width: 768px) {
+    width: 60svw;
+  }
 
   @media (max-width: 480px) {
     width: 75svw;

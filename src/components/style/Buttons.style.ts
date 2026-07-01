@@ -51,59 +51,11 @@ const type = {
 const Button = styled.div`
   border-radius: 40px;
   display: inline-flex;
-  padding: ${(props) => props.width || "8px 32px"};
-  justify-content: center;
-  align-items: center;
-  user-select: none;
-  align-self: ${(props) => props.alignSelf || "center"};
-  justify-self: center;
-  text-align: center;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 16px;
-  border: 2px solid #000000;
-  letter-spacing: 0.1px;
-  cursor: pointer;
-
-  transition-property: background-color, color;
-  transition-duration: 0.6s;
-  transition-timing-function: ease;
-  transform-origin: center;
-  height: fit-content;
-  white-space: nowrap;
-
-  > div:nth-child(even) {
-    overflow: hidden;
-
-    > span {
-      display: inline-block;
-    }
-  }
-
-  ${(props) => type[props.type]}
-
-  &.disabled,
-  &:disabled {
-    cursor: not-allowed;
-    background-color: #aca69f;
-    border: 2px solid #aca69f;
-    color: #555;
-    :hover {
-      background-color: #aca69f;
-      border: 2px solid #aca69f;
-      color: #555;
-    }
-  }
-`;
-
-const ButtonAtag = styled.a`
-  border-radius: 40px;
-  display: inline-flex;
   padding: 8px 32px;
   justify-content: center;
   align-items: center;
   user-select: none;
-  align-self: ${(props) => props.alignSelf || "center"};
+  align-self: center;
   justify-self: center;
   text-align: center;
   font-style: normal;
@@ -141,6 +93,10 @@ const ButtonAtag = styled.a`
       border: 2px solid #aca69f;
       color: #555;
     }
+  }
+
+  @media (max-width: 575px) {
+    font-size: 14px;
   }
 `;
 
@@ -148,4 +104,4 @@ Button.defaultProps = {
   type: "primary",
 };
 
-export { Button, ButtonAtag };
+export { Button };

@@ -6,12 +6,16 @@ import DataLoadingSpinner from "../../components/ui/DataLoadingSpinner";
 const PriceBreakdownContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
   padding: 0px 20px;
   margin: 40px 0px;
   height: calc(100svh - 240px);
   overflow-y: auto;
+
+  &.in-modal {
+    height: 100%;
+  }
 `;
 
 const PriceListContainer = styled.div`
@@ -77,10 +81,12 @@ export default function PriceBreakdownDisplay({
   allPrices,
   totalPrice,
   loading,
+  isInModal = false,
 }: {
   allPrices: IPrice[];
   totalPrice: { totalPrice: number; note: string };
   loading: boolean;
+  isInModal?: boolean;
 }) {
   if (loading) {
     return (
@@ -91,7 +97,7 @@ export default function PriceBreakdownDisplay({
   }
 
   return (
-    <PriceBreakdownContainer>
+    <PriceBreakdownContainer className={isInModal ? "in-modal" : ""}>
       <PriceListContainer>
         {allPrices.map((price) => (
           <Fragment key={price.Name + price.Size + price.Quantity}>

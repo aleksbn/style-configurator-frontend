@@ -32,6 +32,10 @@ const PriceBreakdownContainer = styled.div`
     width: 50svw;
   }
 
+  @media (max-width: 575px) {
+    width: 75svw;
+  }
+
   @media (max-width: 480px) {
     padding: 80px 20px 80px 20px;
     width: 100svw;

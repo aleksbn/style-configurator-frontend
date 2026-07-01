@@ -23,13 +23,20 @@ const ModalContainer = styled.div`
     cursor: pointer;
   }
 
+  @media (max-width: 768px) {
+    padding: 80px 20px;
+  }
+
+  @media (max-width: 575px) {
+    width: 75%;
+  }
+
   @media (max-width: 480px) {
     width: 100%;
-    padding: 80px 20px;
   }
 `;
 
-export default function ModalConfigureOptions({
+export default function MobileConfigureOptions({
   onClose,
   selectedOption,
   update_parts,

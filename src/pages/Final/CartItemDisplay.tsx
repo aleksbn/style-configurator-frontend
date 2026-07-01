@@ -18,11 +18,23 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 5%;
+  padding: 20px 30px;
   width: 100%;
   height: calc(100svh - 240px);
   overflow-y: hidden;
   position: relative;
+
+  @media (max-width: 1024px) {
+    padding: 20px;
+  }
+
+  @media (max-width: 768px) {
+    padding: 10px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 5px;
+  }
 `;
 
 const None = styled.div`
@@ -30,11 +42,24 @@ const None = styled.div`
   font-weight: bold;
   letter-spacing: 1px;
   text-transform: uppercase;
+  text-align: center;
 `;
 
 const Title = styled.h1`
   text-align: center;
   font-size: 2.5rem;
+
+  @media (max-width: 1024px) {
+    font-size: 1.8rem;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 1.5rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1.2rem;
+  }
 `;
 
 const Size = styled.span`
@@ -49,6 +74,10 @@ const ModelContainer = styled.div`
   justify-content: center;
   align-items: center;
   padding-bottom: 20px;
+
+  @media (max-width: 1024px) {
+    height: calc(100% - 50px);
+  }
 `;
 
 const ButtonsContainer = styled.div`
@@ -67,11 +96,13 @@ export default function CartItemDisplay({
   selectedCartItem,
   allModels,
   isFirstInteraction,
+  smallerThan768px,
 }: {
   selectItem: (item: ICartItem | null) => void;
   selectedCartItem: ICartItem | null;
   allModels: IModel[];
   isFirstInteraction: boolean;
+  smallerThan768px: boolean;
 }) {
   const [selectedModel, setSelectedModel] = useState<IModel | null>(null);
   const [modelKey, setModelKey] = useState<string>("");
@@ -129,7 +160,7 @@ export default function CartItemDisplay({
   if (!selectedCartItem && isFirstInteraction)
     return (
       <Container>
-        <None>Click on a cart item to see a model</None>
+        <None>{`Click on a ${smallerThan768px ? `"show cart" to select a model` : "cart item to see a model"}`}</None>
       </Container>
     );
 

@@ -16,8 +16,7 @@ import useBreakpoint from "../hooks/useBreakpoints";
 import { GrConfigure } from "react-icons/gr";
 import PriceBreakdown from "./Configurator/PriceBreakdown";
 import ColorPickerModal from "./Configurator/ColorPickerModal";
-import ModalConfigureOptions from "./Configurator/ModalConfigureOptions";
-import { SlideUp } from "../animations/Slide";
+import MobileConfigureOptions from "./Configurator/MobileConfigureOptions";
 import MobileOptions from "./Configurator/MobileOptions";
 
 const PageConfiguratorWrap = styled(PageWrap)`
@@ -29,15 +28,12 @@ const PageConfiguratorWrap = styled(PageWrap)`
   height: calc(100svh - 140px);
   margin-top: 70px;
   position: relative;
-
-  @media (max-width: 480px) {
-    justify-content: space-between;
-  }
 `;
 
 const PageConfigurator = styled.div`
   grid-template-columns: 3fr 5fr 3fr;
   display: grid;
+  align-items: flex-end;
   width: 100%;
   height: calc(100svh - 140px);
 
@@ -45,7 +41,7 @@ const PageConfigurator = styled.div`
     grid-template-columns: 3fr 5fr;
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: 768px) {
     grid-template-columns: 1fr;
     height: calc(100svh - 280px);
   }
@@ -55,6 +51,10 @@ const Title = styled.h1`
   text-align: center;
   font-size: 2.5rem;
   height: 50px;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
 
   @media (max-width: 1024px) {
     font-size: 2.2rem;
@@ -259,7 +259,7 @@ export default function Configurator({
       </AnimatePresence>
       <AnimatePresence>
         {configurationOpened && (
-          <ModalConfigureOptions
+          <MobileConfigureOptions
             onClose={() => setConfigurationOpened(false)}
             selectedOption={
               selectedOption

@@ -84,7 +84,6 @@ export default function Selection() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const breakpoint = useBreakpoint();
-  console.log(breakpoint);
 
   useEffect(() => {
     dispatch(setConfiguration(null));

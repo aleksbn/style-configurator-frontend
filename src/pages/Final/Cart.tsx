@@ -8,7 +8,7 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  padding: 10%;
+  padding: 45px;
   border: 1px solid black;
   border-radius: 50px;
   width: 100%;
@@ -16,16 +16,14 @@ const Container = styled.div`
   overflow-y: auto;
   gap: 16px;
   position: relative;
-`;
 
-const Title = styled.h1`
-  text-align: center;
-  font-size: 1.5rem;
-  letter-spacing: 1px;
-  position: absolute;
-  top: 3%;
-  left: 50%;
-  transform: translateX(-50%);
+  &::-webkit-scrollbar {
+    width: 0px;
+  }
+
+  @media (max-width: 1024px) {
+    padding: 45px 20px;
+  }
 `;
 
 const CartItem = styled.div`
@@ -56,14 +54,15 @@ export default function Cart({
   selectItem,
   cartRedux,
   allModels,
+  onClose = () => {},
 }: {
   selectItem: (item: ICartItem) => void;
   cartRedux: { items: ICartItem[] };
   allModels: IModel[];
+  onClose?: () => void;
 }) {
   return (
     <Container>
-      <Title>Selected items</Title>
       {cartRedux.items.map((item) => {
         const selectedModel = allModels.find(
           (model) => model.id === item.configKey.split(":")[0],
@@ -72,7 +71,10 @@ export default function Cart({
           Object.keys(item).length > 1 && (
             <CartItem
               key={item.configKey + item.size}
-              onClick={() => selectItem(item)}
+              onClick={() => {
+                selectItem(item);
+                onClose();
+              }}
             >
               {
                 <>

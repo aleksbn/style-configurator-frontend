@@ -1,5 +1,5 @@
-import { motion } from "framer-motion";
 import React from "react";
+import { motion } from "framer-motion";
 import styled from "styled-components";
 import { fade } from "../../animations/Fade";
 
@@ -20,13 +20,30 @@ const StyledFooter = styled.div`
     &.right {
       justify-self: flex-end;
       margin-right: 50px;
+
+      @media (max-width: 1024px) {
+        margin-right: 15px;
+      }
+    }
+  }
+
+  @media (max-width: 575px) {
+    &.final-footer {
+      display: none;
     }
   }
 `;
 
-export default function Footer({ children }) {
+export default function Footer({
+  className,
+  children,
+}: {
+  className?: string;
+  children?: React.ReactNode;
+}) {
   return (
     <StyledFooter
+      className={className}
       as={motion.div}
       variants={fade(1.7, 0.2, 0.5, 0.5)}
       initial="initial"

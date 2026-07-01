@@ -43,7 +43,14 @@ const ModelComponent = styled.div`
 
   @media (max-width: 1024px) and (orientation: landscape) {
     > div {
-      max-height: 60%;
+      max-height: 80%;
+    }
+  }
+
+  @media (max-width: 768px) {
+    height: calc(100svh - 380px);
+    > div {
+      max-height: 80%;
     }
   }
 
@@ -69,9 +76,9 @@ export default function Model({
   type = "",
 }: {
   model: IModel | null;
-  price: { [key: string]: number };
-  numberOfItems: number;
-  showPriceBreakdown: () => void;
+  price: { [key: string]: number } | null;
+  numberOfItems: number | null;
+  showPriceBreakdown: () => void | undefined;
   type: string;
 }) {
   const breakpoint = useBreakpoint();
@@ -79,7 +86,7 @@ export default function Model({
   return (
     <ModelComponent type={type}>
       <ReactSVG src={model?.url} alt={model?.name} />
-      {breakpoint != "desktop" && price && (
+      {breakpoint != "desktop" && price && numberOfItems && (
         <Price onClick={showPriceBreakdown}>
           Total price: ${(price["Total price"] * numberOfItems).toFixed(2)}
         </Price>

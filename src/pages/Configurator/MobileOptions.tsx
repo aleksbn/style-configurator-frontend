@@ -26,7 +26,7 @@ const OptionList = styled.div`
 `;
 
 const OptionListItem = styled.div`
-  font-size: 16px;
+  font-size: 24px;
   letter-spacing: 0.8px;
   text-transform: uppercase;
   white-space: nowrap;
@@ -48,15 +48,13 @@ const OptionListItem = styled.div`
 
   &.active {
     color: #000000;
-    @media (max-width: 767px) {
-      > .ruler {
-        width: 100%;
-      }
+    > .ruler {
+      width: 100%;
     }
   }
 
-  &:last-child {
-    margin-bottom: 0;
+  @media (max-width: 575px) {
+    font-size: 18px;
   }
 `;
 
