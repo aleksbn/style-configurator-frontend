@@ -1,9 +1,9 @@
 import { AnimatePresence, motion } from "framer-motion";
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { fade } from "../../animations/Fade";
-import type { IModel } from "../../models/Model";
 import useBreakpoint from "../../hooks/useBreakpoints";
+import type { IModelWithPrice } from "../../models/Model";
 
 const Container = styled.div`
   display: flex;
@@ -68,7 +68,7 @@ export default function ProductImage({
   swipeLeft,
   swipeRight,
 }: {
-  currentModel: IModel | null;
+  currentModel: IModelWithPrice | null;
   swipeLeft: () => void;
   swipeRight: () => void;
 }) {

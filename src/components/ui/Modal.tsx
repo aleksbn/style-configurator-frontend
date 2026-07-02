@@ -1,4 +1,4 @@
-import React from "react";
+import { type ReactNode } from "react";
 import { BackgroundOverlay } from "../style/Common.style";
 import { cubicBezier, motion } from "framer-motion";
 import styled, { css } from "styled-components";
@@ -54,7 +54,7 @@ export default function Modal({
   onClose,
 }: {
   type: "left" | "right";
-  children: React.ReactNode;
+  children: ReactNode;
   onClose: () => void;
 }) {
   return (

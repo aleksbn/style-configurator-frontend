@@ -1,4 +1,4 @@
-import { cubicBezier, scale } from "framer-motion";
+import { cubicBezier } from "framer-motion";
 
 function fade(
   delayIn: number = 0,

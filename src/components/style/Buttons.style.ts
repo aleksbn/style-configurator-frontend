@@ -48,7 +48,13 @@ const type = {
   `,
 };
 
-const Button = styled.div`
+type ButtonType = keyof typeof type;
+
+interface ButtonProps {
+  type?: ButtonType;
+}
+
+const Button = styled.div<ButtonProps>`
   border-radius: 40px;
   display: inline-flex;
   padding: 8px 32px;
@@ -80,7 +86,7 @@ const Button = styled.div`
     }
   }
 
-  ${(props) => type[props.type]}
+  ${(props) => type[props.type ?? "primary"]}
 
   &.disabled,
   &:disabled {

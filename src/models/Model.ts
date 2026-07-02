@@ -11,6 +11,10 @@ interface IModel {
   selected_size: string;
 }
 
+interface IModelWithPrice extends IModel {
+  price: number;
+}
+
 interface IMultiOptionType {
   code: string;
   name: string;
@@ -30,4 +34,4 @@ interface IOption {
   price: number;
 }
 
-export type { IModel, IOption, IMultiOptionType };
+export type { IModel, IModelWithPrice, IOption, IMultiOptionType };

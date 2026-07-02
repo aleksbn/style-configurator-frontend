@@ -1,10 +1,9 @@
-import React from "react";
 import type { IModel } from "../../models/Model";
 import styled from "styled-components";
 import { ReactSVG } from "react-svg";
 import useBreakpoint from "../../hooks/useBreakpoints";
 
-const ModelComponent = styled.div`
+const ModelComponent = styled.div<{ $type?: string }>`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -13,8 +12,8 @@ const ModelComponent = styled.div`
   height: calc(100svh - 240px);
   padding: 35px;
   gap: 16px;
-  ${({ type }) => {
-    switch (type) {
+  ${({ $type }) => {
+    switch ($type) {
       case "final":
         return `
           height: 100%;
@@ -84,8 +83,8 @@ export default function Model({
   const breakpoint = useBreakpoint();
   if (!model) return null;
   return (
-    <ModelComponent type={type}>
-      <ReactSVG src={model?.url} alt={model?.name} />
+    <ModelComponent $type={type}>
+      <ReactSVG src={model?.url} />
       {breakpoint != "desktop" && price && numberOfItems && (
         <Price onClick={showPriceBreakdown}>
           Total price: ${(price["Total price"] * numberOfItems).toFixed(2)}

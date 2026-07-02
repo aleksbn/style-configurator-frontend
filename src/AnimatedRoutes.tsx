@@ -1,4 +1,3 @@
-import React from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 import Landing from "./pages/Landing";
 import { AnimatePresence, motion } from "framer-motion";

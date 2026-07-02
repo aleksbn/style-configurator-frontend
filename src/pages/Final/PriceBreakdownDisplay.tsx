@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import { Fragment } from "react";
 import styled from "styled-components";
 import type { IPrice } from "../../models/Cart";
 import DataLoadingSpinner from "../../components/ui/DataLoadingSpinner";

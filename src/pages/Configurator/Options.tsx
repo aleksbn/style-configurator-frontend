@@ -1,4 +1,4 @@
-import React from "react";
+import { type Dispatch, type SetStateAction } from "react";
 import styled from "styled-components";
 import type { IOption } from "../../models/Model";
 
@@ -58,7 +58,7 @@ export default function Options({
   selectedOption,
 }: {
   options: IOption[];
-  setSelectedOption: React.Dispatch<React.SetStateAction<IOption | null>>;
+  setSelectedOption: Dispatch<SetStateAction<IOption | null>>;
   selectedOption: IOption | null;
 }) {
   return (

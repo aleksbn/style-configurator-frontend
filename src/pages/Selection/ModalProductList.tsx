@@ -1,9 +1,10 @@
-import React from "react";
 import { cubicBezier, motion } from "framer-motion";
 import styled from "styled-components";
 import { BackgroundOverlay } from "../../components/style/Common.style";
 import { SlideRight } from "../../animations/Slide";
 import { IoMdClose } from "react-icons/io";
+import type { IModel } from "../../models/Model";
+import type { Dispatch, SetStateAction } from "react";
 
 const Container = styled.div`
   display: flex;
@@ -50,6 +51,13 @@ export default function ModalProductList({
   setCurrentModel,
   currentModel,
   onClose,
+}: {
+  models: {
+    [key: string]: { name: string; options: { [key: string]: IModel } };
+  };
+  currentModel: IModel | null;
+  setCurrentModel: Dispatch<SetStateAction<IModel | null>>;
+  onClose: () => void;
 }) {
   return (
     <BackgroundOverlay

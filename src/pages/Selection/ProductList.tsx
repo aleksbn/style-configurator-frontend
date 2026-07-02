@@ -1,7 +1,8 @@
-import React from "react";
 import { motion } from "framer-motion";
 import styled from "styled-components";
 import { SlideRight } from "../../animations/Slide";
+import type { IModel } from "../../models/Model";
+import type { Dispatch, SetStateAction } from "react";
 
 const Container = styled.div`
   display: flex;
@@ -39,7 +40,17 @@ const List = styled.ul`
   margin: 0;
 `;
 
-export default function ProductList({ models, setCurrentModel, currentModel }) {
+export default function ProductList({
+  models,
+  setCurrentModel,
+  currentModel,
+}: {
+  models: {
+    [key: string]: { name: string; options: { [key: string]: IModel } };
+  };
+  currentModel: IModel | null;
+  setCurrentModel: Dispatch<SetStateAction<IModel | null>>;
+}) {
   let delayIn = 0.5;
   return (
     <Container>

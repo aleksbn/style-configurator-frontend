@@ -1,4 +1,10 @@
-import React, { useLayoutEffect, useState } from "react";
+import {
+  useLayoutEffect,
+  useRef,
+  useState,
+  type ChangeEvent,
+  type FocusEvent,
+} from "react";
 import { BackgroundOverlay } from "../../components/style/Common.style";
 import { cubicBezier, motion } from "framer-motion";
 import styled from "styled-components";
@@ -121,17 +127,20 @@ export default function DownloadDialog({
     fullAddress: "",
   });
   const [buttonWidth, setButtonWidth] = useState(50);
+  const fullNameRef = useRef<HTMLInputElement>(null);
 
   useLayoutEffect(() => {
-    setButtonWidth(document.querySelector("#fullName")?.offsetWidth || 50);
+    if (fullNameRef.current) {
+      setButtonWidth(fullNameRef.current.offsetWidth || 50);
+    }
   }, []);
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormValues((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleBlur = (e) => {
+  const handleBlur = (e: FocusEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     const trimmed = value.trim();
     let emptyErrorText = "";
@@ -232,6 +241,7 @@ export default function DownloadDialog({
         <InputContainer className={errors.fullName ? "error" : ""}>
           <Label htmlFor="fullName">Full Name</Label>
           <Input
+            ref={fullNameRef}
             className={errors.fullName ? "error" : ""}
             id="fullName"
             name="fullName"

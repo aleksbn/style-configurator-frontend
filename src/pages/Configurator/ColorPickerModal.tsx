@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { cubicBezier, motion } from "framer-motion";
 import styled from "styled-components";
 import { HexColorPicker } from "react-colorful";
@@ -158,7 +158,7 @@ export default function ColorPickerModal({
         .then((name) => {
           if (active) setColorName(name);
         })
-        .catch((err) => {
+        .catch(() => {
           if (active) setColorName(selectedColor);
         });
     }, 300);

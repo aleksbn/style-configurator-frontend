@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { PageWrap, RotateMessage } from "../components/style/Common.style";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import Footer from "../components/ui/Footer";
 import Model from "./Configurator/Model";
 import type { IModel } from "../models/Model";
 import Options from "./Configurator/Options";
 import ConfigureOptions from "./Configurator/ConfigureOptions";
 import { Button } from "../components/style/Buttons.style";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import type { ICartItem } from "../models/Cart";
 import YesNoDialog from "../components/ui/YesNoDialog";
@@ -114,7 +114,7 @@ export default function Configurator({
   const [selectedOptionKey, setSelectedOptionKey] = useState<string>(
     Object.keys(model?.options ?? {})[0] ?? "",
   );
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const cartItem = searchParams.get("cartItem")?.split("|");
   const [numberOfItems, setNumberOfItems] = useState(
     Number(cartItem?.[2]) || 1,
@@ -173,9 +173,13 @@ export default function Configurator({
           {breakpoint != "mobile" && (
             <Options
               options={Object.values(model?.options ?? {})}
-              setSelectedOption={(option) =>
-                setSelectedOptionKey(option?.type_name)
-              }
+              setSelectedOption={(option) => {
+                const selected =
+                  typeof option === "function"
+                    ? option(selectedOption)
+                    : option;
+                setSelectedOptionKey(selected?.type_name ?? "");
+              }}
               selectedOption={selectedOption}
             />
           )}

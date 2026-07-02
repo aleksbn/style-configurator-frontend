@@ -1,4 +1,3 @@
-import React from "react";
 import { motion } from "framer-motion";
 import { Button } from "../components/style/Buttons.style";
 import styled from "styled-components";

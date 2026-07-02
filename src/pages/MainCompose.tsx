@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import Configurator from "./Configurator";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { setSelectedModel } from "../store/slices/modelSlice";
@@ -18,7 +18,7 @@ export default function MainCompose() {
     .flat() as IModel[];
   const selectedSKU = useAppSelector((state) => state.configuration.data);
   const selectedModel = useAppSelector((state) => state.models.selectedModel);
-  const [price, setPrice] = useState(null);
+  const [price, setPrice] = useState<{ [key: string]: number }>({});
   const [isLoading, setIsLoading] = useState(true);
   const [justLoaded, setJustLoaded] = useState(true);
 

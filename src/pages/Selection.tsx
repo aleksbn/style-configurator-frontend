@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ProductList from "./Selection/ProductList.js";
 import ProductImage from "./Selection/ProductImage.js";
 import { useAppDispatch, useAppSelector } from "../store/hooks.js";
@@ -15,7 +15,7 @@ import { setCartToBeCleared } from "../store/slices/webSiteSlice.js";
 import useBreakpoint from "../hooks/useBreakpoints.js";
 import { IoArrowBackCircleOutline } from "react-icons/io5";
 import { IoArrowForwardCircleOutline } from "react-icons/io5";
-import type { IModel } from "../models/Model.js";
+import type { IModel, IModelWithPrice } from "../models/Model.js";
 import { AnimatePresence, motion } from "framer-motion";
 import { SlideLeft, SlideRight } from "../animations/Slide.js";
 import { CiBoxList } from "react-icons/ci";
@@ -70,7 +70,13 @@ const SeeAllContainer = styled.div`
 `;
 
 export default function Selection() {
-  const { data: models } = useAppSelector((state) => state.models);
+  const { data: models } = useAppSelector(
+    (state) => state.models,
+  ) as unknown as {
+    data: {
+      [key: string]: { name: string; options: { [key: string]: IModel } };
+    };
+  };
   const allModels = Object.values(models)
     .map((model) => model.options)
     .map((options) => Object.values(options))
@@ -186,7 +192,7 @@ export default function Selection() {
         )}
       </AnimatePresence>
       <ProductImage
-        currentModel={currentModel}
+        currentModel={currentModel as IModelWithPrice}
         swipeLeft={handleSelectPrevModelClick}
         swipeRight={handleSelectNextModelClick}
       />

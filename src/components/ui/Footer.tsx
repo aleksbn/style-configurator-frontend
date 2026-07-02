@@ -1,4 +1,4 @@
-import React from "react";
+import { type ReactNode } from "react";
 import { motion } from "framer-motion";
 import styled from "styled-components";
 import { fade } from "../../animations/Fade";
@@ -39,7 +39,7 @@ export default function Footer({
   children,
 }: {
   className?: string;
-  children?: React.ReactNode;
+  children?: ReactNode;
 }) {
   return (
     <StyledFooter

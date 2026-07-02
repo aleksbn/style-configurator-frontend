@@ -1,4 +1,3 @@
-import React from "react";
 import type { ICartItem } from "../../models/Cart";
 import type { IModel } from "../../models/Model";
 import Cart from "./Cart";

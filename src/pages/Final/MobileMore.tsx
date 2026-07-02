@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "styled-components";
 import { BackgroundOverlay } from "../../components/style/Common.style";
 import { cubicBezier, motion } from "framer-motion";

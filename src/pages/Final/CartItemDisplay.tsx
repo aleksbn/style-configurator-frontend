@@ -1,7 +1,7 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import type { ICartItem } from "../../models/Cart";
 import styled from "styled-components";
-import type { IModel } from "../../models/Model";
+import type { IModel, IModelWithPrice } from "../../models/Model";
 import Model from "../Configurator/Model";
 import { redoModel, redoReduxModel } from "../../helpers/modelHelper";
 import { AnimatePresence } from "framer-motion";
@@ -117,7 +117,9 @@ export default function CartItemDisplay({
   useLayoutEffect(() => {
     const allButtons = document.querySelectorAll(".button");
     const maxWidth = Math.max(
-      ...Array.from(allButtons).map((b) => b.offsetWidth),
+      ...Array.from(allButtons as NodeListOf<HTMLButtonElement>).map(
+        (b) => b.offsetWidth,
+      ),
     );
     setMaxButtonWidth(maxWidth);
   }, [selectedModel]);
@@ -188,7 +190,13 @@ export default function CartItemDisplay({
                 animate="animate"
                 exit="exit"
               >
-                <Model model={selectedModel} type="final" />
+                <Model
+                  model={selectedModel as IModelWithPrice}
+                  type="final"
+                  price={null}
+                  numberOfItems={null}
+                  showPriceBreakdown={() => {}}
+                />
               </ModelContainer>
             </>
           )}

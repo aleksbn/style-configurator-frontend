@@ -1,4 +1,4 @@
-import React from "react";
+import { type Dispatch, type SetStateAction } from "react";
 import { BackgroundOverlay } from "../../components/style/Common.style";
 import { cubicBezier, motion } from "framer-motion";
 import ConfigureOptions from "./ConfigureOptions";
@@ -57,13 +57,13 @@ export default function MobileConfigureOptions({
   model: IModel | null;
   price: { [key: string]: number };
   numberOfItems: number;
-  setNumberOfItems: React.Dispatch<React.SetStateAction<number>>;
-  setSize: React.Dispatch<React.SetStateAction<string>>;
+  setNumberOfItems: Dispatch<SetStateAction<number>>;
+  setSize: Dispatch<SetStateAction<string>>;
   cartItem: string[] | undefined;
   priceBreakdownOpened: boolean;
-  setPriceBreakdownOpened: React.Dispatch<React.SetStateAction<boolean>>;
+  setPriceBreakdownOpened: Dispatch<SetStateAction<boolean>>;
   colorPickerOpened: boolean;
-  setColorPickerOpened: React.Dispatch<React.SetStateAction<boolean>>;
+  setColorPickerOpened: Dispatch<SetStateAction<boolean>>;
   selectedColor: string;
 }) {
   return (

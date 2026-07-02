@@ -1,4 +1,3 @@
-import React from "react";
 import Modal from "../../components/ui/Modal";
 import PriceBreakdownDisplay from "./PriceBreakdownDisplay";
 import type { IPrice } from "../../models/Cart";
