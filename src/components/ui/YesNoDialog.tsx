@@ -18,37 +18,6 @@ const Container = styled.div`
   position: relative;
 `;
 
-const ModalYesButton = styled(Button)`
-  width: 100%;
-  background-color: #000;
-  color: #fff;
-  padding: 24px 36px;
-  border-radius: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-weight: bold;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #fff;
-    color: #000000;
-  }
-`;
-
-const ModalNoButton = styled(Button)`
-  width: 100%;
-  background-color: #fff;
-  color: #000;
-  padding: 24px 36px;
-  border-radius: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-weight: bold;
-  cursor: pointer;
-`;
-
 const Title = styled.div`
   font-size: 2rem;
   font-weight: bold;
@@ -125,12 +94,12 @@ export default function YesNoDialog({
         <Desc>{description}</Desc>
         <div></div>
         <ButtonContainer>
-          <ModalYesButton type="primary" onClick={onYes}>
+          <Button type="tertiary" onClick={onYes}>
             {onYesText}
-          </ModalYesButton>
-          <ModalNoButton type="secondary" onClick={onNo}>
+          </Button>
+          <Button type="quaternary" onClick={onNo}>
             {onNoText}
-          </ModalNoButton>
+          </Button>
         </ButtonContainer>
       </Container>
     </BackgroundOverlay>

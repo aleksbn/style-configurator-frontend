@@ -5,6 +5,7 @@ import { HexColorPicker } from "react-colorful";
 import { fadeAndIncrease } from "../../animations/Fade";
 import { BackgroundOverlay } from "../../components/style/Common.style";
 import ColorApi from "../../Api/ColorApiHelper";
+import { Button } from "../../components/style/Buttons.style";
 
 const Container = styled.div`
   display: flex;
@@ -39,6 +40,10 @@ const Container = styled.div`
       height: 60svh;
       width: 60svw;
     }
+
+    & .button {
+      width: 60svw;
+    }
   }
 
   @media (max-width: 480px) {
@@ -51,48 +56,10 @@ const Container = styled.div`
       height: 75svw;
       width: 75svw;
     }
-  }
-`;
 
-const ModalOkButton = styled.div`
-  width: 100%;
-  background-color: #000;
-  color: #fff;
-  padding: 24px 36px;
-  border-radius: 10px 10px 0 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-weight: bold;
-  cursor: pointer;
-
-  @media (max-width: 768px) {
-    width: 60svw;
-  }
-
-  @media (max-width: 480px) {
-    width: 75svw;
-  }
-`;
-
-const ModalCancelButton = styled.div`
-  width: 100%;
-  background-color: #fff;
-  color: #000;
-  padding: 24px 36px;
-  border-radius: 0 0 10px 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-weight: bold;
-  cursor: pointer;
-
-  @media (max-width: 768px) {
-    width: 60svw;
-  }
-
-  @media (max-width: 480px) {
-    width: 75svw;
+    & .button {
+      width: 75svw;
+    }
   }
 `;
 
@@ -205,15 +172,31 @@ export default function ColorPickerModal({
           <ColorSwatch color={selectedColor} />
           <HexLabel>{colorName}</HexLabel>
         </ColorPreview>
-        <ModalOkButton
+        <Button
+          type="tertiary"
+          className="button"
+          style={{
+            borderRadius: "10px 10px 0 0",
+            borderWidth: "0px",
+          }}
           onClick={() => {
             onChange(selectedColor);
             onClose?.();
           }}
         >
           OK
-        </ModalOkButton>
-        <ModalCancelButton onClick={onClose}>Cancel</ModalCancelButton>
+        </Button>
+        <Button
+          type="quaternary"
+          className="button"
+          style={{
+            borderRadius: "0 0 10px 10px",
+            borderWidth: "0px",
+          }}
+          onClick={onClose}
+        >
+          Cancel
+        </Button>
       </Container>
     </BackgroundOverlay>
   );

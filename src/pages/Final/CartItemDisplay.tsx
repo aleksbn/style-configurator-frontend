@@ -73,7 +73,7 @@ const ModelContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-bottom: 20px;
+  padding-bottom: 30px;
 
   @media (max-width: 1024px) {
     height: calc(100% - 50px);

@@ -2,48 +2,63 @@ import styled, { css } from "styled-components";
 
 const type = {
   primary: css`
-    color: #ffffff;
-    background-color: #000000;
+    color: #e3dcd1;
+    background-color: #0d1d32;
 
     &:hover {
-      background-color: transparent;
-      color: #000000;
+      background-color: #e3dcd1;
+      color: #0d1d32;
     }
   `,
 
   secondary: css`
-    color: #000000;
+    color: #0d1d32;
     background-color: transparent;
 
     &:hover {
-      color: #ffffff;
-      background-color: #000000;
+      color: #e3dcd1;
+      background-color: #0d1d32;
 
       > span {
         transition: color 0.6s ease;
-        color: #ffffff;
+        color: #e3dcd1;
       }
     }
   `,
 
   tertiary: css`
-    color: #000000;
-    background-color: #00ffff;
-    border: 2px solid #00ffff;
+    width: 100%;
+    background-color: #0d1d32;
+    color: #e3dcd1;
+    padding: 24px 36px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    cursor: pointer;
 
     &:hover {
-      background-color: #ffffff;
+      background-color: #cfc9bf;
+      color: #0d1d32;
     }
   `,
 
   quaternary: css`
-    color: #000000;
-    background-color: #ffffff;
-    border: none;
+    width: 100%;
+    background-color: #e3dcd1;
+    color: #0d1d32;
+    padding: 24px 36px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    cursor: pointer;
 
     &:hover {
-      color: #ffffff;
-      background-color: #000000;
+      background-color: #112742;
+      color: #e3dcd1;
     }
   `,
 };
@@ -55,9 +70,9 @@ interface ButtonProps {
 }
 
 const Button = styled.div<ButtonProps>`
-  border-radius: 40px;
+  border-radius: 30px;
   display: inline-flex;
-  padding: 8px 32px;
+  padding: 12px 24px;
   justify-content: center;
   align-items: center;
   user-select: none;
@@ -67,12 +82,12 @@ const Button = styled.div<ButtonProps>`
   font-style: normal;
   font-weight: 500;
   font-size: 16px;
-  border: 2px solid #000000;
+  border: 1.5px solid #0d1d32;
   letter-spacing: 0.1px;
   cursor: pointer;
 
   transition-property: background-color, color;
-  transition-duration: 0.6s;
+  transition-duration: 0.4s;
   transition-timing-function: ease;
   transform-origin: center;
   height: fit-content;
