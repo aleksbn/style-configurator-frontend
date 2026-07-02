@@ -8,6 +8,7 @@ import { BsCart } from "react-icons/bs";
 import { BsFillCartFill } from "react-icons/bs";
 import { useAppSelector } from "../../store/hooks";
 import { getBackLink } from "../../constants/backRelations";
+import { LogoMonochrome } from "../../helpers/imageImport";
 
 const Wrapp = styled.div`
   display: flex;
@@ -112,7 +113,7 @@ export default function Navbar() {
         </BackContainer>
       )}
       <LogoContainer>
-        <Logo src="./src/assets/images/logo_monochrome.png" alt="logo" />
+        <Logo src={LogoMonochrome} />
       </LogoContainer>
       {location.pathname === "/" ? (
         <span></span>
