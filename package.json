@@ -1,8 +1,16 @@
 {
   "name": "style-configurator-frontend",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
+  "description": "A full-stack clothing configurator with PDF receipt generation",
+  "author": "Aleksandar Matic",
+  "license": "MIT",
+  "homepage": "https://styledial.vercel.app",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aleksbn/style-configurator-frontend"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
