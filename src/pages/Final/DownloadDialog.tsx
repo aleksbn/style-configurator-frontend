@@ -10,6 +10,7 @@ import { cubicBezier, motion } from "framer-motion";
 import styled from "styled-components";
 import { fadeAndIncrease } from "../../animations/Fade";
 import { Button } from "../../components/style/Buttons.style";
+import ButtonSpinner from "../../components/ui/ButtonSpinner";
 
 const Container = styled.div`
   display: flex;
@@ -100,10 +101,28 @@ const ModalButton = styled(Button)`
   }
 `;
 
+const ErrorLabel = styled.span`
+  color: red;
+  font-size: 14px;
+  margin-top: 8px;
+  display: none;
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  &.visible {
+    display: block;
+  }
+`;
+
 export default function DownloadDialog({
   onClose,
   transitionTime = 0.3,
   onClick,
+  errorText,
+  creatingPdf,
+  buttonText,
 }: {
   onClose: () => void;
   transitionTime?: number;
@@ -113,6 +132,9 @@ export default function DownloadDialog({
     email: string,
     fulladdress: string,
   ) => void;
+  errorText?: string | null;
+  creatingPdf: boolean;
+  buttonText: string;
 }) {
   const [errors, setErrors] = useState({
     fullName: null,
@@ -293,7 +315,10 @@ export default function DownloadDialog({
           <Error>{errors.email}</Error>
         </InputContainer>
         <ModalButton
-          style={{ width: buttonWidth }}
+          style={{
+            width: buttonWidth,
+            padding: creatingPdf ? "18px 36px" : "24px 36px",
+          }}
           onClick={handleOnClick}
           className={
             !formValues.fullName ||
@@ -308,8 +333,15 @@ export default function DownloadDialog({
               : ""
           }
         >
-          Download PDF
+          {creatingPdf ? (
+            <ButtonSpinner height="32px" width="32px" />
+          ) : (
+            buttonText
+          )}
         </ModalButton>
+        <ErrorLabel className={errorText ? "visible" : ""}>
+          {errorText}
+        </ErrorLabel>
       </Container>
     </BackgroundOverlay>
   );

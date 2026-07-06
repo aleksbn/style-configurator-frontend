@@ -108,6 +108,8 @@ export default function Final() {
   const [cartModalOpened, setCartModalOpened] = useState(false);
   const [priceModalOpened, setPriceModalOpened] = useState(false);
   const [moreModalOpened, setMoreModalOpened] = useState(false);
+  const [creatingPdf, setCreatingPdf] = useState(false);
+  const [pdfError, setPdfError] = useState<string | null>(null);
 
   const breakpoint = useBreakpoint();
   const cartRedux = useAppSelector((state) => state.cart);
@@ -189,30 +191,38 @@ export default function Final() {
     email: string,
     fullAddress: string,
   ) => {
-    const content = await arrangeContentForPDF(
-      fullName,
-      phone,
-      email,
-      fullAddress,
-    );
-    console.log(content);
-    const { pdf } = await import("@react-pdf/renderer");
-    const { default: PdfGenerator } = await import("./Final/PdfGenerator");
-    await loadFonts();
-    const pdfBlob = await pdf(
-      <PdfGenerator
-        footer={content.footer}
-        frontCoverPage={content.frontCoverPage}
-        priceBreakdownPage={content.priceBreakdownPage}
-        orderDataPage={content.orderDataPage}
-        backCoverPage={content.backCoverPage}
-      />,
-    ).toBlob();
-    const pdfUrl = URL.createObjectURL(pdfBlob);
-    const link = document.createElement("a");
-    link.href = pdfUrl;
-    link.download = "style-dial-receipt.pdf";
-    link.click();
+    setCreatingPdf(true);
+    setPdfError(null);
+    try {
+      const content = await arrangeContentForPDF(
+        fullName,
+        phone,
+        email,
+        fullAddress,
+      );
+      const { pdf } = await import("@react-pdf/renderer");
+      const { default: PdfGenerator } = await import("./Final/PdfGenerator");
+      await loadFonts();
+      const pdfBlob = await pdf(
+        <PdfGenerator
+          footer={content.footer}
+          frontCoverPage={content.frontCoverPage}
+          priceBreakdownPage={content.priceBreakdownPage}
+          orderDataPage={content.orderDataPage}
+          backCoverPage={content.backCoverPage}
+        />,
+      ).toBlob();
+      const pdfUrl = URL.createObjectURL(pdfBlob);
+      const link = document.createElement("a");
+      link.href = pdfUrl;
+      link.download = "style-dial-receipt.pdf";
+      link.click();
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+      setPdfError("Error generating PDF. Please try again.");
+    } finally {
+      setCreatingPdf(false);
+    }
   };
 
   const arrangeContentForPDF = async (
@@ -395,6 +405,9 @@ export default function Final() {
           <DownloadDialog
             onClose={() => setDownloadDialogOpen(false)}
             onClick={handleDownloadClick}
+            errorText={pdfError}
+            creatingPdf={creatingPdf}
+            buttonText={pdfError ? "Try again" : "Download PDF"}
           />
         )}
       </AnimatePresence>
