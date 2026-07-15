@@ -17,25 +17,35 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  width: fit-content;
-  height: 80%;
   width: 40%;
+  max-height: 85svh;
+  overflow-y: auto;
   padding: 5%;
   background-color: rgba(240, 248, 255, 1);
   border-radius: 50px;
   position: relative;
+
+  @media (max-width: 1024px) {
+    width: 60%;
+  }
+
+  @media (max-width: 600px) {
+    width: 90%;
+    padding: 8% 6%;
+  }
 `;
 
 const Title = styled.h1`
   text-align: center;
   font-size: 1.5rem;
   letter-spacing: 1px;
-  position: absolute;
-  top: 3%;
-  left: 50%;
-  width: 90%;
-  transform: translateX(-50%);
-  padding-bottom: 40px;
+  width: 100%;
+  margin: 0 0 32px 0;
+
+  @media (max-width: 600px) {
+    font-size: 1.2rem;
+    margin-bottom: 24px;
+  }
 `;
 
 const InputContainer = styled.div`
@@ -85,10 +95,8 @@ const ModalButton = styled(Button)`
   align-items: center;
   font-weight: bold;
   cursor: pointer;
-  position: absolute;
-  bottom: 5%;
-  left: 50%;
-  transform: translateX(-50%);
+  align-self: center;
+  margin-top: 16px;
 
   &:hover {
     background-color: #fff;
@@ -106,10 +114,7 @@ const ErrorLabel = styled.span`
   font-size: 14px;
   margin-top: 8px;
   display: none;
-  position: absolute;
-  bottom: 12px;
-  left: 50%;
-  transform: translateX(-50%);
+  align-self: center;
 
   &.visible {
     display: block;

@@ -45,6 +45,7 @@ const PriceInfoContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 8px;
   padding-left: 40px;
   width: 100%;
   padding-bottom: 8px;

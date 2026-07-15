@@ -16,6 +16,13 @@ const Container = styled.div`
   background-color: rgba(240, 248, 255, 1);
   border-radius: 50px;
   position: relative;
+
+  @media (max-width: 600px) {
+    width: 88%;
+    height: auto;
+    max-height: 80svh;
+    padding: 10% 6% 32px 6%;
+  }
 `;
 
 const Title = styled.div`
@@ -23,12 +30,22 @@ const Title = styled.div`
   font-weight: bold;
   margin: 0 0 48px 0;
   text-align: center;
+
+  @media (max-width: 600px) {
+    font-size: 1.4rem;
+    margin-bottom: 24px;
+  }
 `;
 
 const Desc = styled.div`
   font-size: 1.4rem;
   text-align: center;
   margin-bottom: 32px;
+
+  @media (max-width: 600px) {
+    font-size: 1rem;
+    margin-bottom: 24px;
+  }
 `;
 
 const ButtonContainer = styled.div`
@@ -41,6 +58,16 @@ const ButtonContainer = styled.div`
   bottom: 48px;
   left: 50%;
   transform: translateX(-50%);
+
+  @media (max-width: 600px) {
+    position: static;
+    transform: none;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+    min-width: unset;
+    max-width: 100%;
+  }
 `;
 
 export default function YesNoDialog({
