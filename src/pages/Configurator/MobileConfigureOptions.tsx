@@ -55,7 +55,7 @@ export default function MobileConfigureOptions({
   selectedOption: IOption | null;
   update_parts: (partid: string, partvalue: string) => void;
   model: IModel | null;
-  price: { [key: string]: number };
+  price: Record<string, number>;
   numberOfItems: number;
   setNumberOfItems: Dispatch<SetStateAction<number>>;
   setSize: Dispatch<SetStateAction<string>>;

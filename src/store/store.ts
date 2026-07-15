@@ -3,7 +3,7 @@ import modelsReducer from "./slices/modelSlice";
 import configurationReducer from "./slices/configurationSlice";
 import cartReducer from "./slices/cartSlice";
 import webSiteReducer from "./slices/webSiteSlice";
-import { persistStore, persistReducer } from "redux-persist/es";
+import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/es/storage";
 
 const persistConfig = {

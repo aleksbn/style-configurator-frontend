@@ -201,7 +201,9 @@ export default function Landing() {
               initial="initial"
               animate="animate"
               type="primary"
-              onClick={() => navigate("/products")}
+              onClick={() => {
+                void navigate("/products");
+              }}
             >
               Start creating
             </Button>

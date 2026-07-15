@@ -72,9 +72,19 @@ export default function NotFound() {
       </Description>
 
       <Buttons>
-        <Button onClick={() => navigate("/")}>Back Home</Button>
+        <Button
+          onClick={() => {
+            void navigate("/");
+          }}
+        >
+          Back Home
+        </Button>
 
-        <SecondaryButton onClick={() => navigate(-1)}>
+        <SecondaryButton
+          onClick={() => {
+            void navigate(-1);
+          }}
+        >
           Start Designing
         </SecondaryButton>
       </Buttons>

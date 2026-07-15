@@ -108,7 +108,7 @@ export default function Configurator({
   update_parts: (partid: string, partvalue: string) => void;
   add_to_cart: (numberOfItems: number, size: string) => void;
   update_cart: (oldItem: ICartItem, newItem: ICartItem) => void;
-  price: { [key: string]: number };
+  price: Record<string, number>;
   selectedSKU: string | null;
 }) {
   const [selectedOptionKey, setSelectedOptionKey] = useState<string>(
@@ -119,7 +119,7 @@ export default function Configurator({
   const [numberOfItems, setNumberOfItems] = useState(
     Number(cartItem?.[2]) || 1,
   );
-  const [size, setSize] = useState(model?.selected_size || "");
+  const [size, setSize] = useState(model?.selected_size ?? "");
   const [addToCardDialogOpen, setAddToCardDialogOpen] = useState(false);
   const [priceBreakdownOpened, setPriceBreakdownOpened] = useState(false);
   const [configurationOpened, setConfigurationOpened] = useState(false);
@@ -142,7 +142,7 @@ export default function Configurator({
           quantity: numberOfItems,
         },
       );
-      navigate("/final");
+      void navigate("/final");
     } else {
       add_to_cart(numberOfItems, size);
       setAddToCardDialogOpen(true);
@@ -159,7 +159,7 @@ export default function Configurator({
   };
 
   const handleColorChange = (color: string) => {
-    update_color(selectedOption?.code || "", color);
+    update_color(selectedOption?.code ?? "", color);
   };
 
   return (
@@ -215,7 +215,7 @@ export default function Configurator({
               colorPickerOpened={colorPickerOpened}
               setColorPickerOpened={setColorPickerOpened}
               selectedColor={
-                selectedOption?.value || selectedOption?.default_value || ""
+                selectedOption?.value ?? selectedOption?.default_value ?? ""
               }
             />
           )}
@@ -244,7 +244,12 @@ export default function Configurator({
       <Footer>
         <EmptyDiv></EmptyDiv>
         <div style={{ overflow: "hidden" }}>
-          <Button type="primary" onClick={handleAddToCartClick}>
+          <Button
+            type="primary"
+            onClick={() => {
+              void handleAddToCartClick();
+            }}
+          >
             {cartItem ? "Update cart" : "Add to cart"}
           </Button>
         </div>
@@ -254,7 +259,7 @@ export default function Configurator({
         {priceBreakdownOpened && (
           <PriceBreakdown
             onClose={() => setPriceBreakdownOpened(false)}
-            name={model?.name || ""}
+            name={model?.name ?? ""}
             price={price}
             transitionTime={0.5}
             numberOfItems={numberOfItems}
@@ -282,7 +287,7 @@ export default function Configurator({
             colorPickerOpened={colorPickerOpened}
             setColorPickerOpened={setColorPickerOpened}
             selectedColor={
-              selectedOption?.value || selectedOption?.default_value || ""
+              selectedOption?.value ?? selectedOption?.default_value ?? ""
             }
           />
         )}
@@ -291,7 +296,7 @@ export default function Configurator({
         {colorPickerOpened && (
           <ColorPickerModal
             onChange={handleColorChange}
-            color={`#${selectedOption?.value || selectedOption?.default_value || ""}`}
+            color={`#${selectedOption?.value ?? selectedOption?.default_value ?? ""}`}
             transitionTime={0.3}
             onClose={() => setColorPickerOpened(false)}
           />

@@ -45,9 +45,7 @@ export default function ProductList({
   setCurrentModel,
   currentModel,
 }: {
-  models: {
-    [key: string]: { name: string; options: { [key: string]: IModel } };
-  };
+  models: Record<string, { name: string; options: Record<string, IModel> }>;
   currentModel: IModel | null;
   setCurrentModel: Dispatch<SetStateAction<IModel | null>>;
 }) {

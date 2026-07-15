@@ -3,8 +3,8 @@ const Wrapp = styled.div<{ width?: string; height?: string }>`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: ${(props) => props.width || "32px"};
-  height: ${(props) => props.height || "32px"};
+  width: ${(props) => props.width ?? "32px"};
+  height: ${(props) => props.height ?? "32px"};
 `;
 
 const Loader = styled.div<{ width?: string; height?: string }>`
@@ -14,8 +14,8 @@ const Loader = styled.div<{ width?: string; height?: string }>`
   border-color: #e5e5e5 #555555 #555555;
   border-image: initial;
   border-radius: 50%;
-  width: ${(props) => props.width || "15px"};
-  height: ${(props) => props.height || "15px"};
+  width: ${(props) => props.width ?? "15px"};
+  height: ${(props) => props.height ?? "15px"};
   animation: 2s linear 0s infinite normal none running spin;
 
   @keyframes spin {

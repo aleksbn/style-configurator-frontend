@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import type { IModel } from "../../models/Model";
 import type { ICartItem } from "../../models/Cart";
+import { getModelIdFromConfigKey } from "../../helpers/configKey";
 
 const Container = styled.div`
   display: flex;
@@ -53,7 +54,9 @@ export default function Cart({
   selectItem,
   cartRedux,
   allModels,
-  onClose = () => {},
+  onClose = () => {
+    // noop
+  },
 }: {
   selectItem: (item: ICartItem) => void;
   cartRedux: { items: ICartItem[] };
@@ -64,7 +67,7 @@ export default function Cart({
     <Container>
       {cartRedux.items.map((item) => {
         const selectedModel = allModels.find(
-          (model) => model.id === item.configKey.split(":")[0],
+          (model) => model.id === getModelIdFromConfigKey(item.configKey),
         );
         return (
           Object.keys(item).length > 1 && (

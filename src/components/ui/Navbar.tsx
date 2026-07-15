@@ -74,7 +74,7 @@ export default function Navbar() {
   const handleCartClick = () => {
     if (cart.items.length === 0) return;
     localStorage.setItem("previousPath", location.pathname);
-    navigate("/final");
+    void navigate("/final");
   };
   return (
     <Wrapp
@@ -94,14 +94,14 @@ export default function Navbar() {
             initial="initial"
             animate="animate"
             exit="exit"
-            onClick={() =>
-              navigate(
+            onClick={() => {
+              void navigate(
                 getBackLink(
                   location.pathname,
                   localStorage.getItem("previousPath")!,
                 ),
-              )
-            }
+              );
+            }}
           >
             <IoChevronBackCircleOutline
               size={36}

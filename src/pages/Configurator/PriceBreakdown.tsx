@@ -107,7 +107,7 @@ export default function PriceBreakdown({
   numberOfItems,
 }: {
   name: string;
-  price: { [key: string]: number };
+  price: Record<string, number>;
   transitionTime?: number;
   onClose?: () => void;
   numberOfItems: number;

@@ -1,10 +1,10 @@
 import { cubicBezier } from "framer-motion";
 
 function fade(
-  delayIn: number = 0,
-  delayOut: number = 0,
-  durationIn: number = 1,
-  durationOut: number = 1,
+  delayIn = 0,
+  delayOut = 0,
+  durationIn = 1,
+  durationOut = 1,
 ) {
   return {
     initial: {
@@ -30,10 +30,10 @@ function fade(
 }
 
 function fadeAndIncrease(
-  delayIn: number = 0,
-  delayOut: number = 0,
-  durationIn: number = 1,
-  durationOut: number = 1,
+  delayIn = 0,
+  delayOut = 0,
+  durationIn = 1,
+  durationOut = 1,
 ) {
   return {
     initial: {

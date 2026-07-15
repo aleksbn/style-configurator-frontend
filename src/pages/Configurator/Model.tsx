@@ -75,7 +75,7 @@ export default function Model({
   type = "",
 }: {
   model: IModel | null;
-  price: { [key: string]: number } | null;
+  price: Record<string, number> | null;
   numberOfItems: number | null;
   showPriceBreakdown: () => void | undefined;
   type: string;

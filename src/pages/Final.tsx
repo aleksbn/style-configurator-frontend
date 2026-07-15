@@ -6,6 +6,8 @@ import styled from "styled-components";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import type { IModel } from "../models/Model";
 import type { ICartItem, IPrice } from "../models/Cart";
+import type { IPdfOption, IPdfPriceBreakdownItem } from "../models/Pdf";
+import { getModelIdFromConfigKey } from "../helpers/configKey";
 import { setConfiguration } from "../store/slices/configurationSlice";
 import Footer from "../components/ui/Footer";
 import { Button } from "../components/style/Buttons.style";
@@ -119,7 +121,7 @@ export default function Final() {
   const allModels = Object.values(useAppSelector((state) => state.models.data))
     .map((model) => model.options)
     .map((options) => Object.values(options))
-    .flat() as IModel[];
+    .flat();
 
   useEffect(() => {
     const handleResize = () => setSmallerThan768px(window.innerWidth <= 768);
@@ -130,12 +132,12 @@ export default function Final() {
   const handleItemClick = (item: ICartItem | null) => {
     setIsFirstInteraction(false);
     setSelectedCartItem(item);
-    dispatch(setConfiguration(item?.configKey));
+    dispatch(setConfiguration(item?.configKey ?? null));
   };
 
   const handleClearCartClick = () => {
     dispatch(setCartToBeCleared(true));
-    navigate("/products");
+    void navigate("/products");
   };
 
   useEffect(() => {
@@ -148,22 +150,19 @@ export default function Final() {
         const totalPriceData = totalPriceResponse.data;
         setTotalPrice(totalPriceData);
         const allPricesData: IPrice[] = [];
-        for (let i = 0; i < cartRedux.items.length; i++) {
-          const priceResponse = await Api.getSinglePrice(
-            cartRedux.items[i].configKey,
-          );
+        for (const cartItem of cartRedux.items) {
+          const priceResponse = await Api.getSinglePrice(cartItem.configKey);
           allPricesData.push({
             Name:
               allModels.find(
                 (model) =>
-                  model.id === cartRedux.items[i].configKey.split(":")[0],
+                  model.id === getModelIdFromConfigKey(cartItem.configKey),
               )?.name ?? "",
-            ConfigKey: cartRedux.items[i].configKey,
-            Size: cartRedux.items[i].size,
-            Quantity: cartRedux.items[i].quantity,
+            ConfigKey: cartItem.configKey,
+            Size: cartItem.size,
+            Quantity: cartItem.quantity,
             PricePerItem: priceResponse["Total price"],
-            TotalPrice:
-              priceResponse["Total price"] * cartRedux.items[i].quantity,
+            TotalPrice: priceResponse["Total price"] * cartItem.quantity,
           });
         }
         setAllPrices(allPricesData);
@@ -174,7 +173,7 @@ export default function Final() {
       }
     };
 
-    fetchPrices();
+    void fetchPrices();
   }, [cartRedux]);
 
   const getModelImageForPdf = async (
@@ -251,7 +250,7 @@ export default function Final() {
         title: "Order data",
         total: {
           title: "Total",
-          price: totalPrice,
+          price: totalPrice ?? { totalPrice: 0, note: "" },
         },
         userData: {
           name: fullName,
@@ -275,7 +274,7 @@ export default function Final() {
     const items = await Promise.all(
       pieces.map(async (item, index) => {
         const model = allModels.find(
-          (model) => model.id === item.configKey.split(":")[0],
+          (model) => model.id === getModelIdFromConfigKey(item.configKey),
         );
         if (model) {
           return {
@@ -284,7 +283,7 @@ export default function Final() {
             pricePerItem: allPrices[index].PricePerItem,
             totalPrice: allPrices[index].TotalPrice,
             options: await Promise.all(
-              item.options.map(async (option: { color: string }) => {
+              item.options.map(async (option: IPdfOption) => {
                 if (option.color) {
                   return {
                     ...option,
@@ -301,12 +300,16 @@ export default function Final() {
       }),
     );
 
+    const definedItems = items.filter(
+      (item): item is IPdfPriceBreakdownItem => item !== undefined,
+    );
+
     const chunkSize = 5;
     const itemSets = [];
-    for (let i = 0; i < items.length; i += chunkSize) {
-      const chunk = items.slice(i, i + chunkSize);
+    for (let i = 0; i < definedItems.length; i += chunkSize) {
+      const chunk = definedItems.slice(i, i + chunkSize);
       const from = i + 1;
-      const to = Math.min(i + chunkSize, items.length);
+      const to = Math.min(i + chunkSize, definedItems.length);
       itemSets.push({
         title: `List of items ${from}-${to}`,
         pieces: chunk,
@@ -404,7 +407,9 @@ export default function Final() {
         {downloadDialogOpen && (
           <DownloadDialog
             onClose={() => setDownloadDialogOpen(false)}
-            onClick={handleDownloadClick}
+            onClick={(fullName, phone, email, fullAddress) => {
+              void handleDownloadClick(fullName, phone, email, fullAddress);
+            }}
             errorText={pdfError}
             creatingPdf={creatingPdf}
             buttonText={pdfError ? "Try again" : "Download PDF"}

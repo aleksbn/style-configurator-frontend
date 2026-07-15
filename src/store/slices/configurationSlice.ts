@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 interface ConfigurationState {
   data: string | null;
@@ -16,7 +16,7 @@ const configurationSlice = createSlice({
   name: "configuration",
   initialState,
   reducers: {
-    setConfiguration: (state, action) => {
+    setConfiguration: (state, action: PayloadAction<string | null>) => {
       state.data = action.payload;
     },
   },

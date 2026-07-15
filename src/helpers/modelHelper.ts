@@ -1,27 +1,28 @@
 import type { IModel, IMultiOptionType, IOption } from "../models/Model";
+import { parseConfigKey } from "./configKey";
 
 const redoReduxModel = (allModels: IModel[], selectedSKU: string) => {
+  const { modelId, parts } = parseConfigKey(selectedSKU);
   const modelToConfigure: IModel | undefined = structuredClone(
-    allModels.find((model: IModel) => model.id === selectedSKU?.split(":")[0]),
+    allModels.find((model: IModel) => model.id === modelId),
   );
   const allOptions: IOption[] = Object.values(
-    modelToConfigure?.options || {},
+    modelToConfigure?.options ?? {},
   ).flat();
-  const allSkuOptions = selectedSKU?.split(":").slice(1) || [];
-  allSkuOptions.forEach((option) => {
+  parts.forEach((part) => {
     const selectedOption: IOption | undefined = allOptions.find(
-      (o) => o.code === option.split("-")[0],
+      (o) => o.code === part.code,
     );
     if (!selectedOption) return;
     const hasMultiOptions = !!selectedOption.multi_option_type;
-    if (selectedOption.default_value !== option.split("-")[1]) {
-      selectedOption.value = option.split("-")[1];
+    if (selectedOption.default_value !== part.value) {
+      selectedOption.value = part.value;
     } else {
       selectedOption.value = null;
     }
     if (hasMultiOptions) {
       const selectedType = selectedOption.multi_option_type?.find(
-        (o) => o.code === option.split("-")[2],
+        (o) => o.code === part.typeCode,
       )?.value;
       if (selectedType !== undefined) {
         selectedOption.selected_type = selectedType;
@@ -32,7 +33,7 @@ const redoReduxModel = (allModels: IModel[], selectedSKU: string) => {
   return modelToConfigure;
 };
 
-const redoModel = (selectedModel: IModel) => {
+const redoModel = (selectedModel: IModel | null) => {
   if (selectedModel) {
     const allIds = Object.keys(selectedModel.options);
     allIds.forEach((id) => {
@@ -42,7 +43,7 @@ const redoModel = (selectedModel: IModel) => {
         [...optionElements].forEach((optionElement) => {
           (optionElement as SVGElement).setAttribute(
             "fill",
-            `#${option.value || option.default_value}`,
+            `#${option.value ?? option.default_value}`,
           );
         });
       } else {
@@ -50,12 +51,12 @@ const redoModel = (selectedModel: IModel) => {
           if (optionElement.getAttribute("fill")) {
             (optionElement as SVGElement).setAttribute(
               "fill",
-              `#${option.value || option.default_value}`,
+              `#${option.value ?? option.default_value}`,
             );
           } else {
             (optionElement as SVGElement).setAttribute(
               "stroke",
-              `#${option.value || option.default_value}`,
+              `#${option.value ?? option.default_value}`,
             );
           }
         });

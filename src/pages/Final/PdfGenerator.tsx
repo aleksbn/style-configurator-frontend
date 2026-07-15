@@ -1,4 +1,3 @@
-// @ts-nocheck
 import {
   Page,
   Text,
@@ -7,6 +6,7 @@ import {
   StyleSheet,
   Image,
 } from "@react-pdf/renderer";
+import type { IPdfFooter, IPdfGeneratorProps } from "../../models/Pdf";
 
 const styles = StyleSheet.create({
   page: {
@@ -354,7 +354,7 @@ const styles = StyleSheet.create({
   },
 });
 
-function PageFooter({ footer }) {
+function PageFooter({ footer }: { footer: IPdfFooter }) {
   return (
     <View style={styles.footer} fixed>
       <View> </View>
@@ -374,7 +374,7 @@ function PdfGeneratorFinal({
   priceBreakdownPage,
   orderDataPage,
   backCoverPage,
-}) {
+}: IPdfGeneratorProps) {
   return (
     <Document>
       {/* FRONT COVER PAGE */}
@@ -506,7 +506,9 @@ function PdfGeneratorFinal({
                           </Text>
                         </View>
                         {piece.options
-                          .filter((o) => o.name)
+                          .filter(
+                            (o): o is typeof o & { name: string } => !!o.name,
+                          )
                           .map((option, index) => (
                             <View
                               style={{

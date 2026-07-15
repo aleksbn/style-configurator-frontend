@@ -1,12 +1,12 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import Api from "../../Api/ApiHelper";
+import type { IModel, IModelsData } from "../../models/Model";
 
 export const fetchModels = createAsyncThunk(
   "models/fetchModels",
-  async (_, { rejectWithValue }) => {
+  async (_: void, { rejectWithValue }) => {
     try {
-      const response = await Api.get("/models");
-      return response;
+      return await Api.getAllModelsContent();
     } catch (error: unknown) {
       if (error instanceof Error) {
         return rejectWithValue(error.message);
@@ -17,14 +17,14 @@ export const fetchModels = createAsyncThunk(
 );
 
 interface ModelState {
-  data: any[];
-  selectedModel: any | null;
+  data: IModelsData;
+  selectedModel: IModel | null;
   loading: boolean;
   error: string | null;
 }
 
 const initialState: ModelState = {
-  data: [],
+  data: {},
   selectedModel: null,
   loading: false,
   error: null,
@@ -34,7 +34,7 @@ const modelSlice = createSlice({
   name: "models",
   initialState,
   reducers: {
-    setSelectedModel: (state, action) => {
+    setSelectedModel: (state, action: PayloadAction<IModel | null>) => {
       state.selectedModel = action.payload;
     },
   },

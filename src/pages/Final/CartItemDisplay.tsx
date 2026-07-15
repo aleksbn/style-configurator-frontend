@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useState } from "react";
 import type { ICartItem } from "../../models/Cart";
 import styled from "styled-components";
-import type { IModel, IModelWithPrice } from "../../models/Model";
+import type { IModel } from "../../models/Model";
 import Model from "../Configurator/Model";
 import { redoModel, redoReduxModel } from "../../helpers/modelHelper";
 import { AnimatePresence } from "framer-motion";
@@ -133,9 +133,9 @@ export default function CartItemDisplay({
 
       setTimeout(() => {
         const newModel = redoReduxModel(allModels, selectedCartItem.configKey);
-        setSelectedModel(newModel || null);
-        setModelKey(newModel?.id || "");
-        setModelName(newModel?.name || "");
+        setSelectedModel(newModel ?? null);
+        setModelKey(newModel?.id ?? "");
+        setModelName(newModel?.name ?? "");
         setSize(selectedCartItem.size);
       }, 300);
     }
@@ -191,11 +191,13 @@ export default function CartItemDisplay({
                 exit="exit"
               >
                 <Model
-                  model={selectedModel as IModelWithPrice}
+                  model={selectedModel}
                   type="final"
                   price={null}
                   numberOfItems={null}
-                  showPriceBreakdown={() => {}}
+                  showPriceBreakdown={() => {
+                    // noop
+                  }}
                 />
               </ModelContainer>
             </>
@@ -214,7 +216,7 @@ export default function CartItemDisplay({
             }}
             onClick={() => {
               localStorage.setItem("previousPath", location.pathname);
-              navigate({
+              void navigate({
                 pathname: "/compose",
                 search: `${createSearchParams({ cartItem: `${selectedCartItem.configKey}|${selectedCartItem.size}|${selectedCartItem.quantity}` })}`,
               });

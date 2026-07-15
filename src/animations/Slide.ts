@@ -1,11 +1,15 @@
 import { cubicBezier } from "framer-motion";
 
+function negate(distance: number | string): number | string {
+  return typeof distance === "string" ? `-${distance}` : -distance;
+}
+
 function SlideUp(
-  delayIn: number = 0,
-  delayOut: number = 0,
-  durationIn: number = 1,
-  durationOut: number = 1,
-  withOpacity: boolean = false,
+  delayIn = 0,
+  delayOut = 0,
+  durationIn = 1,
+  durationOut = 1,
+  withOpacity = false,
   distance: number | string = 100,
 ) {
   return {
@@ -35,16 +39,16 @@ function SlideUp(
 }
 
 function SlideRight(
-  delayIn: number = 0,
-  delayOut: number = 0,
-  durationIn: number = 1,
-  durationOut: number = 1,
-  withOpacity: boolean = false,
+  delayIn = 0,
+  delayOut = 0,
+  durationIn = 1,
+  durationOut = 1,
+  withOpacity = false,
   distance: number | string = 100,
 ) {
   return {
     initial: {
-      x: -distance,
+      x: negate(distance),
       opacity: withOpacity ? 0 : 1,
     },
     animate: {
@@ -57,7 +61,7 @@ function SlideRight(
       },
     },
     exit: {
-      x: -distance,
+      x: negate(distance),
       opacity: withOpacity ? 0 : 1,
       transition: {
         duration: durationOut,
@@ -69,11 +73,11 @@ function SlideRight(
 }
 
 function SlideLeft(
-  delayIn: number = 0,
-  delayOut: number = 0,
-  durationIn: number = 1,
-  durationOut: number = 1,
-  withOpacity: boolean = false,
+  delayIn = 0,
+  delayOut = 0,
+  durationIn = 1,
+  durationOut = 1,
+  withOpacity = false,
   distance: number | string = 100,
 ) {
   return {

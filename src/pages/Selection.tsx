@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from "../store/hooks.js";
 import Footer from "../components/ui/Footer.js";
 import { Button } from "../components/style/Buttons.style.js";
 import { setSelectedModel } from "../store/slices/modelSlice.js";
-import { convertModelToSku } from "../helpers/skuHelper.js";
+import { buildConfigKey } from "../helpers/configKey.js";
 import { useNavigate } from "react-router-dom";
 import { PageWrap, RotateMessage } from "../components/style/Common.style.js";
 import styled from "styled-components";
@@ -73,14 +73,12 @@ export default function Selection() {
   const { data: models } = useAppSelector(
     (state) => state.models,
   ) as unknown as {
-    data: {
-      [key: string]: { name: string; options: { [key: string]: IModel } };
-    };
+    data: Record<string, { name: string; options: Record<string, IModel> }>;
   };
   const allModels = Object.values(models)
     .map((model) => model.options)
     .map((options) => Object.values(options))
-    .flat() as IModel[];
+    .flat();
   const cartToBeCleared = useAppSelector(
     (state) => state.webSite.cartToBeCleared,
   );
@@ -110,8 +108,8 @@ export default function Selection() {
 
   const handleComposeClick = () => {
     dispatch(setSelectedModel(currentModel));
-    dispatch(setConfiguration(convertModelToSku(currentModel)));
-    navigate("/compose");
+    dispatch(setConfiguration(buildConfigKey(currentModel)));
+    void navigate("/compose");
   };
 
   const handleSelectPrevModelClick = () => {

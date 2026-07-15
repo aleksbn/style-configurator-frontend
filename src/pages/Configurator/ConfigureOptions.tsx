@@ -204,7 +204,7 @@ export default function ConfigureOptions({
   selectedOption: IOption | null;
   update_parts: (partid: string, partvalue: string) => void;
   model: IModel | null;
-  price: { [key: string]: number };
+  price: Record<string, number>;
   numberOfItems: number;
   setNumberOfItems: React.Dispatch<React.SetStateAction<number>>;
   setSize: React.Dispatch<React.SetStateAction<string>>;
@@ -256,8 +256,7 @@ export default function ConfigureOptions({
       <Title>{selectedOption?.name}</Title>
       <Body>
         <MainContainer>
-          {selectedOption?.multi_option_type &&
-            selectedOption.multi_option_type.map((option) => (
+          {selectedOption?.multi_option_type?.map((option) => (
               <>
                 <Label
                   onClick={() =>

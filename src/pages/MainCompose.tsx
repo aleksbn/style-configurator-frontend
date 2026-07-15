@@ -8,29 +8,29 @@ import LoadingSpinner from "../components/ui/LoadingSpinner";
 import { addToCart, updateCartItem } from "../store/slices/cartSlice";
 import type { ICartItem } from "../models/Cart";
 import { redoModel, redoReduxModel } from "../helpers/modelHelper";
-import type { IModel } from "../models/Model";
+import { parseConfigKey, stringifyConfigKey } from "../helpers/configKey";
 
 export default function MainCompose() {
   const dispatch = useAppDispatch();
   const allModels = Object.values(useAppSelector((state) => state.models.data))
     .map((model) => model.options)
     .map((options) => Object.values(options))
-    .flat() as IModel[];
+    .flat();
   const selectedSKU = useAppSelector((state) => state.configuration.data);
   const selectedModel = useAppSelector((state) => state.models.selectedModel);
-  const [price, setPrice] = useState<{ [key: string]: number }>({});
+  const [price, setPrice] = useState<Record<string, number>>({});
   const [isLoading, setIsLoading] = useState(true);
   const [justLoaded, setJustLoaded] = useState(true);
 
   useEffect(() => {
     const fetchPrice = async () => {
       if (selectedSKU === null) return;
-      const priceObject = await Api.getSinglePrice(selectedSKU!);
+      const priceObject = await Api.getSinglePrice(selectedSKU);
       setPrice(priceObject);
       setIsLoading(false);
     };
 
-    fetchPrice();
+    void fetchPrice();
   }, [selectedSKU]);
 
   // FOR JUST LOADED
@@ -54,34 +54,32 @@ export default function MainCompose() {
   useEffect(() => {
     if (selectedSKU && allModels.length > 0) {
       const modelToConfigure = redoReduxModel(allModels, selectedSKU);
-      dispatch(setSelectedModel(modelToConfigure));
+      dispatch(setSelectedModel(modelToConfigure ?? null));
     }
   }, [selectedSKU]);
 
   const update_color = (partid: string, color: string) => {
-    const newSku = selectedSKU
-      ?.split(":")
-      .map((part) => {
-        if (part.split("-")[0] === partid) {
-          return `${part.split("-")[0]}-${color.slice(1)}${part.split("-")[2] ? `-${part.split("-")[2]}` : ""}`;
-        }
-        return part;
-      })
-      .join(":");
-    dispatch(setConfiguration(newSku));
+    if (selectedSKU === null) {
+      dispatch(setConfiguration(null));
+      return;
+    }
+    const parsed = parseConfigKey(selectedSKU);
+    parsed.parts = parsed.parts.map((part) =>
+      part.code === partid ? { ...part, value: color.slice(1) } : part,
+    );
+    dispatch(setConfiguration(stringifyConfigKey(parsed)));
   };
 
   const update_parts = (partid: string, partvalue: string) => {
-    const newSku = selectedSKU
-      ?.split(":")
-      .map((part) => {
-        if (part.split("-")[0] === partid) {
-          return `${part.split("-")[0]}-${part.split("-")[1]}-${partvalue}`;
-        }
-        return part;
-      })
-      .join(":");
-    dispatch(setConfiguration(newSku));
+    if (selectedSKU === null) {
+      dispatch(setConfiguration(null));
+      return;
+    }
+    const parsed = parseConfigKey(selectedSKU);
+    parsed.parts = parsed.parts.map((part) =>
+      part.code === partid ? { ...part, typeCode: partvalue } : part,
+    );
+    dispatch(setConfiguration(stringifyConfigKey(parsed)));
   };
 
   const add_to_cart = (numberOfItems: number, size: string) => {

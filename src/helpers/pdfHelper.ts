@@ -1,4 +1,5 @@
 import type { IModel, IMultiOptionType } from "../models/Model";
+import { parseConfigKey } from "./configKey";
 import InterRegular from "../assets/fonts/Inter_Regular.ttf";
 import InterBold from "../assets/fonts/Inter_Bold.ttf";
 import InterMedium from "../assets/fonts/Inter_Medium.ttf";
@@ -18,9 +19,8 @@ const applyOptionsToSvg = async (
   const doc = parser.parseFromString(svgText, "image/svg+xml");
   const svg = doc.querySelector("svg")!;
 
-  const parts = configKey.split(":").slice(1);
-  parts.forEach((part) => {
-    const [code, color, selectedType] = part.split("-");
+  const { parts } = parseConfigKey(configKey);
+  parts.forEach(({ code, value: color, typeCode: selectedType }) => {
     const option = Object.values(model.options).find((o) => o.code === code);
     if (option && color) {
       try {

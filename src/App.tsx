@@ -22,7 +22,7 @@ function App() {
   const { loading, error } = useAppSelector((state) => state.models);
 
   useEffect(() => {
-    dispatch(fetchModels());
+    void dispatch(fetchModels());
   }, [dispatch]);
 
   if (loading) return <LoadingSpinner text="Loading all models" />;
