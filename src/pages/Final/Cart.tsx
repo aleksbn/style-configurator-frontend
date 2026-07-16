@@ -2,6 +2,7 @@ import styled from "styled-components";
 import type { IModel } from "../../models/Model";
 import type { ICartItem } from "../../models/Cart";
 import { getModelIdFromConfigKey } from "../../helpers/configKey";
+import { InlineLabel } from "../../components/style/Common.style";
 
 const Container = styled.div`
   display: flex;
@@ -32,11 +33,6 @@ const CartItem = styled.div`
   align-items: center;
   width: 100%;
   cursor: pointer;
-`;
-
-const Name = styled.span`
-  font-size: 1.2rem;
-  margin-right: 10px;
 `;
 
 const ImageContainer = styled.div`
@@ -80,9 +76,9 @@ export default function Cart({
             >
               {
                 <>
-                  <Name>
+                  <InlineLabel>
                     {selectedModel?.name} - {item.size}
-                  </Name>
+                  </InlineLabel>
                   <ImageContainer>
                     <Image src={selectedModel?.sketch} />
                   </ImageContainer>

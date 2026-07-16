@@ -1,10 +1,10 @@
-import { cubicBezier, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import styled from "styled-components";
-import { BackgroundOverlay } from "../../components/style/Common.style";
 import { SlideRight } from "../../animations/Slide";
 import { IoMdClose } from "react-icons/io";
 import type { IModel } from "../../models/Model";
 import type { Dispatch, SetStateAction } from "react";
+import ModalBackdrop from "../../components/ui/ModalBackdrop";
 
 const Container = styled.div`
   display: flex;
@@ -58,30 +58,14 @@ export default function ModalProductList({
   onClose: () => void;
 }) {
   return (
-    <BackgroundOverlay
-      as={motion.div}
-      initial={{ backgroundColor: "rgba(0, 0, 0, 0)" }}
-      animate={{
-        backgroundColor: "rgba(0, 0, 0, 0.75)",
-        transition: {
-          duration: 0.3,
-          ease: cubicBezier(0.85, 0, 0.15, 1),
-        },
-      }}
-      exit={{
-        backgroundColor: "rgba(0, 0, 0, 0)",
-        transition: {
-          duration: 0.3,
-          ease: cubicBezier(0.85, 0, 0.15, 1),
-        },
-      }}
-    >
+    <ModalBackdrop onClose={onClose}>
       <Container
         as={motion.div}
         variants={SlideRight(0, 0, 0.5, 0.5, false, 1000)}
         initial="initial"
         animate="animate"
         exit="exit"
+        onClick={(e) => e.stopPropagation()}
       >
         <IoMdClose className="close-icon" onClick={onClose} size={32} />
         <List>
@@ -106,6 +90,6 @@ export default function ModalProductList({
           ))}
         </List>
       </Container>
-    </BackgroundOverlay>
+    </ModalBackdrop>
   );
 }

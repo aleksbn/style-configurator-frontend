@@ -61,6 +61,23 @@ const type = {
       color: #e3dcd1;
     }
   `,
+
+  dark: css`
+    background-color: #000;
+    color: #fff;
+    padding: 24px 36px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #fff;
+      color: #000;
+    }
+  `,
 };
 
 type ButtonType = keyof typeof type;

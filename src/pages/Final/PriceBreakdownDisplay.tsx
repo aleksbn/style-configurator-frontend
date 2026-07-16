@@ -1,7 +1,14 @@
 import { Fragment } from "react";
 import styled from "styled-components";
 import type { IPrice } from "../../models/Cart";
-import DataLoadingSpinner from "../../components/ui/DataLoadingSpinner";
+import Spinner from "../../components/ui/Spinner";
+import {
+  PriceLabel,
+  Price,
+  Part as SharedPart,
+  PriceInfoContainer,
+  UnderlineBase,
+} from "../../components/style/PriceList.style";
 
 const PriceBreakdownContainer = styled.div`
   display: flex;
@@ -26,50 +33,20 @@ const PriceListContainer = styled.div`
   width: 100%;
 `;
 
-const Part = styled.div`
-  text-transform: uppercase;
-  padding-bottom: 14px;
-  letter-spacing: 0.1em;
-
+const Part = styled(SharedPart)`
   > span {
     font-style: italic;
     text-transform: lowercase;
   }
-
-  &.total {
-    font-weight: 700;
-  }
 `;
 
-const PriceInfoContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 8px;
-  padding-left: 40px;
-  width: 100%;
-  padding-bottom: 8px;
-
-  &.total {
-    font-weight: 700;
-  }
-`;
-
-const Underline = styled.div`
-  width: 100%;
-  height: 3px;
-  background-color: rgba(0, 0, 0, 0.2);
+const Underline = styled(UnderlineBase)`
   margin-bottom: 24px;
-  flex-shrink: 0;
 
   &:last-child {
     margin-bottom: 8px;
   }
 `;
-
-const PriceLabel = styled.span``;
-
-const Price = styled.span``;
 
 const Note = styled.span`
   font-size: 0.8rem;
@@ -92,7 +69,7 @@ export default function PriceBreakdownDisplay({
   if (loading) {
     return (
       <PriceBreakdownContainer>
-        <DataLoadingSpinner />
+        <Spinner />
       </PriceBreakdownContainer>
     );
   }

@@ -1,27 +1,16 @@
 import { type Dispatch, type SetStateAction } from "react";
-import { BackgroundOverlay } from "../../components/style/Common.style";
-import { cubicBezier, motion } from "framer-motion";
+import { SidePanelBase } from "../../components/style/Common.style";
+import { motion } from "framer-motion";
 import ConfigureOptions from "./ConfigureOptions";
 import styled from "styled-components";
 import { SlideLeft } from "../../animations/Slide";
 import type { IModel, IOption } from "../../models/Model";
 import { IoMdClose } from "react-icons/io";
+import ModalBackdrop from "../../components/ui/ModalBackdrop";
 
-const ModalContainer = styled.div`
+const ModalContainer = styled(SidePanelBase)`
   height: 100svh;
   width: 50%;
-  position: absolute;
-  top: 0;
-  right: 0;
-  background-color: #ffffff;
-  padding: 80px 20px 80px 60px;
-
-  & .close-icon {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    cursor: pointer;
-  }
 
   @media (max-width: 768px) {
     padding: 80px 20px;
@@ -67,25 +56,7 @@ export default function MobileConfigureOptions({
   selectedColor: string;
 }) {
   return (
-    <BackgroundOverlay
-      as={motion.div}
-      initial={{ backgroundColor: "rgba(0, 0, 0, 0)" }}
-      animate={{
-        backgroundColor: "rgba(0, 0, 0, 0.75)",
-        transition: {
-          duration: 0.3,
-          ease: cubicBezier(0.85, 0, 0.15, 1),
-        },
-      }}
-      exit={{
-        backgroundColor: "rgba(0, 0, 0, 0)",
-        transition: {
-          duration: 0.3,
-          ease: cubicBezier(0.85, 0, 0.15, 1),
-        },
-      }}
-      onClick={onClose}
-    >
+    <ModalBackdrop onClose={onClose}>
       <ModalContainer
         as={motion.div}
         variants={SlideLeft(0, 0, 0.5, 0.5, false, 500)}
@@ -110,6 +81,6 @@ export default function MobileConfigureOptions({
           selectedColor={selectedColor}
         />
       </ModalContainer>
-    </BackgroundOverlay>
+    </ModalBackdrop>
   );
 }

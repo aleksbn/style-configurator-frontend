@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { setSelectedModel } from "../store/slices/modelSlice";
 import { setConfiguration } from "../store/slices/configurationSlice";
 import Api from "../Api/ApiHelper";
-import LoadingSpinner from "../components/ui/LoadingSpinner";
+import Spinner from "../components/ui/Spinner";
 import { addToCart, updateCartItem } from "../store/slices/cartSlice";
 import type { ICartItem } from "../models/Cart";
 import { redoModel, redoReduxModel } from "../helpers/modelHelper";
@@ -113,6 +113,6 @@ export default function MainCompose() {
   };
 
   if (!selectedModel) return null;
-  if (isLoading) return <LoadingSpinner />;
+  if (isLoading) return <Spinner fullScreen size={64} text="Loading..." />;
   return <>{getComponent()}</>;
 }

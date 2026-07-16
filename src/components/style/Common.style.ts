@@ -21,6 +21,28 @@ const BackgroundOverlay = styled.div`
   justify-content: center;
 `;
 
+/** Base for a full-height panel sliding in from the right edge (mobile config/price-breakdown panels). */
+const SidePanelBase = styled.div`
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: #ffffff;
+  padding: 80px 20px 80px 60px;
+
+  & .close-icon {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    cursor: pointer;
+  }
+`;
+
+/** A compact inline label, e.g. next to a price or product name. */
+const InlineLabel = styled.span`
+  font-size: 1.2rem;
+  margin-right: 10px;
+`;
+
 const RotateMessage = styled.div`
   display: none;
   @media (max-height: 500px) and (orientation: landscape) {
@@ -39,4 +61,4 @@ const RotateMessage = styled.div`
   }
 `;
 
-export { PageWrap, BackgroundOverlay, RotateMessage };
+export { PageWrap, BackgroundOverlay, SidePanelBase, InlineLabel, RotateMessage };

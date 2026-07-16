@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { cubicBezier, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import styled from "styled-components";
 import { HexColorPicker } from "react-colorful";
 import { fadeAndIncrease } from "../../animations/Fade";
-import { BackgroundOverlay } from "../../components/style/Common.style";
 import ColorApi from "../../Api/ColorApiHelper";
 import { Button } from "../../components/style/Buttons.style";
+import ModalBackdrop from "../../components/ui/ModalBackdrop";
 
 const Container = styled.div`
   display: flex;
@@ -137,25 +137,7 @@ export default function ColorPickerModal({
   }, [selectedColor]);
 
   return (
-    <BackgroundOverlay
-      as={motion.div}
-      initial={{ backgroundColor: "rgba(0, 0, 0, 0)" }}
-      animate={{
-        backgroundColor: "rgba(0, 0, 0, 0.75)",
-        transition: {
-          duration: transitionTime / 2,
-          ease: cubicBezier(0.85, 0, 0.15, 1),
-        },
-      }}
-      exit={{
-        backgroundColor: "rgba(0, 0, 0, 0)",
-        transition: {
-          duration: transitionTime / 2,
-          ease: cubicBezier(0.85, 0, 0.15, 1),
-        },
-      }}
-      onClick={onClose}
-    >
+    <ModalBackdrop duration={transitionTime / 2} onClose={onClose}>
       <Container
         as={motion.div}
         variants={fadeAndIncrease(0, 0, 0.3, 0.3)}
@@ -198,6 +180,6 @@ export default function ColorPickerModal({
           Cancel
         </Button>
       </Container>
-    </BackgroundOverlay>
+    </ModalBackdrop>
   );
 }

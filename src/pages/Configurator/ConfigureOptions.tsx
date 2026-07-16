@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import type { IModel, IOption } from "../../models/Model";
 import styled from "styled-components";
+import { getTotalPrice } from "../../helpers/price";
 
 const Container = styled.div`
   display: flex;
@@ -318,7 +319,7 @@ export default function ConfigureOptions({
       </Body>
       <PriceContainer onClick={() => setPriceBreakdownOpened(true)}>
         <Label>Total price:</Label>
-        <Price>${(price["Total price"] * numberOfItems).toFixed(2)}</Price>
+        <Price>${getTotalPrice(price, numberOfItems).toFixed(2)}</Price>
       </PriceContainer>
     </Container>
   );

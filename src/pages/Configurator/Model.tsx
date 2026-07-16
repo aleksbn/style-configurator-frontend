@@ -2,6 +2,7 @@ import type { IModel } from "../../models/Model";
 import styled from "styled-components";
 import { ReactSVG } from "react-svg";
 import useBreakpoint from "../../hooks/useBreakpoints";
+import { getTotalPrice } from "../../helpers/price";
 
 const ModelComponent = styled.div<{ $type?: string }>`
   display: flex;
@@ -87,7 +88,7 @@ export default function Model({
       <ReactSVG src={model?.url} />
       {breakpoint != "desktop" && price && numberOfItems && (
         <Price onClick={showPriceBreakdown}>
-          Total price: ${(price["Total price"] * numberOfItems).toFixed(2)}
+          Total price: ${getTotalPrice(price, numberOfItems).toFixed(2)}
         </Price>
       )}
     </ModelComponent>

@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { fade } from "../../animations/Fade";
 import useBreakpoint from "../../hooks/useBreakpoints";
 import type { IModelWithPrice } from "../../models/Model";
+import { InlineLabel } from "../../components/style/Common.style";
 
 const Container = styled.div`
   display: flex;
@@ -53,11 +54,6 @@ const PriceContainer = styled.div`
   width: 100%;
 `;
 
-const Label = styled.span`
-  font-size: 1.2rem;
-  margin-right: 10px;
-`;
-
 const Price = styled.span`
   font-size: 1.2rem;
   font-weight: bold;
@@ -94,7 +90,7 @@ export default function ProductImage({
             animate="animate"
             onAnimationComplete={() => setIsInitial(false)}
           >
-            <Label>Starting from:</Label>
+            <InlineLabel>Starting from:</InlineLabel>
             <Price key={currentModel?.sketch}>
               ${currentModel?.base_price}
             </Price>
@@ -131,7 +127,7 @@ export default function ProductImage({
             animate="animate"
             exit="exit"
           >
-            <Label>Starting from:</Label>
+            <InlineLabel>Starting from:</InlineLabel>
             <Price key={currentModel?.price}>
               ${currentModel?.base_price.toFixed(2)}
             </Price>

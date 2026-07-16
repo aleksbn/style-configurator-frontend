@@ -8,6 +8,7 @@ import type { IModel } from "../models/Model";
 import type { ICartItem, IPrice } from "../models/Cart";
 import type { IPdfOption, IPdfPriceBreakdownItem } from "../models/Pdf";
 import { getModelIdFromConfigKey } from "../helpers/configKey";
+import { getTotalPrice } from "../helpers/price";
 import { setConfiguration } from "../store/slices/configurationSlice";
 import Footer from "../components/ui/Footer";
 import { Button } from "../components/style/Buttons.style";
@@ -162,7 +163,7 @@ export default function Final() {
             Size: cartItem.size,
             Quantity: cartItem.quantity,
             PricePerItem: priceResponse["Total price"],
-            TotalPrice: priceResponse["Total price"] * cartItem.quantity,
+            TotalPrice: getTotalPrice(priceResponse, cartItem.quantity),
           });
         }
         setAllPrices(allPricesData);

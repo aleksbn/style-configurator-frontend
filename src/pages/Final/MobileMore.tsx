@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import { BackgroundOverlay } from "../../components/style/Common.style";
-import { cubicBezier, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { SlideUp } from "../../animations/Slide";
 import { Button } from "../../components/style/Buttons.style";
+import ModalBackdrop from "../../components/ui/ModalBackdrop";
 
 const Container = styled.div`
   display: flex;
@@ -36,25 +36,7 @@ export default function MobileMore({
   actions: { label: string; onClick: () => void }[];
 }) {
   return (
-    <BackgroundOverlay
-      as={motion.div}
-      initial={{ backgroundColor: "rgba(0, 0, 0, 0)" }}
-      animate={{
-        backgroundColor: "rgba(0, 0, 0, 0.75)",
-        transition: {
-          duration: 0.3,
-          ease: cubicBezier(0.85, 0, 0.15, 1),
-        },
-      }}
-      exit={{
-        backgroundColor: "rgba(0, 0, 0, 0)",
-        transition: {
-          duration: 0.3,
-          ease: cubicBezier(0.85, 0, 0.15, 1),
-        },
-      }}
-      onClick={onClose}
-    >
+    <ModalBackdrop onClose={onClose}>
       <Container
         as={motion.div}
         variants={SlideUp(0, 0, 0.5, 0.5, false, 400)}
@@ -74,6 +56,6 @@ export default function MobileMore({
           </Button>
         ))}
       </Container>
-    </BackgroundOverlay>
+    </ModalBackdrop>
   );
 }

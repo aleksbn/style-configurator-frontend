@@ -5,7 +5,7 @@ import Navbar from "./components/ui/Navbar";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "./store/hooks";
 import { fetchModels } from "./store/slices/modelSlice";
-import LoadingSpinner from "./components/ui/LoadingSpinner";
+import Spinner from "./components/ui/Spinner";
 
 const AppWrapper = styled.div`
   height: 100%;
@@ -25,7 +25,7 @@ function App() {
     void dispatch(fetchModels());
   }, [dispatch]);
 
-  if (loading) return <LoadingSpinner text="Loading all models" />;
+  if (loading) return <Spinner fullScreen size={64} text="Loading all models" />;
   if (error) return <div>{error}</div>;
 
   return (

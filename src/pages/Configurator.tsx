@@ -60,7 +60,7 @@ const Title = styled.h1`
     font-size: 2.2rem;
   }
 
-  @media (max-width: 768) {
+  @media (max-width: 768px) {
     font-size: 1.8rem;
   }
 

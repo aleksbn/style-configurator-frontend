@@ -1,8 +1,8 @@
 import { type ReactNode } from "react";
-import { BackgroundOverlay } from "../style/Common.style";
-import { cubicBezier, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import styled, { css } from "styled-components";
 import { SlideLeft, SlideRight } from "../../animations/Slide";
+import ModalBackdrop from "./ModalBackdrop";
 
 const Container = styled.div<{ position: "left" | "right" }>`
   display: flex;
@@ -58,25 +58,7 @@ export default function Modal({
   onClose: () => void;
 }) {
   return (
-    <BackgroundOverlay
-      as={motion.div}
-      initial={{ backgroundColor: "rgba(0, 0, 0, 0)" }}
-      animate={{
-        backgroundColor: "rgba(0, 0, 0, 0.75)",
-        transition: {
-          duration: 0.3,
-          ease: cubicBezier(0.85, 0, 0.15, 1),
-        },
-      }}
-      exit={{
-        backgroundColor: "rgba(0, 0, 0, 0)",
-        transition: {
-          duration: 0.3,
-          ease: cubicBezier(0.85, 0, 0.15, 1),
-        },
-      }}
-      onClick={onClose}
-    >
+    <ModalBackdrop onClose={onClose}>
       <Container
         as={motion.div}
         variants={
@@ -92,6 +74,6 @@ export default function Modal({
       >
         {children}
       </Container>
-    </BackgroundOverlay>
+    </ModalBackdrop>
   );
 }
