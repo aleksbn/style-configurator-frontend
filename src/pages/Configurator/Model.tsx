@@ -3,6 +3,9 @@ import styled from "styled-components";
 import { ReactSVG } from "react-svg";
 import useBreakpoint from "../../hooks/useBreakpoints";
 import { getTotalPrice } from "../../helpers/price";
+import { motion } from "framer-motion";
+import { fade } from "../../animations/Fade";
+import { animated } from "../../animations/Motion";
 
 const ModelComponent = styled.div<{ $type?: string }>`
   display: flex;
@@ -74,18 +77,30 @@ export default function Model({
   numberOfItems,
   showPriceBreakdown,
   type = "",
+  startingAnimationNumber = 0,
+  afterInjection,
+  animationTime = 0.7,
 }: {
   model: IModel | null;
   price: Record<string, number> | null;
   numberOfItems: number | null;
   showPriceBreakdown: () => void | undefined;
   type: string;
+  startingAnimationNumber: number;
+  afterInjection?: (svg: SVGSVGElement) => void;
+  animationTime?: number;
 }) {
   const breakpoint = useBreakpoint();
   if (!model) return null;
   return (
-    <ModelComponent $type={type}>
-      <ReactSVG src={model?.url} />
+    <ModelComponent
+      $type={type}
+      as={motion.div}
+      {...animated(
+        fade(startingAnimationNumber, 0, animationTime, animationTime),
+      )}
+    >
+      <ReactSVG src={model?.url} afterInjection={afterInjection} />
       {breakpoint != "desktop" && price && numberOfItems && (
         <Price onClick={showPriceBreakdown}>
           Total price: ${getTotalPrice(price, numberOfItems).toFixed(2)}

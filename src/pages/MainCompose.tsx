@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import Configurator from "./Configurator";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { setSelectedModel } from "../store/slices/modelSlice";
@@ -20,7 +20,6 @@ export default function MainCompose() {
   const selectedModel = useAppSelector((state) => state.models.selectedModel);
   const [price, setPrice] = useState<Record<string, number>>({});
   const [isLoading, setIsLoading] = useState(true);
-  const [justLoaded, setJustLoaded] = useState(true);
 
   useEffect(() => {
     const fetchPrice = async () => {
@@ -33,22 +32,23 @@ export default function MainCompose() {
     void fetchPrice();
   }, [selectedSKU]);
 
-  // FOR JUST LOADED
+  const selectedModelRef = useRef(selectedModel);
   useEffect(() => {
-    setTimeout(() => {
-      setJustLoaded(false);
-    }, 1100);
-  }, []);
-
-  // UPDATE VISUAL MODEL
-  useLayoutEffect(() => {
-    setTimeout(
-      () => {
-        redoModel(selectedModel);
-      },
-      justLoaded ? 1000 : 200,
-    );
+    selectedModelRef.current = selectedModel;
   }, [selectedModel]);
+
+  // UPDATE VISUAL MODEL - applies color/part changes to the already-injected SVG
+  useLayoutEffect(() => {
+    redoModel(selectedModel);
+  }, [selectedModel]);
+
+  // Re-applies the current model once react-svg actually (re)injects the SVG
+  // into the DOM (e.g. on first load or when switching to a different model
+  // file), instead of guessing with a timeout. Must stay referentially
+  // stable so react-svg doesn't re-inject on every unrelated re-render.
+  const handleAfterInjection = useCallback(() => {
+    redoModel(selectedModelRef.current);
+  }, []);
 
   // UPDATE REDUX MODEL
   useEffect(() => {
@@ -104,6 +104,7 @@ export default function MainCompose() {
       update_cart,
       price,
       selectedSKU,
+      afterInjection: handleAfterInjection,
     };
   };
 

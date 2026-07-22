@@ -2,7 +2,14 @@ import styled from "styled-components";
 import type { IModel } from "../../models/Model";
 import type { ICartItem } from "../../models/Cart";
 import { getModelIdFromConfigKey } from "../../helpers/configKey";
-import { InlineLabel } from "../../components/style/Common.style";
+import {
+  InlineLabel,
+  PriceBreakdownContainer,
+} from "../../components/style/Common.style";
+import { motion } from "framer-motion";
+import { animated } from "../../animations/Motion";
+import { SlideRight } from "../../animations/Slide";
+import Spinner from "../../components/ui/Spinner";
 
 const Container = styled.div`
   display: flex;
@@ -53,14 +60,30 @@ export default function Cart({
   onClose = () => {
     // noop
   },
+  loading,
+  isInModal = false,
 }: {
   selectItem: (item: ICartItem) => void;
   cartRedux: { items: ICartItem[] };
   allModels: IModel[];
   onClose?: () => void;
+  loading?: boolean;
+  isInModal?: boolean;
 }) {
+  const animation = !isInModal
+    ? animated(SlideRight(1, 0, 0.5, 0.5, true, 500))
+    : {};
+
+  if (loading) {
+    return (
+      <PriceBreakdownContainer>
+        <Spinner />
+      </PriceBreakdownContainer>
+    );
+  }
+
   return (
-    <Container>
+    <Container as={motion.div} {...animation}>
       {cartRedux.items.map((item) => {
         const selectedModel = allModels.find(
           (model) => model.id === getModelIdFromConfigKey(item.configKey),

@@ -2,6 +2,7 @@ import { Route, Routes, useLocation } from "react-router-dom";
 import Landing from "./pages/Landing";
 import { AnimatePresence, motion } from "framer-motion";
 import { fade } from "./animations/Fade";
+import { animated } from "./animations/Motion";
 import Selection from "./pages/Selection";
 import MainCompose from "./pages/MainCompose";
 import Final from "./pages/Final";
@@ -17,10 +18,7 @@ export default function AnimatedRoutes() {
           path="/"
           element={
             <motion.div
-              variants={fade(0, 0, 1, 1)}
-              initial="initial"
-              animate="animate"
-              exit="exit"
+              {...animated(fade(0, 0, 1, 1))}
               style={{
                 position: "absolute",
                 width: "100%",
@@ -35,10 +33,7 @@ export default function AnimatedRoutes() {
           path="/products"
           element={
             <motion.div
-              variants={fade(0, 0, 1, 1)}
-              initial="initial"
-              animate="animate"
-              exit="exit"
+              {...animated(fade(0, 0, 1, 1))}
               style={{
                 position: "absolute",
                 width: "100%",
@@ -53,10 +48,7 @@ export default function AnimatedRoutes() {
           path="/compose"
           element={
             <motion.div
-              variants={fade(1, 0, 1, 1)}
-              initial="initial"
-              animate="animate"
-              exit="exit"
+              {...animated(fade(1, 0, 1, 1))}
               style={{
                 position: "absolute",
                 width: "100%",
@@ -71,10 +63,7 @@ export default function AnimatedRoutes() {
           path="/final"
           element={
             <motion.div
-              variants={fade(1, 0, 1, 1)}
-              initial="initial"
-              animate="animate"
-              exit="exit"
+              {...animated(fade(1, 0, 1, 1))}
               style={{
                 position: "absolute",
                 width: "100%",
@@ -89,10 +78,7 @@ export default function AnimatedRoutes() {
           path="*"
           element={
             <motion.div
-              variants={fade(1, 0, 1, 1)}
-              initial="initial"
-              animate="animate"
-              exit="exit"
+              {...animated(fade(1, 0, 1, 1))}
               style={{
                 position: "absolute",
                 width: "100%",

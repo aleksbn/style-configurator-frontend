@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import ConfigureOptions from "./ConfigureOptions";
 import styled from "styled-components";
 import { SlideLeft } from "../../animations/Slide";
+import { animated } from "../../animations/Motion";
 import type { IModel, IOption } from "../../models/Model";
 import { IoMdClose } from "react-icons/io";
 import ModalBackdrop from "../../components/ui/ModalBackdrop";
@@ -59,10 +60,7 @@ export default function MobileConfigureOptions({
     <ModalBackdrop onClose={onClose}>
       <ModalContainer
         as={motion.div}
-        variants={SlideLeft(0, 0, 0.5, 0.5, false, 500)}
-        initial="initial"
-        animate="animate"
-        exit="exit"
+        {...animated(SlideLeft(0, 0, 0.5, 0.5, false, 500))}
         onClick={(e) => e.stopPropagation()}
       >
         <IoMdClose className="close-icon" onClick={onClose} size={32} />
@@ -79,6 +77,8 @@ export default function MobileConfigureOptions({
           colorPickerOpened={colorPickerOpened}
           setColorPickerOpened={setColorPickerOpened}
           selectedColor={selectedColor}
+          startingAnimationNumber={0}
+          isInModal={true}
         />
       </ModalContainer>
     </ModalBackdrop>

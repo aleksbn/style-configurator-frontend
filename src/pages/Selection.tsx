@@ -49,7 +49,7 @@ const ArrowContainer = styled.div`
 
 const SeeAllContainer = styled.div`
   position: absolute;
-  top: 70px;
+  top: 90px;
   left: 15px;
   z-index: 2;
   display: flex;

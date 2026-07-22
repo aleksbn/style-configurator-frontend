@@ -2,6 +2,7 @@ import { type ReactNode } from "react";
 import { motion } from "framer-motion";
 import styled, { css } from "styled-components";
 import { SlideLeft, SlideRight } from "../../animations/Slide";
+import { animated } from "../../animations/Motion";
 import ModalBackdrop from "./ModalBackdrop";
 
 const Container = styled.div<{ position: "left" | "right" }>`
@@ -61,14 +62,11 @@ export default function Modal({
     <ModalBackdrop onClose={onClose}>
       <Container
         as={motion.div}
-        variants={
+        {...animated(
           type === "left"
             ? SlideRight(0, 0, 0.5, 0.5, false, 500)
-            : SlideLeft(0, 0, 0.5, 0.5, false, 500)
-        }
-        initial="initial"
-        animate="animate"
-        exit="exit"
+            : SlideLeft(0, 0, 0.5, 0.5, false, 500),
+        )}
         onClick={(e) => e.stopPropagation()}
         position={type === "left" ? "left" : "right"}
       >

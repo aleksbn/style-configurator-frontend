@@ -1,8 +1,5 @@
 import { cubicBezier } from "framer-motion";
-
-function negate(distance: number | string): number | string {
-  return typeof distance === "string" ? `-${distance}` : -distance;
-}
+import { negate } from "./animationHelper";
 
 function SlideUp(
   delayIn = 0,

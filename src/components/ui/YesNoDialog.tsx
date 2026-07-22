@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import styled from "styled-components";
 import { fadeAndIncrease } from "../../animations/Fade";
+import { animated } from "../../animations/Motion";
 import { Button } from "../style/Buttons.style";
 import ModalBackdrop from "./ModalBackdrop";
 
@@ -93,10 +94,7 @@ export default function YesNoDialog({
     <ModalBackdrop duration={transitionTime / 2} onClose={onClose}>
       <Container
         as={motion.div}
-        variants={fadeAndIncrease(0, 0, 0.3, 0.3)}
-        initial="initial"
-        animate="animate"
-        exit="exit"
+        {...animated(fadeAndIncrease(0, 0, 0.3, 0.3))}
         onClick={(e) => e.stopPropagation()}
       >
         <Title>{title}</Title>

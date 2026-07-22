@@ -7,7 +7,7 @@ import type { IModel } from "../models/Model";
 import Options from "./Configurator/Options";
 import ConfigureOptions from "./Configurator/ConfigureOptions";
 import { Button } from "../components/style/Buttons.style";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import type { ICartItem } from "../models/Cart";
 import YesNoDialog from "../components/ui/YesNoDialog";
@@ -18,6 +18,8 @@ import PriceBreakdown from "./Configurator/PriceBreakdown";
 import ColorPickerModal from "./Configurator/ColorPickerModal";
 import MobileConfigureOptions from "./Configurator/MobileConfigureOptions";
 import MobileOptions from "./Configurator/MobileOptions";
+import { fade } from "../animations/Fade";
+import { animated } from "../animations/Motion";
 
 const PageConfiguratorWrap = styled(PageWrap)`
   display: flex;
@@ -102,6 +104,7 @@ export default function Configurator({
   update_cart,
   price,
   selectedSKU,
+  afterInjection,
 }: {
   model: IModel | null;
   update_color: (partid: string, color: string) => void;
@@ -110,6 +113,7 @@ export default function Configurator({
   update_cart: (oldItem: ICartItem, newItem: ICartItem) => void;
   price: Record<string, number>;
   selectedSKU: string | null;
+  afterInjection?: (svg: SVGSVGElement) => void;
 }) {
   const [selectedOptionKey, setSelectedOptionKey] = useState<string>(
     Object.keys(model?.options ?? {})[0] ?? "",
@@ -168,7 +172,9 @@ export default function Configurator({
         <RotateMessage>
           Please rotate your device to portrait mode
         </RotateMessage>
-        <Title>{model?.name}</Title>
+        <Title as={motion.h1} {...animated(fade(1.2, 0, 0.7, 0.7))}>
+          {model?.name}
+        </Title>
         <PageConfigurator className="test">
           {breakpoint != "mobile" && (
             <Options
@@ -181,6 +187,7 @@ export default function Configurator({
                 setSelectedOptionKey(selected?.type_name ?? "");
               }}
               selectedOption={selectedOption}
+              startingAnimationNumber={1.2}
             />
           )}
           {breakpoint == "mobile" && (
@@ -196,6 +203,10 @@ export default function Configurator({
             numberOfItems={numberOfItems}
             showPriceBreakdown={() => setPriceBreakdownOpened(true)}
             type=""
+            startingAnimationNumber={
+              1.2 + Object.values(model?.options ?? {}).length * 0.2
+            }
+            afterInjection={afterInjection}
           />
           {breakpoint == "desktop" && (
             <ConfigureOptions
@@ -216,6 +227,9 @@ export default function Configurator({
               setColorPickerOpened={setColorPickerOpened}
               selectedColor={
                 selectedOption?.value ?? selectedOption?.default_value ?? ""
+              }
+              startingAnimationNumber={
+                1.2 + Object.values(model?.options ?? {}).length * 0.2 + 0.2
               }
             />
           )}

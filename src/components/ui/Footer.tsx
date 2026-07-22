@@ -2,6 +2,7 @@ import { type ReactNode } from "react";
 import { motion } from "framer-motion";
 import styled from "styled-components";
 import { fade } from "../../animations/Fade";
+import { animated } from "../../animations/Motion";
 
 const StyledFooter = styled.div`
   position: absolute;
@@ -45,10 +46,7 @@ export default function Footer({
     <StyledFooter
       className={className}
       as={motion.div}
-      variants={fade(1.7, 0.2, 0.5, 0.5)}
-      initial="initial"
-      animate="animate"
-      exit="exit"
+      {...animated(fade(1.7, 0.2, 0.5, 0.5))}
     >
       {children}
     </StyledFooter>

@@ -3,6 +3,7 @@ import { Button } from "../components/style/Buttons.style";
 import styled from "styled-components";
 import { fade } from "../animations/Fade";
 import { SlideUp } from "../animations/Slide";
+import { animated } from "../animations/Motion";
 import { useNavigate } from "react-router-dom";
 import { LargeLogo, LargeImage } from "../helpers/imageImport";
 import useBreakpoint from "../hooks/useBreakpoints";
@@ -173,22 +174,12 @@ export default function Landing() {
         />
         <TopWrapp>
           <Title>
-            <motion.span
-              variants={fade(1.3, 0, 1, 1)}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-            >
+            <motion.span {...animated(fade(1.3, 0, 1, 1))}>
               Style Dial
             </motion.span>
           </Title>
           <Desc>
-            <motion.span
-              variants={fade(1.6, 0, 1, 1)}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-            >
+            <motion.span {...animated(fade(1.6, 0, 1, 1))}>
               The best cloth configurator
             </motion.span>
           </Desc>
@@ -209,12 +200,7 @@ export default function Landing() {
             </Button>
           </div>
           <div className="desc">
-            <motion.span
-              variants={SlideUp(2.2, 0, 1, 1, true)}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-            >
+            <motion.span {...animated(SlideUp(2.2, 0, 1, 1, true))}>
               You'll never buy from others again
             </motion.span>
           </div>

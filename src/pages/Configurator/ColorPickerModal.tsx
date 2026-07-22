@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import styled from "styled-components";
 import { HexColorPicker } from "react-colorful";
 import { fadeAndIncrease } from "../../animations/Fade";
+import { animated } from "../../animations/Motion";
 import ColorApi from "../../Api/ColorApiHelper";
 import { Button } from "../../components/style/Buttons.style";
 import ModalBackdrop from "../../components/ui/ModalBackdrop";
@@ -140,10 +141,7 @@ export default function ColorPickerModal({
     <ModalBackdrop duration={transitionTime / 2} onClose={onClose}>
       <Container
         as={motion.div}
-        variants={fadeAndIncrease(0, 0, 0.3, 0.3)}
-        initial="initial"
-        animate="animate"
-        exit="exit"
+        {...animated(fadeAndIncrease(0, 0, 0.3, 0.3))}
         onClick={(e) => e.stopPropagation()}
       >
         <HexColorPicker

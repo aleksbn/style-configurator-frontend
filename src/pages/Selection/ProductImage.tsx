@@ -2,6 +2,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import styled from "styled-components";
 import { fade } from "../../animations/Fade";
+import { animated } from "../../animations/Motion";
 import useBreakpoint from "../../hooks/useBreakpoints";
 import type { IModelWithPrice } from "../../models/Model";
 import { InlineLabel } from "../../components/style/Common.style";
@@ -103,10 +104,7 @@ export default function ProductImage({
             src={currentModel?.sketch}
             key={currentModel?.sketch}
             as={motion.img}
-            variants={fade(0, 0, 0.5, 0.5)}
-            initial="initial"
-            animate="animate"
-            exit="exit"
+            {...animated(fade(0, 0, 0.5, 0.5))}
             drag="x"
             dragConstraints={{ left: 0, right: 0 }}
             dragElastic={0}
@@ -122,10 +120,7 @@ export default function ProductImage({
           <PriceContainer
             as={motion.div}
             key={currentModel?.sketch + "price"}
-            variants={fade(0, 0, 0.5, 0.5)}
-            initial="initial"
-            animate="animate"
-            exit="exit"
+            {...animated(fade(0, 0, 0.5, 0.5))}
           >
             <InlineLabel>Starting from:</InlineLabel>
             <Price key={currentModel?.price}>

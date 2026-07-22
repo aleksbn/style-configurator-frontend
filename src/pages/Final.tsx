@@ -335,6 +335,7 @@ export default function Final() {
             selectItem={handleItemClick}
             cartRedux={cartRedux}
             allModels={allModels}
+            loading={loading}
           />
         )}
         {smallerThan768px && (

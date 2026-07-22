@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import type { IModel, IOption } from "../../models/Model";
 import styled from "styled-components";
 import { getTotalPrice } from "../../helpers/price";
+import { animated } from "../../animations/Motion";
+import { motion } from "framer-motion";
+import { fadeInSlideSideOut } from "../../animations/FadeAndSlide";
 
 const Container = styled.div`
   display: flex;
@@ -166,7 +169,6 @@ const NumberOfItemsInput = styled.input`
   cursor: pointer;
   outline: none;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-  transition: all 0.2s ease-in-out;
 `;
 
 const Price = styled.span`
@@ -178,7 +180,7 @@ const Error = styled.span`
   font-style: italic;
   font-size: 0.8rem;
   position: absolute;
-  bottom: -24px;
+  bottom: -36px;
   left: 50%;
   transform: translateX(-50%);
   width: 100%;
@@ -201,6 +203,8 @@ export default function ConfigureOptions({
   colorPickerOpened,
   setColorPickerOpened,
   selectedColor,
+  startingAnimationNumber,
+  isInModal = false,
 }: {
   selectedOption: IOption | null;
   update_parts: (partid: string, partvalue: string) => void;
@@ -214,6 +218,8 @@ export default function ConfigureOptions({
   colorPickerOpened: boolean;
   setColorPickerOpened: React.Dispatch<React.SetStateAction<boolean>>;
   selectedColor: string;
+  startingAnimationNumber: number;
+  isInModal?: boolean;
 }) {
   const [inputValue, setInputValue] = useState(String(numberOfItems));
   const [errorDisplayed, setErrorDisplayed] = useState(false);
@@ -235,6 +241,19 @@ export default function ConfigureOptions({
     setErrorDisplayed(false);
   };
 
+  const fadeInAndRight = (step: number, distance = 300) =>
+    animated(
+      fadeInSlideSideOut(
+        startingAnimationNumber + step * 0.2,
+        0,
+        0.7,
+        0.7,
+        distance,
+      ),
+    );
+
+  const multiOptionCount = selectedOption?.multi_option_type?.length ?? 0;
+
   const handleNumberOfItemsBlur = () => {
     const desiredNumber = Number(inputValue);
     if (isNaN(desiredNumber) || desiredNumber < 1) {
@@ -254,39 +273,60 @@ export default function ConfigureOptions({
 
   return (
     <Container>
-      <Title>{selectedOption?.name}</Title>
+      <Title as={motion.h1} {...(isInModal ? {} : fadeInAndRight(0))}>
+        {selectedOption?.name}
+      </Title>
       <Body>
         <MainContainer>
-          {selectedOption?.multi_option_type?.map((option) => (
-              <>
-                <Label
-                  onClick={() =>
-                    update_parts(selectedOption?.code || "", option.code)
-                  }
-                >
-                  {option.name}
-                </Label>
-                <Radio
-                  type="radio"
-                  key={option.value}
-                  value={option.value}
-                  checked={option.value === selectedOption.selected_type}
-                  onClick={() =>
-                    update_parts(selectedOption?.code || "", option.code)
-                  }
-                />
-              </>
-            ))}
-          <ColorLabel>Select color:</ColorLabel>
+          {selectedOption?.multi_option_type?.map((option, index) => (
+            <>
+              <Label
+                as={motion.label}
+                {...(isInModal ? {} : fadeInAndRight(index + 1))}
+                onClick={() =>
+                  update_parts(selectedOption?.code || "", option.code)
+                }
+              >
+                {option.name}
+              </Label>
+              <Radio
+                type="radio"
+                as={motion.input}
+                {...(isInModal ? {} : fadeInAndRight(index + 1))}
+                key={option.value}
+                value={option.value}
+                checked={option.value === selectedOption.selected_type}
+                onClick={() =>
+                  update_parts(selectedOption?.code || "", option.code)
+                }
+              />
+            </>
+          ))}
+          <ColorLabel
+            as={motion.label}
+            {...(isInModal ? {} : fadeInAndRight(multiOptionCount + 1))}
+          >
+            Select color:
+          </ColorLabel>
           <ColorCircle
+            as={motion.div}
+            {...(isInModal ? {} : fadeInAndRight(multiOptionCount + 1))}
             style={{
               backgroundColor: `#${selectedColor}`,
               borderColor: invertedColor,
             }}
             onClick={() => setColorPickerOpened(!colorPickerOpened)}
           />
-          <Label>Size:</Label>
-          <SizeSelectorContainer>
+          <Label
+            as={motion.label}
+            {...(isInModal ? {} : fadeInAndRight(multiOptionCount + 2))}
+          >
+            Size:
+          </Label>
+          <SizeSelectorContainer
+            as={motion.div}
+            {...(isInModal ? {} : fadeInAndRight(multiOptionCount + 2))}
+          >
             <SizeSelector onChange={(e) => setSize(e.target.value)}>
               {model?.sizes.map((sizeValue) => (
                 <SizeOption
@@ -302,8 +342,15 @@ export default function ConfigureOptions({
             </SizeSelector>
             <Arrow />
           </SizeSelectorContainer>
-          <Label>Number of items:</Label>
+          <Label
+            as={motion.label}
+            {...(isInModal ? {} : fadeInAndRight(multiOptionCount + 3))}
+          >
+            Number of items:
+          </Label>
           <NumberOfItemsInput
+            as={motion.input}
+            {...(isInModal ? {} : fadeInAndRight(multiOptionCount + 3))}
             type="number"
             min="1"
             max="10"
@@ -317,7 +364,11 @@ export default function ConfigureOptions({
           </Error>
         </MainContainer>
       </Body>
-      <PriceContainer onClick={() => setPriceBreakdownOpened(true)}>
+      <PriceContainer
+        onClick={() => setPriceBreakdownOpened(true)}
+        as={motion.div}
+        {...(isInModal ? {} : fadeInAndRight(multiOptionCount + 4))}
+      >
         <Label>Total price:</Label>
         <Price>${getTotalPrice(price, numberOfItems).toFixed(2)}</Price>
       </PriceContainer>

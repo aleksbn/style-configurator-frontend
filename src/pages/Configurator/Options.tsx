@@ -1,6 +1,9 @@
 import { type Dispatch, type SetStateAction } from "react";
 import styled from "styled-components";
 import type { IOption } from "../../models/Model";
+import { motion } from "framer-motion";
+import { SlideRight } from "../../animations/Slide";
+import { animated } from "../../animations/Motion";
 
 const Container = styled.div`
   padding-left: 20%;
@@ -25,6 +28,7 @@ const OptionContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow: hidden;
 `;
 
 const Option = styled.div`
@@ -56,28 +60,43 @@ export default function Options({
   options,
   setSelectedOption,
   selectedOption,
+  startingAnimationNumber,
 }: {
   options: IOption[];
   setSelectedOption: Dispatch<SetStateAction<IOption | null>>;
   selectedOption: IOption | null;
+  startingAnimationNumber: number;
 }) {
   return (
     <Container>
       <OptionsContainer>
-        {options.map((option) => (
-          <OptionContainer>
-            <Option
-              key={option.code}
-              onClick={() => setSelectedOption(option)}
-              className={selectedOption?.code === option.code ? "selected" : ""}
-            >
-              {option.name}
-            </Option>
-            <Underline
-              className={selectedOption?.code === option.code ? "selected" : ""}
-            />
-          </OptionContainer>
-        ))}
+        {options.map((option, index) => {
+          const slideIn = animated(
+            SlideRight(startingAnimationNumber + index * 0.2, 0, 0.5, 0.5, true, 300),
+          );
+          return (
+            <OptionContainer>
+              <Option
+                as={motion.div}
+                {...slideIn}
+                key={option.code}
+                onClick={() => setSelectedOption(option)}
+                className={
+                  selectedOption?.code === option.code ? "selected" : ""
+                }
+              >
+                {option.name}
+              </Option>
+              <Underline
+                as={motion.div}
+                {...slideIn}
+                className={
+                  selectedOption?.code === option.code ? "selected" : ""
+                }
+              />
+            </OptionContainer>
+          );
+        })}
       </OptionsContainer>
     </Container>
   );

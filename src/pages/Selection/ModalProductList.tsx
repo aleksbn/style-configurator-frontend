@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import styled from "styled-components";
 import { SlideRight } from "../../animations/Slide";
+import { animated } from "../../animations/Motion";
 import { IoMdClose } from "react-icons/io";
 import type { IModel } from "../../models/Model";
 import type { Dispatch, SetStateAction } from "react";
@@ -61,10 +62,7 @@ export default function ModalProductList({
     <ModalBackdrop onClose={onClose}>
       <Container
         as={motion.div}
-        variants={SlideRight(0, 0, 0.5, 0.5, false, 1000)}
-        initial="initial"
-        animate="animate"
-        exit="exit"
+        {...animated(SlideRight(0, 0, 0.5, 0.5, false, 1000))}
         onClick={(e) => e.stopPropagation()}
       >
         <IoMdClose className="close-icon" onClick={onClose} size={32} />

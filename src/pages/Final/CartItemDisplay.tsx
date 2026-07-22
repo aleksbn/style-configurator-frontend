@@ -1,4 +1,10 @@
-import { useEffect, useLayoutEffect, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import type { ICartItem } from "../../models/Cart";
 import styled from "styled-components";
 import type { IModel } from "../../models/Model";
@@ -7,6 +13,7 @@ import { redoModel, redoReduxModel } from "../../helpers/modelHelper";
 import { AnimatePresence } from "framer-motion";
 import { motion } from "framer-motion";
 import { fade } from "../../animations/Fade";
+import { animated } from "../../animations/Motion";
 import { createSearchParams, useNavigate } from "react-router-dom";
 import { Button } from "../../components/style/Buttons.style";
 import { useAppDispatch } from "../../store/hooks";
@@ -18,7 +25,7 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 20px 30px;
+  padding: 40px 60px;
   width: 100%;
   height: calc(100svh - 240px);
   overflow-y: hidden;
@@ -48,6 +55,10 @@ const None = styled.div`
 const Title = styled.h1`
   text-align: center;
   font-size: 2.5rem;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
 
   @media (max-width: 1024px) {
     font-size: 1.8rem;
@@ -126,28 +137,24 @@ export default function CartItemDisplay({
 
   useLayoutEffect(() => {
     if (selectedCartItem) {
-      setSelectedModel(null);
-      setModelKey("");
-      setModelName("");
-      setSize("");
-
-      setTimeout(() => {
-        const newModel = redoReduxModel(allModels, selectedCartItem.configKey);
-        setSelectedModel(newModel ?? null);
-        setModelKey(newModel?.id ?? "");
-        setModelName(newModel?.name ?? "");
-        setSize(selectedCartItem.size);
-      }, 300);
+      const newModel = redoReduxModel(allModels, selectedCartItem.configKey);
+      setSelectedModel(newModel ?? null);
+      setModelKey(selectedCartItem.configKey ?? "");
+      setModelName(newModel?.name ?? "");
+      setSize(selectedCartItem.size);
     }
   }, [selectedCartItem]);
 
+  const selectedModelRef = useRef(selectedModel);
   useEffect(() => {
-    if (selectedModel) {
-      setTimeout(() => {
-        redoModel(selectedModel);
-      }, 50);
-    }
+    selectedModelRef.current = selectedModel;
   }, [selectedModel]);
+
+  // Must stay referentially stable so react-svg only re-injects the SVG
+  // when it actually mounts a new model, not on unrelated re-renders.
+  const handleAfterInjection = useCallback(() => {
+    redoModel(selectedModelRef.current);
+  }, []);
 
   const handleClickDelete = () => {
     if (selectedCartItem) {
@@ -168,41 +175,40 @@ export default function CartItemDisplay({
 
   if (selectedCartItem)
     return (
-      <Container>
-        <AnimatePresence mode="wait">
-          {selectedModel && (
-            <>
+      <Container className="container">
+        {selectedModel && (
+          <>
+            <AnimatePresence mode="wait">
               <Title
-                key={modelKey + "Title"}
+                key={modelKey}
                 as={motion.h1}
-                variants={fade(0, 0, 0.3, 0.3)}
-                initial="initial"
-                animate="animate"
-                exit="exit"
+                {...animated(fade(0, 0, 0.3, 0.3))}
               >
                 {modelName} - <Size>{size}</Size>
               </Title>
+            </AnimatePresence>
+            <AnimatePresence mode="wait">
               <ModelContainer
                 as={motion.div}
                 key={modelKey}
-                variants={fade(0, 0, 0.3, 0.3)}
-                initial="initial"
-                animate="animate"
-                exit="exit"
+                {...animated(fade(0, 0, 0.3, 0.3))}
               >
                 <Model
                   model={selectedModel}
                   type="final"
                   price={null}
                   numberOfItems={null}
+                  startingAnimationNumber={0}
                   showPriceBreakdown={() => {
                     // noop
                   }}
+                  afterInjection={handleAfterInjection}
+                  animationTime={0.3}
                 />
               </ModelContainer>
-            </>
-          )}
-        </AnimatePresence>
+            </AnimatePresence>
+          </>
+        )}
         <ButtonsContainer>
           <Button
             as={motion.div}

@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import { SlideUp } from "../../animations/Slide";
+import { animated } from "../../animations/Motion";
 import { Button } from "../../components/style/Buttons.style";
 import ModalBackdrop from "../../components/ui/ModalBackdrop";
 
@@ -39,10 +40,7 @@ export default function MobileMore({
     <ModalBackdrop onClose={onClose}>
       <Container
         as={motion.div}
-        variants={SlideUp(0, 0, 0.5, 0.5, false, 400)}
-        initial="initial"
-        animate="animate"
-        exit="exit"
+        {...animated(SlideUp(0, 0, 0.5, 0.5, false, 400))}
         onClick={(e) => e.stopPropagation()}
       >
         {actions.map((action, index) => (

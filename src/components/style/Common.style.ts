@@ -61,4 +61,27 @@ const RotateMessage = styled.div`
   }
 `;
 
-export { PageWrap, BackgroundOverlay, SidePanelBase, InlineLabel, RotateMessage };
+const PriceBreakdownContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 0px 20px;
+  margin: 40px 0px;
+  height: calc(100svh - 240px);
+  overflow-y: auto;
+
+  &.in-modal {
+    height: 100%;
+    width: 100%;
+  }
+`;
+
+export {
+  PageWrap,
+  BackgroundOverlay,
+  SidePanelBase,
+  InlineLabel,
+  RotateMessage,
+  PriceBreakdownContainer,
+};

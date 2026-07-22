@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import styled from "styled-components";
 import { SlideRight } from "../../animations/Slide";
+import { animated } from "../../animations/Motion";
 import type { IModel } from "../../models/Model";
 import type { Dispatch, SetStateAction } from "react";
 
@@ -56,10 +57,7 @@ export default function ProductList({
         {Object.values(models).map((model) => (
           <motion.li
             key={model.name}
-            variants={SlideRight((delayIn += 0.2), 0, 0.5, 0.5, true)}
-            initial="initial"
-            animate="animate"
-            exit="exit"
+            {...animated(SlideRight((delayIn += 0.2), 0, 0.5, 0.5, true))}
           >
             <Header>{model.name.toUpperCase()}</Header>
             {Object.values(model.options).map((option) => (

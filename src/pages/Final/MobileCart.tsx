@@ -23,6 +23,7 @@ export default function MobileCart({
         cartRedux={cartRedux}
         allModels={allModels}
         onClose={onClose}
+        isInModal={true}
       />
     </Modal>
   );

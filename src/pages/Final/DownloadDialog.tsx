@@ -8,6 +8,7 @@ import {
 import { motion } from "framer-motion";
 import styled from "styled-components";
 import { fadeAndIncrease } from "../../animations/Fade";
+import { animated } from "../../animations/Motion";
 import { Button } from "../../components/style/Buttons.style";
 import ButtonSpinner from "../../components/ui/ButtonSpinner";
 import ModalBackdrop from "../../components/ui/ModalBackdrop";
@@ -226,10 +227,7 @@ export default function DownloadDialog({
     <ModalBackdrop duration={transitionTime / 2} onClose={onClose}>
       <Container
         as={motion.div}
-        variants={fadeAndIncrease(0, 0, 0.3, 0.3)}
-        initial="initial"
-        animate="animate"
-        exit="exit"
+        {...animated(fadeAndIncrease(0, 0, 0.3, 0.3))}
         onClick={(e) => e.stopPropagation()}
       >
         <Title>We need some data for the receipt</Title>

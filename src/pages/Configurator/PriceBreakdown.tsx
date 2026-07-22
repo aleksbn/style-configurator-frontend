@@ -10,6 +10,7 @@ import {
 } from "../../components/style/PriceList.style";
 import { motion } from "framer-motion";
 import { SlideLeft } from "../../animations/Slide";
+import { animated } from "../../animations/Motion";
 import { IoMdClose } from "react-icons/io";
 import { getTotalPrice } from "../../helpers/price";
 import ModalBackdrop from "../../components/ui/ModalBackdrop";
@@ -83,10 +84,7 @@ export default function PriceBreakdown({
     <ModalBackdrop duration={transitionTime / 2} onClose={onClose}>
       <PriceBreakdownContainer
         as={motion.div}
-        variants={SlideLeft(0, 0, 0.5, 0.5, false, "100%")}
-        initial="initial"
-        animate="animate"
-        exit="exit"
+        {...animated(SlideLeft(0, 0, 0.5, 0.5, false, "100%"))}
         onClick={(e) => e.stopPropagation()}
       >
         <IoMdClose onClick={onClose} size={30} className="close-icon" />

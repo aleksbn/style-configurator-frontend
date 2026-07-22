@@ -14,7 +14,7 @@ const OptionList = styled.div`
   left: 0;
   right: 0;
   overflow-x: auto;
-  gap: 12px;
+  gap: 20px;
   padding: 0 20px;
   box-sizing: border-box;
 

@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import styled from "styled-components";
 import { fade } from "../../animations/Fade";
+import { animated } from "../../animations/Motion";
 import { useLocation, useNavigate } from "react-router-dom";
 import { SlideLeft, SlideRight } from "../../animations/Slide";
 import { IoChevronBackCircleOutline } from "react-icons/io5";
@@ -77,23 +78,14 @@ export default function Navbar() {
     void navigate("/final");
   };
   return (
-    <Wrapp
-      as={motion.div}
-      variants={fade()}
-      initial="initial"
-      animate="animate"
-      exit="exit"
-    >
+    <Wrapp as={motion.div} {...animated(fade())}>
       {location.pathname === "/" ? (
         <span></span>
       ) : (
         <BackContainer>
           <BackButton
             as={motion.span}
-            variants={SlideRight(0.5, 0, 0.5, 0.5, true)}
-            initial="initial"
-            animate="animate"
-            exit="exit"
+            {...animated(SlideRight(0.5, 0, 0.5, 0.5, true))}
             onClick={() => {
               void navigate(
                 getBackLink(
@@ -120,10 +112,7 @@ export default function Navbar() {
       ) : (
         <CartContainer
           as={motion.div}
-          variants={SlideLeft(0.5, 0, 0.5, 0.5, true)}
-          initial="initial"
-          animate="animate"
-          exit="exit"
+          {...animated(SlideLeft(0.5, 0, 0.5, 0.5, true))}
           onClick={handleCartClick}
         >
           {cart.items.length === 0 ? (

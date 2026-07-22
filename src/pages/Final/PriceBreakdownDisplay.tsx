@@ -9,21 +9,10 @@ import {
   PriceInfoContainer,
   UnderlineBase,
 } from "../../components/style/PriceList.style";
-
-const PriceBreakdownContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 0px 20px;
-  margin: 40px 0px;
-  height: calc(100svh - 240px);
-  overflow-y: auto;
-
-  &.in-modal {
-    height: 100%;
-  }
-`;
+import { SlideLeft } from "../../animations/Slide";
+import { animated } from "../../animations/Motion";
+import { motion } from "framer-motion";
+import { PriceBreakdownContainer } from "../../components/style/Common.style";
 
 const PriceListContainer = styled.div`
   display: flex;
@@ -74,8 +63,16 @@ export default function PriceBreakdownDisplay({
     );
   }
 
+  const animation = !isInModal
+    ? animated(SlideLeft(1, 0, 0.5, 0.5, true, 500))
+    : {};
+
   return (
-    <PriceBreakdownContainer className={isInModal ? "in-modal" : ""}>
+    <PriceBreakdownContainer
+      className={isInModal ? "in-modal" : ""}
+      as={motion.div}
+      {...animation}
+    >
       <PriceListContainer>
         {allPrices.map((price) => (
           <Fragment key={price.Name + price.Size + price.Quantity}>
